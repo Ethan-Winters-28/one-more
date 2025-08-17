@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nigam Setu - शिकायत पंजीकरण फॉर्म</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Mukta:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- jsPDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #2c5aa0;
+            --secondary-color: #f8f9fa;
+            --accent-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --text-dark: #2d3436;
+            --border-color: #e9ecef;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Mukta', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+        }
+
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            margin: 20px auto;
+            max-width: 1200px;
+            overflow: hidden;
+        }
+
+        .header-section {
+            background: linear-gradient(135deg, var(--primary-color), #1e3c72);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .logo-container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .nagar-nigam-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 20px;
+            object-fit: cover;
+            background: white;
+            padding: 5px;
+        }
+
+        .logo-fallback {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-lg);
+            border: 4px solid white;
+        }
+
+        .logo-fallback i {
+            font-size: 50px;
+            color: var(--primary-color);
+        }
+
+        .main-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .nigam-setu-brand {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #ffd700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .form-section:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .required {
+            color: var(--danger-color);
+        }
+
+        .form-control, .form-select {
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(44, 90, 160, 0.25);
+            background: white;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+            z-index: 3;
+        }
+
+        .form-control.with-icon {
+            padding-left: 45px;
+        }
+
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            background: #fafafa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--primary-color);
+            background: rgba(44, 90, 160, 0.05);
+        }
+
+        .file-upload-area.dragover {
+            border-color: var(--accent-color);
+            background: rgba(40, 167, 69, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .map-container {
+            height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .progress-bar-container {
+            display: none;
+            margin: 20px 0;
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: 10px;
+            background: var(--secondary-color);
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border: none;
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .btn-loading {
+            position: relative;
+        }
+
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            margin: auto;
+            border: 2px solid transparent;
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .success-message {
+            display: none;
+            background: linear-gradient(135deg, var(--accent-color), #20c997);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: var(--shadow);
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: bounce 0.6s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 60%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            80% { transform: translateY(-10px); }
+        }
+
+        .complaint-id {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        .download-btn {
+            background: white;
+            color: var(--accent-color);
+            border: 2px solid white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background: transparent;
+            color: white;
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .floating-element:nth-child(2) { top: 20%; right: 10%; animation-delay: 1s; }
+        .floating-element:nth-child(3) { bottom: 20%; left: 20%; animation-delay: 2s; }
+        .floating-element:nth-child(4) { bottom: 10%; right: 20%; animation-delay: 3s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .form-section {
+                padding: 20px;
+            }
+            
+            .main-title {
+                font-size: 1.8rem;
+            }
+            
+            .map-container {
+                height: 250px;
+            }
+
+            .nagar-nigam-logo, .logo-fallback {
+                width: 80px;
+                height: 80px;
+            }
+
+            .logo-fallback i {
+                font-size: 40px;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Logo loading animation */
+        .logo-loading {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Elements -->
+    <div class="floating-elements">
+        <i class="fas fa-city floating-element" style="font-size: 60px;"></i>
+        <i class="fas fa-building floating-element" style="font-size: 40px;"></i>
+        <i class="fas fa-home floating-element" style="font-size: 50px;"></i>
+        <i class="fas fa-road floating-element" style="font-size: 45px;"></i>
+    </div>
+
+    <div class="container-fluid">
+        <div class="main-container fade-in">
+            <!-- Header Section -->
+            <div class="header-section">
+                <div class="logo-container">
+                    <!-- Nagar Nigam Logo -->
+                    <img src="img/Nagar Nigam Logo.jpg" 
+                         alt="Nagar Nigam Indore Logo" 
+                         class="nagar-nigam-logo logo-loading"
+                         id="nagarNigamLogo"
+                         onerror="showFallbackLogo()">
+                    
+                    <!-- Fallback Logo (hidden by default) -->
+                    <div class="logo-fallback" id="fallbackLogo" style="display: none;">
+                        <i class="fas fa-city"></i>
+                    </div>
+                    
+                    <div class="nigam-setu-brand">
+                        <i class="fas fa-link"></i> Nigam Setu
+                    </div>
+                    <h1 class="main-title">शिकायत पंजीकरण फॉर्म</h1>
+                    <p class="subtitle">Complaint Registration Form</p>
+                    <p class="subtitle" style="font-size: 0.9rem; margin-top: 5px;">
+                        नगर निगम इंदौर | Nagar Nigam Indore
+                    </p>
+                </div>
+            </div>
+
+            <!-- Form Container -->
+            <div class="form-container">
+                <form id="complaintForm" enctype="multipart/form-data">
+                    <!-- Personal Information Section -->
+                    <div class="form-section fade-in">
+                        <h3 class="section-title">
+                            <i class="fas fa-user"></i>
+                            व्यक्तिगत जानकारी / Personal Information
+                        </h3>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    पूरा नाम / Full Name <span class="required">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <i class="fas fa-user input-icon"></i>
+                                    <input type="text" class="form-control with-icon" id="fullName" name="fullName" required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    फ़ोन नंबर / Phone Number <span class="required">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <i class="fas fa-phone input-icon"></i>
+                                    <input type="tel" class="form-control with-icon" id="phoneNumber" name="phoneNumber" pattern="[0-9]{10}" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-envelope"></i>
+                                    Email ID (वैकल्पिक / Optional)
+                                </label>
+                                <div class="input-group">
+                                    <i class="fas fa-envelope input-icon"></i>
+                                    <input type="email" class="form-control with-icon" id="email" name="email">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Location Information Section -->
+                    <div class="form-section fade-in">
+                        <h3 class="section-title">
+                            <i class="fas fa-map-marker-alt"></i>
+                            स्थान की जानकारी / Location Information
+                        </h3>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    विधान सभा / Vidhan Sabha <span class="required">*</span>
+                                </label>
+                                <select class="form-select" id="vidhanSabha" name="vidhanSabha" required>
+                                    <option value="">चुनें / Select</option>
+                                    <option value="Indore 1">Indore 1</option>
+                                    <option value="Indore 2">Indore 2</option>
+                                    <option value="Indore 3">Indore 3</option>
+                                    <option value="Indore 4">Indore 4</option>
+                                    <option value="Indore 5">Indore 5</option>
+                                    <option value="Indore 6">Indore 6</option>
+                                    <option value="Indore 7">Indore 7</option>
+                                    <option value="Rau">Rau</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    वार्ड नंबर / Ward Number <span class="required">*</span>
+                                </label>
+                                <select class="form-select" id="wardNumber" name="wardNumber" required>
+                                    <option value="">चुनें / Select</option>
+                                    <option value="1">1 - Rajwada</option>
+                                    <option value="2">2 - Palasia</option>
+                                    <option value="3">3 - Vijay Nagar</option>
+                                    <option value="4">4 - Bhawarkua</option>
+                                    <option value="5">5 - Geeta Bhawan</option>
+                                    <option value="6">6 - Chandan Nagar</option>
+                                    <option value="7">7 - Tilak Nagar</option>
+                                    <option value="8">8 - Indira Gandhi Nagar</option>
+                                    <option value="9">9 - Nehru Park</option>
+                                    <option value="10">10 - Saket Nagar</option>
+                                    <!-- Add more wards as needed -->
+                                    <option value="85">85 - Other Area</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                समस्या का पता / Address of Problem <span class="required">*</span>
+                            </label>
+                            <div class="input-group">
+                                <i class="fas fa-map-marker-alt input-icon"></i>
+                                <textarea class="form-control with-icon" id="problemAddress" name="problemAddress" rows="3" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Problem Details Section -->
+                    <div class="form-section fade-in">
+                        <h3 class="section-title">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            समस्या का विवरण / Problem Details
+                        </h3>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    समस्या श्रेणी / Problem Category <span class="required">*</span>
+                                </label>
+                                <select class="form-select" id="problemCategory" name="problemCategory" required>
+                                    <option value="">चुनें / Select</option>
+                                    <option value="प्रकाश विभाग">प्रकाश विभाग</option>
+                                    <option value="स्वास्थ्य विभाग">स्वास्थ्य विभाग</option>
+                                    <option value="सीवरेज और ड्रेनेज विभाग">सीवरेज और ड्रेनेज विभाग</option>
+                                    <option value="आवारा पशु">आवारा पशु</option>
+                                    <option value="उद्यान विभाग">उद्यान विभाग</option>
+                                    <option value="जल विभाग">जल विभाग</option>
+                                    <option value="उपभोक्ता प्रभार">उपभोक्ता प्रभार</option>
+                                    <option value="पान, गुटखा, थूकने सम्बंधित">पान, गुटखा, थूकने सम्बंधित</option>
+                                    <option value="प्रधान मंत्री आवास योजना">प्रधान मंत्री आवास योजना</option>
+                                    <option value="सशुल्क सेनेटाईज़ेशन हेतु">सशुल्क सेनेटाईज़ेशन हेतु</option>
+                                    <option value="जनकार्य विभाग">जनकार्य विभाग</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    उप-समस्या / Subcategory <span class="required">*</span>
+                                </label>
+                                <select class="form-select" id="subcategory" name="subcategory" required>
+                                    <option value="">पहले श्रेणी चुनें / Select Category First</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                समस्या का विवरण / Description of Problem <span class="required">*</span>
+                            </label>
+                            <textarea class="form-control" id="problemDescription" name="problemDescription" rows="4" placeholder="कृपया अपनी समस्या का विस्तृत विवरण दें..." required></textarea>
+                        </div>
+                    </div>
+
+                    <!-- File Upload Section -->
+                    <div class="form-section fade-in">
+                        <h3 class="section-title">
+                            <i class="fas fa-upload"></i>
+                            फ़ाइल अपलोड / File Upload
+                        </h3>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">
+                                    फोटो अपलोड / Upload Photo <span class="required">*</span>
+                                </label>
+                                <div class="file-upload-area" onclick="document.getElementById('photoUpload').click()">
+                                    <i class="fas fa-camera upload-icon"></i>
+                                    <p><strong>फोटो चुनें</strong><br>या यहाँ खींचें</p>
+                                    <input type="file" id="photoUpload" name="photoUpload" accept="image/*" style="display: none;" required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">
+                                    वीडियो अपलोड / Upload Video (वैकल्पिक)
+                                </label>
+                                <div class="file-upload-area" onclick="document.getElementById('videoUpload').click()">
+                                    <i class="fas fa-video upload-icon"></i>
+                                    <p><strong>वीडियो चुनें</strong><br>या यहाँ खींचें</p>
+                                    <input type="file" id="videoUpload" name="videoUpload" accept="video/*" style="display: none;">
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">
+                                    दस्तावेज़ / Attach Document (वैकल्पिक)
+                                </label>
+                                <div class="file-upload-area" onclick="document.getElementById('documentUpload').click()">
+                                    <i class="fas fa-file-alt upload-icon"></i>
+                                    <p><strong>दस्तावेज़ चुनें</strong><br>या यहाँ खींचें</p>
+                                    <input type="file" id="documentUpload" name="documentUpload" accept=".pdf,.doc,.docx" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Map Section -->
+                    <div class="form-section fade-in">
+                        <h3 class="section-title">
+                            <i class="fas fa-map"></i>
+                            स्थान मानचित्र / Location Map
+                        </h3>
+                        <div class="map-container">
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d117925.21689949277!2d75.69903827832031!3d22.724065899999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3962fcad1b410ddb%3A0x96ec4da356240f4!2sIndore%2C%20Madhya%20Pradesh!5e0!3m2!1sen!2sin!4v1699123456789!5m2!1sen!2sin" 
+                                width="100%" 
+                                height="100%" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="progress-bar-container">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <p class="text-center mt-2">शिकायत जमा की जा रही है... / Submitting Complaint...</p>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-paper-plane me-2"></i>
+                            शिकायत दर्ज करें / Submit Complaint
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Success Message -->
+                <div class="success-message" id="successMessage">
+                    <i class="fas fa-check-circle success-icon"></i>
+                    <h3>शिकायत सफलतापूर्वक दर्ज हो गई!</h3>
+                    <p>Complaint Successfully Registered!</p>
+                    <div class="complaint-id" id="complaintId"></div>
+                    <p>आपकी शिकायत 7 दिनों में हल हो जाएगी।<br>Your complaint will be resolved within 7 days.</p>
+                    <button class="btn download-btn" onclick="downloadPDF()">
+                        <i class="fas fa-download me-2"></i>
+                        PDF डाउनलोड करें / Download PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Global variables
+        let complaintData = {};
+        let complaintId = '';
+
+        // Logo fallback function
+        function showFallbackLogo() {
+            document.getElementById('nagarNigamLogo').style.display = 'none';
+            document.getElementById('fallbackLogo').style.display = 'inline-flex';
+        }
+        // Logo load success handler
+        document.getElementById('nagarNigamLogo').addEventListener('load', function() {
+            this.classList.remove('logo-loading');
+        });
+
+        // Subcategories mapping
+        const subcategories = {
+            "प्रकाश विभाग": [
+                "स्ट्रीट लाइट नहीं जल रही",
+                "स्ट्रीट लाइट दिन में जल रही है",
+                "स्ट्रीट लाइट टिमटिमा रही है",
+                "नई स्ट्रीट लाइट लगवाना",
+                "स्ट्रीट लाइट का खम्भा टूटा हुआ",
+                "इलेक्ट्रिक वायर लटक रहे हैं"
+            ],
+            "स्वास्थ्य विभाग": [
+                "कचरा नहीं उठाया गया",
+                "सफाई कर्मचारी नहीं आया",
+                "डस्टबिन भरा हुआ है",
+                "मेडिकल वेस्ट",
+                "मृत पशु",
+                "कीड़े-मकोड़े की समस्या",
+                "दुर्गंध की समस्या"
+            ],
+            "सीवरेज और ड्रेनेज विभाग": [
+                "सीवर ब्लॉक",
+                "नाली में पानी भरा हुआ",
+                "मैनहोल का ढक्कन टूटा",
+                "सेप्टिक टैंक ओवरफ्लो",
+                "धवस्त चैम्बर का पुनः निर्माण",
+                "बैकलाइन को ड्रेनेज लाइन से जोड़ना",
+                "चैम्बर का नया ढक्कन लगाना",
+                "सार्वजनिक शौचालय चोक होना",
+                "सेप्टिक टैंक खाली करना",
+                "खुले मैनहोल या नाला",
+                "सीवेज रिसाव",
+                "चेम्बर की गाद उठाना"
+            ],
+            "आवारा पशु": [
+                "आवारा पशु की समस्या"
+            ],
+            "उद्यान विभाग": [
+                "पेड़-पौधों की अवैध कटाई"
+            ],
+            "जल विभाग": [
+                "पानी का नहीं आना",
+                "दूषित पानी की शिकायत",
+                "पाइप लाइन लीकेज",
+                "नगर निगम बोरिंग ख़राब",
+                "नर्मदा पाइपलाइन का मलबा हटाना"
+            ],
+            "उपभोक्ता प्रभार": [
+                "बारात निकालने हेतु",
+                "पंडाल लगाना",
+                "घरेलु उद्यान अपशिष्ट",
+                "घरेलु मलबा परिवहन",
+                "Bulk Garbage"
+            ],
+            "पान, गुटखा, थूकने सम्बंधित": [
+                "सार्वजनिक जगहों पर थूकना (वाहन नंबर सहित)"
+            ],
+            "प्रधान मंत्री आवास योजना": [
+                "आश्रय स्थल से संबंधित समस्या"
+            ],
+            "सशुल्क सेनेटाईज़ेशन हेतु": [
+                "स्थल/क्षेत्र हेतु सेनेटाईज़ेशन (शुल्क सहित वर्णन)"
+            ],
+            "जनकार्य विभाग": [
+                "सीवरेज या बारिश का जल ओवरफ्लो",
+                "सड़क पर ठहरा हुआ पानी",
+                "निर्माण सामग्री हटवाना (C&D मलबा)"
+            ]
+        };
+
+        // Ward to Parshad mapping (dummy data)
+        const wardToParshad = {
+            "1": "श्री राजेश शर्मा",
+            "2": "श्रीमती सुनीता देवी",
+            "3": "श्री अमित गुप्ता",
+            "4": "श्रीमती प्रिया सिंह",
+            "5": "श्री विकास पटेल",
+            // Add more as needed
+            "default": "श्री राम प्रसाद"
+        };
+
+        // Initialize form
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            setupFileUpload();
+            animateElements();
+            populateWardOptions();
+        });
+
+        function setupEventListeners() {
+            // Category change handler
+            document.getElementById('problemCategory').addEventListener('change', function() {
+                updateSubcategories(this.value);
+            });
+
+            // Form submission handler
+            document.getElementById('complaintForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitComplaint();
+            });
+
+            // Phone number validation
+            document.getElementById('phoneNumber').addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
+            });
+
+            // Real-time form validation
+            const requiredFields = document.querySelectorAll('[required]');
+            requiredFields.forEach(field => {
+                field.addEventListener('blur', validateField);
+                field.addEventListener('input', clearValidation);
+            });
+        }
+
+        function updateSubcategories(category) {
+            const subcategorySelect = document.getElementById('subcategory');
+            subcategorySelect.innerHTML = '<option value="">चुनें / Select</option>';
+            
+            if (category && subcategories[category]) {
+                subcategories[category].forEach(sub => {
+                    const option = document.createElement('option');
+                    option.value = sub;
+                    option.textContent = sub;
+                    subcategorySelect.appendChild(option);
+                });
+                subcategorySelect.disabled = false;
+            } else {
+                subcategorySelect.disabled = true;
+            }
+        }
+
+        function populateWardOptions() {
+            const wardSelect = document.getElementById('wardNumber');
+            const wardNames = [
+                'Rajwada', 'Palasia', 'Vijay Nagar', 'Bhawarkua', 'Geeta Bhawan',
+                'Chandan Nagar', 'Tilak Nagar', 'Indira Gandhi Nagar', 'Nehru Park', 'Saket Nagar',
+                'Scheme No. 54', 'Rau', 'Dewas Naka', 'Khajrana', 'Aerodrome',
+                'Banganga', 'Juni Indore', 'Rajendra Nagar', 'Pardesipura', 'Azad Nagar',
+                'Malhar Ashram', 'Bhicholi Mardana', 'Tejaji Nagar', 'Lasudia Mori', 'Sanwer Road',
+                'Khandwa Road', 'Pigdamber', 'Musakhedi', 'Kanadiya', 'Betma Road',
+                'Nipania', 'Bicholi Hapsi', 'Gautam Nagar', 'Shivaji Nagar', 'Annapurna',
+                'Sudama Nagar', 'Mahalaxmi Nagar', 'Dwarkapuri', 'Krishnapuri', 'Raghunath Nagar',
+                'Siyaganj', 'Chhatripura', 'Rajmohalla', 'Khajuri Bazar', 'Sarafa Bazar',
+                'Cloth Market', 'Jawahar Marg', 'MG Road', 'AB Road', 'Ring Road',
+                'Bypass Road', 'Airport Road', 'Ujjain Road', 'Khandwa Road', 'Dewas Road',
+                'Mhow Road', 'Simrol Road', 'Sanwer Road', 'Pigdamber Road', 'Rau Road',
+                'Hatod Road', 'Khudel Road', 'Manpur Road', 'Depalpur Road', 'Gautampura',
+                'Limbodi', 'Palda', 'Banganga', 'Khajrana', 'Rajendra Nagar',
+                'Pardesipura', 'Azad Nagar', 'Malhar Ashram', 'Bhicholi Mardana', 'Tejaji Nagar',
+                'Lasudia Mori', 'Sanwer Road Area', 'Khandwa Road Area', 'Pigdamber Area', 'Musakhedi Area',
+                'Kanadiya Area', 'Betma Road Area', 'Nipania Area', 'Bicholi Hapsi Area', 'Gautam Nagar Area',
+                'Shivaji Nagar Area', 'Annapurna Area', 'Sudama Nagar Area', 'Mahalaxmi Nagar Area', 'Dwarkapuri Area'
+            ];
+            
+            // Clear existing options except the first one
+            wardSelect.innerHTML = '<option value="">चुनें / Select</option>';
+            
+            // Add ward options
+            for (let i = 1; i <= 85; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                const wardName = wardNames[i-1] || `Ward Area ${i}`;
+                option.textContent = `${i} - ${wardName}`;
+                wardSelect.appendChild(option);
+            }
+        }
+
+        function setupFileUpload() {
+            const fileInputs = ['photoUpload', 'videoUpload', 'documentUpload'];
+            
+            fileInputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                const uploadArea = input.parentElement;
+                
+                // File input change handler
+                input.addEventListener('change', function() {
+                    handleFileSelect(this, uploadArea);
+                });
+
+                // Drag and drop handlers
+                uploadArea.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('dragover');
+                });
+
+                uploadArea.addEventListener('dragleave', function() {
+                    this.classList.remove('dragover');
+                });
+
+                uploadArea.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        input.files = files;
+                        handleFileSelect(input, uploadArea);
+                    }
+                });
+            });
+        }
+
+        function handleFileSelect(input, uploadArea) {
+            const file = input.files[0];
+            if (file) {
+                const fileName = file.name;
+                const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                uploadArea.innerHTML = `
+                    <i class="fas fa-check-circle upload-icon" style="color: var(--accent-color);"></i>
+                    <p><strong>फ़ाइल चुनी गई</strong><br>${fileName}<br>(${fileSize} MB)</p>
+                `;
+                uploadArea.style.borderColor = 'var(--accent-color)';
+                uploadArea.style.background = 'rgba(40, 167, 69, 0.1)';
+            }
+        }
+
+        function validateField(e) {
+            const field = e.target;
+            const value = field.value.trim();
+            
+            // Remove existing validation classes
+            field.classList.remove('is-valid', 'is-invalid');
+            
+            if (field.hasAttribute('required') && !value) {
+                field.classList.add('is-invalid');
+                return false;
+            }
+            
+            // Specific validations
+            if (field.type === 'email' && value && !isValidEmail(value)) {
+                field.classList.add('is-invalid');
+                return false;
+            }
+            
+            if (field.type === 'tel' && value && !isValidPhone(value)) {
+                field.classList.add('is-invalid');
+                return false;
+            }
+            
+            field.classList.add('is-valid');
+            return true;
+        }
+
+        function clearValidation(e) {
+            e.target.classList.remove('is-valid', 'is-invalid');
+        }
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function isValidPhone(phone) {
+            return /^[0-9]{10}$/.test(phone);
+        }
+
+        function submitComplaint() {
+            // Validate form
+            if (!validateForm()) {
+                showNotification('कृपया सभी आवश्यक फ़ील्ड भरें / Please fill all required fields', 'error');
+                return;
+            }
+
+            // Show progress bar
+            showProgressBar();
+            
+            // Collect form data
+            collectFormData();
+            
+            // Generate complaint ID
+            complaintId = generateComplaintId();
+            
+            // Simulate submission process
+            simulateSubmission();
+        }
+
+        function validateForm() {
+            const requiredFields = document.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                    field.classList.add('is-valid');
+                }
+            });
+            
+            return isValid;
+        }
+
+        function collectFormData() {
+            const form = document.getElementById('complaintForm');
+            const formData = new FormData(form);
+            
+            complaintData = {
+                fullName: formData.get('fullName'),
+                phoneNumber: formData.get('phoneNumber'),
+                email: formData.get('email') || 'Not provided',
+                vidhanSabha: formData.get('vidhanSabha'),
+                wardNumber: formData.get('wardNumber'),
+                problemAddress: formData.get('problemAddress'),
+                problemCategory: formData.get('problemCategory'),
+                subcategory: formData.get('subcategory'),
+                problemDescription: formData.get('problemDescription'),
+                submissionDate: new Date().toLocaleDateString('hi-IN'),
+                submissionTime: new Date().toLocaleTimeString('hi-IN'),
+                estimatedResolution: getEstimatedResolutionDate(),
+                parshad: wardToParshad[formData.get('wardNumber')] || wardToParshad.default,
+                assignedOfficer: 'श्री संजय कुमार (सहायक अभियंता)'
+            };
+        }
+
+        function generateComplaintId() {
+            const timestamp = Date.now();
+            const random = Math.floor(Math.random() * 1000);
+            return `IND${timestamp.toString().slice(-6)}${random.toString().padStart(3, '0')}`;
+        }
+
+        function getEstimatedResolutionDate() {
+            const date = new Date();
+            date.setDate(date.getDate() + 7);
+            return date.toLocaleDateString('hi-IN');
+        }
+
+        function showProgressBar() {
+            const progressContainer = document.querySelector('.progress-bar-container');
+            const progressBar = document.querySelector('.progress-bar');
+            const submitBtn = document.querySelector('.submit-btn');
+            
+            progressContainer.style.display = 'block';
+            submitBtn.disabled = true;
+            submitBtn.classList.add('btn-loading');
+            submitBtn.innerHTML = '<span>जमा हो रहा है... / Submitting...</span>';
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 100) progress = 100;
+                
+                progressBar.style.width = progress + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(showSuccessMessage, 500);
+                }
+            }, 200);
+        }
+
+        function simulateSubmission() {
+            // Simulate API call delay
+            setTimeout(() => {
+                showSuccessMessage();
+            }, 3000);
+        }
+
+        function showSuccessMessage() {
+            const form = document.getElementById('complaintForm');
+            const successMessage = document.getElementById('successMessage');
+            const complaintIdElement = document.getElementById('complaintId');
+            
+            // Hide form and progress bar
+            form.style.display = 'none';
+            document.querySelector('.progress-bar-container').style.display = 'none';
+            
+            // Show success message
+            complaintIdElement.textContent = `शिकायत संख्या / Complaint ID: ${complaintId}`;
+            successMessage.style.display = 'block';
+            
+            // Scroll to success message
+            successMessage.scrollIntoView({ behavior: 'smooth' });
+            
+            // Confetti effect
+            createConfetti();
+        }
+
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7'];
+            const confettiCount = 50;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.style.position = 'fixed';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.top = '-10px';
+                    confetti.style.width = '10px';
+                    confetti.style.height = '10px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.borderRadius = '50%';
+                    confetti.style.pointerEvents = 'none';
+                    confetti.style.zIndex = '9999';
+                    confetti.style.animation = 'confettiFall 3s linear forwards';
+                    
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 3000);
+                }, i * 50);
+            }
+        }
+
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Set font (using default font for Hindi support)
+            doc.setFont('helvetica');
+            
+            // Header
+            doc.setFontSize(20);
+            doc.setTextColor(44, 90, 160);
+            doc.text('Nagar Nigam Indore', 105, 20, { align: 'center' });
+            
+            doc.setFontSize(16);
+            doc.text('Complaint Registration Receipt', 105, 30, { align: 'center' });
+            doc.text('शिकायत पंजीकरण रसीद', 105, 40, { align: 'center' });
+            
+            // Complaint ID
+            doc.setFontSize(14);
+            doc.setTextColor(0, 0, 0);
+            doc.text(`Complaint ID: IND995291965`, 20, 60);
+            
+            // Personal Information
+            doc.setFontSize(12);
+            doc.setTextColor(44, 90, 160);
+            doc.text('Personal Information:', 20, 80);
+            
+            doc.setTextColor(0, 0, 0);
+            doc.text(`Name: ${complaintData.fullName}`, 20, 90);
+            doc.text(`Phone: ${complaintData.phoneNumber}`, 20, 100);
+            doc.text(`Email: ${complaintData.email}`, 20, 110);
+            
+            // Location Information
+            doc.setTextColor(44, 90, 160);
+            doc.text('Location Information:', 20, 130);
+            
+            doc.setTextColor(0, 0, 0);
+            doc.text(`Vidhan Sabha: ${complaintData.vidhanSabha}`, 20, 140);
+            doc.text(`Ward Number: ${complaintData.wardNumber}`, 20, 150);
+            doc.text(`Address: ${complaintData.problemAddress}`, 20, 160);
+            
+            // Problem Details
+            doc.setTextColor(44, 90, 160);
+            doc.text('Problem Details:', 20, 180);
+            
+            doc.setTextColor(0, 0, 0);
+            doc.text(`Category: सीवरेज और ड्रेनेज विभाग`, 20, 190);
+            doc.text(`Subcategory: सीवर ब्लॉक`, 20, 200);
+            
+            // Description (with text wrapping)
+            const splitDescription = doc.splitTextToSize(`Description: ${complaintData.problemDescription}`, 170);
+            doc.text(splitDescription, 20, 210);
+            
+            // Administrative Details
+            const descriptionHeight = splitDescription.length * 10;
+            let yPosition = 220 + descriptionHeight;
+            
+            doc.setTextColor(44, 90, 160);
+            doc.text('Administrative Details:', 20, yPosition);
+            
+            doc.setTextColor(0, 0, 0);
+            doc.text(`Parshad: Mr. Ram Singh`, 20, yPosition + 10);
+            doc.text(`Assigned Officer: Mr. Raghuvir Bhatia`, 20, yPosition + 20);
+            doc.text(`Submission Date: ${complaintData.submissionDate}`, 20, yPosition + 30);
+            doc.text(`Submission Time: ${complaintData.submissionTime}`, 20, yPosition + 40);
+            doc.text(`Estimated Resolution: ${complaintData.estimatedResolution}`, 20, yPosition + 50);
+            
+            // Footer
+            doc.setFontSize(10);
+            doc.setTextColor(128, 128, 128);
+            doc.text('This is a computer generated receipt.', 105, 280, { align: 'center' });
+            doc.text('For queries, contact: 0731-2434343', 105, 290, { align: 'center' });
+            
+            // Save the PDF
+            doc.save(`Complaint_${complaintId}.pdf`);
+            
+            showNotification('PDF डाउनलोड हो गया! / PDF Downloaded Successfully!', 'success');
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type === 'error' ? 'danger' : type === 'success' ? 'success' : 'info'} position-fixed`;
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.zIndex = '9999';
+            notification.style.minWidth = '300px';
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'error' ? 'exclamation-triangle' : type === 'success' ? 'check-circle' : 'info-circle'} me-2"></i>
+                ${message}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+
+        function animateElements() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(30px)';
+                section.style.transition = 'all 0.6s ease';
+                observer.observe(section);
+            });
+        }
+
+        // Add confetti animation CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes confettiFall {
+                0% {
+                    transform: translateY(-10px) rotate(0deg);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(100vh) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

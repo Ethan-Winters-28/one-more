@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Other Services Management - Nigam Setu Admin Portal</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .admin-services-section {
+            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00ffc6, #00d1ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .summary-card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 198, 0.2);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 255, 198, 0.1), rgba(0, 209, 255, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 255, 198, 0.2);
+        }
+
+        .summary-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .icon-cyan { background: rgba(0, 255, 198, 0.2); color: #00ffc6; }
+        .icon-teal { background: rgba(0, 209, 255, 0.2); color: #00d1ff; }
+        .icon-yellow { background: rgba(255, 204, 0, 0.2); color: #ffcc00; }
+        .icon-green { background: rgba(0, 255, 148, 0.2); color: #00ff94; }
+
+        .card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.25rem;
+        }
+
+        .card-label {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        .card-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .trend-up { color: #00ff94; }
+        .trend-down { color: #ff3b3b; }
+
+        .controls-section {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .control-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #e2e8f0;
+        }
+
+        .control-input, .control-select {
+            padding: 0.75rem 1rem;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            border-radius: 0.5rem;
+            color: #ffffff;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .control-input:focus, .control-select:focus {
+            outline: none;
+            border-color: #00ffc6;
+            box-shadow: 0 0 0 3px rgba(0, 255, 198, 0.1);
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #00ffc6, #00d1ff);
+            color: #0f172a;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 255, 198, 0.3);
+        }
+
+        .analytics-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .analytics-card {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .analytics-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 255, 198, 0.1);
+            border-color: rgba(0, 255, 198, 0.3);
+        }
+
+        .analytics-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        .chart-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #00ffc6;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 0.25rem;
+        }
+
+        .complaints-table-container {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 1rem;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .table-subtitle {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        .export-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(0, 255, 198, 0.1);
+            border: 1px solid #00ffc6;
+            border-radius: 0.5rem;
+            color: #00ffc6;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .export-btn:hover {
+            background: rgba(0, 255, 198, 0.2);
+        }
+
+        .complaints-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .complaints-table th,
+        .complaints-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .complaints-table th {
+            background: rgba(30, 41, 59, 0.5);
+            font-weight: 600;
+            color: #00ffc6;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .complaints-table th:hover {
+            background: rgba(0, 255, 198, 0.1);
+        }
+
+        .complaints-table tr:hover {
+            background: rgba(0, 255, 198, 0.05);
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .status-resolved {
+            background: rgba(0, 255, 148, 0.2);
+            color: #00ff94;
+            border: 1px solid #00ff94;
+        }
+
+        .status-inprogress {
+            background: rgba(255, 204, 0, 0.2);
+            color: #ffcc00;
+            border: 1px solid #ffcc00;
+        }
+
+        .status-pending {
+            background: rgba(255, 59, 59, 0.2);
+            color: #ff3b3b;
+            border: 1px solid #ff3b3b;
+        }
+
+        .service-type-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            background: rgba(0, 209, 255, 0.2);
+            color: #00d1ff;
+            border: 1px solid rgba(0, 209, 255, 0.3);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.25rem 0.5rem;
+            border: none;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-assign {
+            background: rgba(0, 255, 198, 0.2);
+            color: #00ffc6;
+            border: 1px solid #00ffc6;
+        }
+
+        .btn-resolve {
+            background: rgba(0, 255, 148, 0.2);
+            color: #00ff94;
+            border: 1px solid #00ff94;
+        }
+
+        .btn-notes {
+            background: rgba(255, 204, 0, 0.2);
+            color: #ffcc00;
+            border: 1px solid #ffcc00;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 255, 198, 0.2);
+        }
+
+        .alert-box {
+            background: rgba(255, 59, 59, 0.1);
+            border: 1px solid #ff3b3b;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        .alert-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .alert-icon {
+            font-size: 1.5rem;
+            color: #ff3b3b;
+        }
+
+        .alert-text {
+            color: #ff3b3b;
+            font-weight: 500;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .performance-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 255, 198, 0.1);
+        }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .metric-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .metric-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ffc6, #00d1ff);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 198, 0.3);
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #ff3b3b;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #e2e8f0;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            border-radius: 0.5rem;
+            color: #ffffff;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #00ffc6;
+            box-shadow: 0 0 0 3px rgba(0, 255, 198, 0.1);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+
+        .modal-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00ffc6, #00d1ff);
+            color: #0f172a;
+        }
+
+        .btn-secondary {
+            background: rgba(148, 163, 184, 0.2);
+            color: #94a3b8;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .admin-services-section {
+                padding: 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .analytics-section {
+                grid-template-columns: 1fr;
+            }
+
+            .complaints-table-container {
+                overflow-x: auto;
+            }
+
+            .complaints-table {
+                min-width: 800px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-services-section">
+        <!-- Section Header -->
+        <div class="section-header">
+            <h1 class="section-title">Other Services Management | अन्य सर्विस प्रबंधन</h1>
+            <p class="section-subtitle">Monitor, assign, and track all municipal service complaints across wards and officers with real-time analytics</p>
+        </div>
+
+        <!-- Alert Box -->
+        <div class="alert-box">
+            <div class="alert-content">
+                <div class="alert-icon">⚠️</div>
+                <div class="alert-text">5 Wards with pending complaints > 10 | 5 वार्डों में 10 से अधिक लंबित शिकायतें</div>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="card-icon icon-cyan">📊</div>
+                <div class="card-value" id="totalComplaints">1,247</div>
+                <div class="card-label">Total Complaints<br>All complaints submitted</div>
+                <div class="card-trend trend-up">
+                    <span>↗️ +12%</span>
+                    <span>vs last month</span>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="card-icon icon-yellow">⏳</div>
+                <div class="card-value" id="pendingComplaints">89</div>
+                <div class="card-label">Pending Complaints<br>Awaiting assignment or action</div>
+                <div class="card-trend trend-down">
+                    <span>↘️ -8%</span>
+                    <span>vs last week</span>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="card-icon icon-green">✅</div>
+                <div class="card-value" id="resolvedComplaints">1,158</div>
+                <div class="card-label">Resolved Complaints<br>Successfully completed</div>
+                <div class="card-trend trend-up">
+                    <span>↗️ +15%</span>
+                    <span>resolution rate</span>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="card-icon icon-teal">👥</div>
+                <div class="card-value" id="activeOfficers">24</div>
+                <div class="card-label">Officers Active<br>Currently handling complaints</div>
+                <div class="card-trend trend-up">
+                    <span>↗️ 96%</span>
+                    <span>efficiency rate</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Metrics -->
+        <div class="performance-metrics">
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-title">Average Resolution Time</div>
+                    <div class="metric-icon icon-cyan">⏱️</div>
+                </div>
+                <div class="card-value">2.4 Days</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 78%"></div>
+                </div>
+                <div class="card-label">Target: 3 days | Current: 78% efficiency</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-title">Citizen Satisfaction</div>
+                    <div class="metric-icon icon-green">😊</div>
+                </div>
+                <div class="card-value">4.6/5.0</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 92%"></div>
+                </div>
+                <div class="card-label">Based on 1,158 feedback responses</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-title">Officer Workload</div>
+                    <div class="metric-icon icon-yellow">📋</div>
+                </div>
+                <div class="card-value">3.7 Cases</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 62%"></div>
+                </div>
+                <div class="card-label">Average per officer | Optimal: 4-6 cases</div>
+            </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div class="analytics-section">
+            <div class="analytics-card">
+                <div class="analytics-title">
+                    📊 Complaints by Service Type | सेवा प्रकार के अनुसार शिकायतें
+                </div>
+                <div class="chart-container">
+                    <canvas id="serviceTypeChart"></canvas>
+                </div>
+                <div class="chart-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">437</div>
+                        <div class="stat-label">E-Challan</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">312</div>
+                        <div class="stat-label">Restoration</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">249</div>
+                        <div class="stat-label">Parking</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">125</div>
+                        <div class="stat-label">Boring</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analytics-card">
+                <div class="analytics-title">
+                    🥧 Status Distribution | स्थिति वितरण
+                </div>
+                <div class="chart-container">
+                    <canvas id="statusChart"></canvas>
+                </div>
+                <div class="chart-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">93%</div>
+                        <div class="stat-label">Resolved</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">5%</div>
+                        <div class="stat-label">In Progress</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">2%</div>
+                        <div class="stat-label">Pending</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analytics-card">
+                <div class="analytics-title">
+                    📈 Weekly Complaint Trends | साप्ताहिक शिकायत रुझान
+                </div>
+                <div class="chart-container">
+                    <canvas id="trendsChart"></canvas>
+                </div>
+                <div class="chart-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">142</div>
+                        <div class="stat-label">This Week</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">156</div>
+                        <div class="stat-label">Last Week</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">-9%</div>
+                        <div class="stat-label">Change</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analytics-card">
+                <div class="analytics-title">
+                    🏘️ Ward Performance | वार्ड प्रदर्शन
+                </div>
+                <div class="chart-container">
+                    <canvas id="wardChart"></canvas>
+                </div>
+                <div class="chart-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">Ward 1</div>
+                        <div class="stat-label">Best Performance</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">2.1 Days</div>
+                        <div class="stat-label">Avg Resolution</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls Section -->
+        <div class="controls-section">
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label class="control-label">Search | खोजें</label>
+                    <input type="text" class="control-input" id="searchInput" placeholder="Search by ID, name, or contact">
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Service Type | सेवा प्रकार</label>
+                    <select class="control-select" id="serviceFilter">
+                        <option value="">All Services</option>
+                        <option value="E-Challan">E-Challan</option>
+                        <option value="Restoration">Restoration</option>
+                        <option value="Parking">Parking</option>
+                        <option value="Boring">Boring</option>
+                        <option value="Noise Pollution">Noise Pollution</option>
+                        <option value="C&D Waste">C&D Waste</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Ward | वार्ड</label>
+                    <select class="control-select" id="wardFilter">
+                        <option value="">All Wards</option>
+                        <option value="Ward 1">Ward 1</option>
+                        <option value="Ward 2">Ward 2</option>
+                        <option value="Ward 3">Ward 3</option>
+                        <option value="Ward 4">Ward 4</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Status | स्थिति</label>
+                    <select class="control-select" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="Pending">Pending</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Resolved">Resolved</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <button class="filter-btn" onclick="applyFilters()">Apply Filters | फ़िल्टर लगाएं</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Complaints Table -->
+        <div class="complaints-table-container">
+            <div class="table-header">
+                <div>
+                    <div class="table-title">Complaints Dashboard | शिकायत डैशबोर्ड</div>
+                    <div class="table-subtitle">Real-time complaint tracking and management</div>
+                </div>
+                <button class="export-btn" onclick="exportData()">📊 Export Data</button>
+            </div>
+            <table class="complaints-table">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Complaint ID</th>
+                        <th onclick="sortTable(1)">Service Type</th>
+                        <th onclick="sortTable(2)">Citizen Name</th>
+                        <th onclick="sortTable(3)">Contact</th>
+                        <th onclick="sortTable(4)">Ward/Zone</th>
+                        <th onclick="sortTable(5)">Assigned Officer</th>
+                        <th onclick="sortTable(6)">Status</th>
+                        <th onclick="sortTable(7)">Submitted On</th>
+                        <th onclick="sortTable(8)">Last Update</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="complaintsTableBody">
+                    <!-- Dynamic content will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Assign Officer Modal -->
+    <div class="modal" id="assignModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Assign Officer | अधिकारी नियुक्त करें</div>
+                <button class="close-btn" onclick="closeModal('assignModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Select Officer | अधिकारी चुनें</label>
+                <select class="form-select" id="officerSelect">
+                    <option value="">Choose Officer</option>
+                    <option value="Rajesh Kumar">Rajesh Kumar - Ward 1</option>
+                    <option value="Priya Sharma">Priya Sharma - Ward 2</option>
+                    <option value="Amit Singh">Amit Singh - Ward 3</option>
+                    <option value="Sunita Devi">Sunita Devi - Ward 4</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Priority | प्राथमिकता</label>
+                <select class="form-select" id="prioritySelect">
+                    <option value="Normal">Normal</option>
+                    <option value="High">High</option>
+                    <option value="Urgent">Urgent</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Notes | टिप्पणी</label>
+                <textarea class="form-textarea" rows="3" id="assignNotes" placeholder="Add assignment notes..."></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn btn-secondary" onclick="closeModal('assignModal')">Cancel</button>
+                <button class="modal-btn btn-primary" onclick="assignOfficer()">Assign Officer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Notes Modal -->
+    <div class="modal" id="notesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Add Notes | टिप्पणी जोड़ें</div>
+                <button class="close-btn" onclick="closeModal('notesModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Update Notes | अपडेट नोट्स</label>
+                <textarea class="form-textarea" rows="4" id="updateNotes" placeholder="Add progress notes or updates..."></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Status Update | स्थिति अपडेट</label>
+                <select class="form-select" id="statusUpdate">
+                    <option value="Pending">Pending</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Resolved">Resolved</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn btn-secondary" onclick="closeModal('notesModal')">Cancel</button>
+                <button class="modal-btn btn-primary" onclick="addNotes()">Save Notes</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample complaint data
+        const complaintsData = [
+            {
+                id: 'COMP-2024-001',
+                serviceType: 'E-Challan',
+                citizenName: 'Rajesh Kumar',
+                contact: '9876543210',
+                ward: 'Ward 1',
+                officer: 'Priya Sharma',
+                status: 'Resolved',
+                submitted: '2024-12-15 10:30',
+                lastUpdate: '2024-12-15 14:45'
+            },
+            {
+                id: 'COMP-2024-002',
+                serviceType: 'Restoration',
+                citizenName: 'Sunita Devi',
+                contact: '9876543211',
+                ward: 'Ward 2',
+                officer: 'Amit Singh',
+                status: 'In Progress',
+                submitted: '2024-12-15 11:15',
+                lastUpdate: '2024-12-15 16:20'
+            },
+            {
+                id: 'COMP-2024-003',
+                serviceType: 'Parking',
+                citizenName: 'Mohammad Ali',
+                contact: '9876543212',
+                ward: 'Ward 3',
+                officer: 'Unassigned',
+                status: 'Pending',
+                submitted: '2024-12-15 12:00',
+                lastUpdate: '2024-12-15 12:00'
+            },
+            {
+                id: 'COMP-2024-004',
+                serviceType: 'Boring',
+                citizenName: 'Geeta Sharma',
+                contact: '9876543213',
+                ward: 'Ward 1',
+                officer: 'Rajesh Kumar',
+                status: 'Resolved',
+                submitted: '2024-12-14 09:45',
+                lastUpdate: '2024-12-15 11:30'
+            },
+            {
+                id: 'COMP-2024-005',
+                serviceType: 'Noise Pollution',
+                citizenName: 'Vikram Singh',
+                contact: '9876543214',
+                ward: 'Ward 4',
+                officer: 'Sunita Devi',
+                status: 'In Progress',
+                submitted: '2024-12-15 08:20',
+                lastUpdate: '2024-12-15 15:10'
+            },
+            {
+                id: 'COMP-2024-006',
+                serviceType: 'C&D Waste',
+                citizenName: 'Anita Patel',
+                contact: '9876543215',
+                ward: 'Ward 2',
+                officer: 'Unassigned',
+                status: 'Pending',
+                submitted: '2024-12-15 13:30',
+                lastUpdate: '2024-12-15 13:30'
+            },
+            {
+                id: 'COMP-2024-007',
+                serviceType: 'E-Challan',
+                citizenName: 'Ravi Gupta',
+                contact: '9876543216',
+                ward: 'Ward 3',
+                officer: 'Priya Sharma',
+                status: 'Resolved',
+                submitted: '2024-12-14 16:45',
+                lastUpdate: '2024-12-15 09:15'
+            },
+            {
+                id: 'COMP-2024-008',
+                serviceType: 'Restoration',
+                citizenName: 'Meera Joshi',
+                contact: '9876543217',
+                ward: 'Ward 1',
+                officer: 'Amit Singh',
+                status: 'In Progress',
+                submitted: '2024-12-15 14:20',
+                lastUpdate: '2024-12-15 17:30'
+            }
+        ];
+
+        let currentComplaintId = null;
+        let charts = {};
+
+        // Initialize the dashboard
+        function initializeDashboard() {
+            renderComplaintsTable(complaintsData);
+            updateCounters();
+            initializeCharts();
+        }
+
+        // Initialize all charts
+        function initializeCharts() {
+            initServiceTypeChart();
+            initStatusChart();
+            initTrendsChart();
+            initWardChart();
+        }
+
+        // Service Type Chart
+        function initServiceTypeChart() {
+            const ctx = document.getElementById('serviceTypeChart').getContext('2d');
+            charts.serviceType = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['E-Challan', 'Restoration', 'Parking', 'Boring', 'Noise Pollution', 'C&D Waste'],
+                    datasets: [{
+                        label: 'Complaints',
+                        data: [437, 312, 249, 125, 74, 50],
+                        backgroundColor: [
+                            'rgba(0, 255, 198, 0.8)',
+                            'rgba(0, 209, 255, 0.8)',
+                            'rgba(255, 204, 0, 0.8)',
+                            'rgba(0, 255, 148, 0.8)',
+                            'rgba(255, 59, 59, 0.8)',
+                            'rgba(148, 163, 184, 0.8)'
+                        ],
+                        borderColor: [
+                            '#00ffc6',
+                            '#00d1ff',
+                            '#ffcc00',
+                            '#00ff94',
+                            '#ff3b3b',
+                            '#94a3b8'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.1)'
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Status Chart
+        function initStatusChart() {
+            const ctx = document.getElementById('statusChart').getContext('2d');
+            charts.status = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Resolved', 'In Progress', 'Pending'],
+                    datasets: [{
+                        data: [1158, 60, 29],
+                        backgroundColor: [
+                            'rgba(0, 255, 148, 0.8)',
+                            'rgba(255, 204, 0, 0.8)',
+                            'rgba(255, 59, 59, 0.8)'
+                        ],
+                        borderColor: [
+                            '#00ff94',
+                            '#ffcc00',
+                            '#ff3b3b'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#e2e8f0',
+                                padding: 20
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Trends Chart
+        function initTrendsChart() {
+            const ctx = document.getElementById('trendsChart').getContext('2d');
+            charts.trends = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'This Week',
+                        data: [18, 25, 22, 28, 24, 15, 10],
+                        borderColor: '#00ffc6',
+                        backgroundColor: 'rgba(0, 255, 198, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Last Week',
+                        data: [22, 28, 26, 32, 29, 18, 13],
+                        borderColor: '#00d1ff',
+                        backgroundColor: 'rgba(0, 209, 255, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#e2e8f0'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.1)'
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Ward Performance Chart
+        function initWardChart() {
+            const ctx = document.getElementById('wardChart').getContext('2d');
+            charts.ward = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Resolution Speed', 'Citizen Satisfaction', 'Officer Efficiency', 'Complaint Volume', 'Response Time'],
+                    datasets: [{
+                        label: 'Ward 1',
+                        data: [85, 92, 88, 75, 90],
+                        borderColor: '#00ffc6',
+                        backgroundColor: 'rgba(0, 255, 198, 0.2)',
+                        pointBackgroundColor: '#00ffc6'
+                    }, {
+                        label: 'Ward 2',
+                        data: [78, 85, 82, 85, 80],
+                        borderColor: '#00d1ff',
+                        backgroundColor: 'rgba(0, 209, 255, 0.2)',
+                        pointBackgroundColor: '#00d1ff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#e2e8f0'
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.2)'
+                            },
+                            pointLabels: {
+                                color: '#94a3b8'
+                            },
+                            ticks: {
+                                color: '#94a3b8',
+                                backdropColor: 'transparent'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Render complaints table
+        function renderComplaintsTable(data) {
+            const tbody = document.getElementById('complaintsTableBody');
+            tbody.innerHTML = '';
+
+            data.forEach(complaint => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${complaint.id}</td>
+                    <td><span class="service-type-badge">${complaint.serviceType}</span></td>
+                    <td>${complaint.citizenName}</td>
+                    <td>${complaint.contact}</td>
+                    <td>${complaint.ward}</td>
+                    <td>${complaint.officer}</td>
+                    <td><span class="status-badge status-${complaint.status.toLowerCase().replace(' ', '')}">${getStatusIcon(complaint.status)} ${complaint.status}</span></td>
+                    <td>${complaint.submitted}</td>
+                    <td>${complaint.lastUpdate}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn btn-assign" onclick="openAssignModal('${complaint.id}')">Assign</button>
+                            <button class="action-btn btn-resolve" onclick="markResolved('${complaint.id}')">Resolve</button>
+                            <button class="action-btn btn-notes" onclick="openNotesModal('${complaint.id}')">Notes</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Get status icon
+        function getStatusIcon(status) {
+            switch(status) {
+                case 'Resolved': return '✅';
+                case 'In Progress': return '⚠️';
+                case 'Pending': return '❌';
+                default: return '⚪';
+            }
+        }
+
+        // Update counters
+        function updateCounters() {
+            const total = complaintsData.length;
+            const pending = complaintsData.filter(c => c.status === 'Pending').length;
+            const resolved = complaintsData.filter(c => c.status === 'Resolved').length;
+            const officers = new Set(complaintsData.map(c => c.officer).filter(o => o !== 'Unassigned')).size;
+
+            animateCounter('totalComplaints', 1247);
+            animateCounter('pendingComplaints', pending);
+            animateCounter('resolvedComplaints', resolved);
+            animateCounter('activeOfficers', officers);
+        }
+
+        // Animate counter
+        function animateCounter(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            const startValue = 0;
+            const duration = 2000;
+            const startTime = performance.now();
+
+            function updateCounter(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const currentValue = Math.floor(startValue + (targetValue - startValue) * progress);
+                
+                element.textContent = currentValue.toLocaleString();
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                }
+            }
+            
+            requestAnimationFrame(updateCounter);
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const serviceFilter = document.getElementById('serviceFilter').value;
+            const wardFilter = document.getElementById('wardFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+
+            let filteredData = complaintsData.filter(complaint => {
+                const matchesSearch = !searchTerm || 
+                    complaint.id.toLowerCase().includes(searchTerm) ||
+                    complaint.citizenName.toLowerCase().includes(searchTerm) ||
+                    complaint.contact.includes(searchTerm);
+                
+                const matchesService = !serviceFilter || complaint.serviceType === serviceFilter;
+                const matchesWard = !wardFilter || complaint.ward === wardFilter;
+                const matchesStatus = !statusFilter || complaint.status === statusFilter;
+
+                return matchesSearch && matchesService && matchesWard && matchesStatus;
+            });
+
+            renderComplaintsTable(filteredData);
+        }
+
+        // Export data
+        function exportData() {
+            const csvContent = "data:text/csv;charset=utf-8," 
+                + "Complaint ID,Service Type,Citizen Name,Contact,Ward,Officer,Status,Submitted,Last Update\n"
+                + complaintsData.map(row => 
+                    `${row.id},${row.serviceType},${row.citizenName},${row.contact},${row.ward},${row.officer},${row.status},${row.submitted},${row.lastUpdate}`
+                ).join("\n");
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "complaints_data.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Sort table
+        function sortTable(columnIndex) {
+            console.log(`Sorting by column ${columnIndex}`);
+        }
+
+        // Open assign modal
+        function openAssignModal(complaintId) {
+            currentComplaintId = complaintId;
+            document.getElementById('assignModal').style.display = 'flex';
+        }
+
+        // Open notes modal
+        function openNotesModal(complaintId) {
+            currentComplaintId = complaintId;
+            document.getElementById('notesModal').style.display = 'flex';
+        }
+
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            currentComplaintId = null;
+        }
+
+        // Assign officer
+        function assignOfficer() {
+            const officer = document.getElementById('officerSelect').value;
+            const priority = document.getElementById('prioritySelect').value;
+            const notes = document.getElementById('assignNotes').value;
+
+            if (!officer) {
+                alert('Please select an officer');
+                return;
+            }
+
+            const complaint = complaintsData.find(c => c.id === currentComplaintId);
+            if (complaint) {
+                complaint.officer = officer;
+                complaint.status = 'In Progress';
+                complaint.lastUpdate = new Date().toLocaleString('en-IN');
+            }
+
+            renderComplaintsTable(complaintsData);
+            updateCounters();
+            closeModal('assignModal');
+
+            document.getElementById('officerSelect').value = '';
+            document.getElementById('prioritySelect').value = 'Normal';
+            document.getElementById('assignNotes').value = '';
+        }
+
+        // Add notes
+        function addNotes() {
+            const notes = document.getElementById('updateNotes').value;
+            const status = document.getElementById('statusUpdate').value;
+
+            if (!notes) {
+                alert('Please add notes');
+                return;
+            }
+
+            const complaint = complaintsData.find(c => c.id === currentComplaintId);
+            if (complaint) {
+                complaint.status = status;
+                complaint.lastUpdate = new Date().toLocaleString('en-IN');
+            }
+
+            renderComplaintsTable(complaintsData);
+            updateCounters();
+            closeModal('notesModal');
+
+            document.getElementById('updateNotes').value = '';
+            document.getElementById('statusUpdate').value = 'Pending';
+        }
+
+        // Mark resolved
+        function markResolved(complaintId) {
+            const complaint = complaintsData.find(c => c.id === complaintId);
+            if (complaint) {
+                complaint.status = 'Resolved';
+                complaint.lastUpdate = new Date().toLocaleString('en-IN');
+            }
+
+            renderComplaintsTable(complaintsData);
+            updateCounters();
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // Initialize dashboard on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboard();
+        });
+
+        // Real-time updates simulation
+        setInterval(() => {
+            const randomIndex = Math.floor(Math.random() * complaintsData.length);
+            complaintsData[randomIndex].lastUpdate = new Date().toLocaleString('en-IN');
+            
+            // Update charts with new data
+            if (charts.serviceType) {
+                const newData = charts.serviceType.data.datasets[0].data.map(val => 
+                    val + Math.floor(Math.random() * 3) - 1
+                );
+                charts.serviceType.data.datasets[0].data = newData;
+                charts.serviceType.update('none');
+            }
+            
+            updateCounters();
+        }, 15000);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9707312ea791a8fc',t:'MTc1NTQxMjk1My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

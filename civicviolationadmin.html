@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Civic Violation Management - Nigam Setu | Indore Smart City</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Glassmorphic Card Base */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0, 255, 198, 0.1), rgba(0, 255, 148, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .glass-card:hover::before {
+            opacity: 1;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 255, 198, 0.2);
+            border-color: rgba(0, 255, 198, 0.3);
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .main-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #00ffc6, #00ff94, #00d1ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(0, 255, 198, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 30px;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .kpi-card {
+            background: linear-gradient(135deg, rgba(0, 255, 198, 0.1), rgba(0, 255, 148, 0.1));
+            border: 2px solid rgba(0, 255, 198, 0.3);
+            animation: slideInUp 0.8s ease forwards;
+            animation-delay: var(--delay);
+        }
+
+        .kpi-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .kpi-icon {
+            font-size: 3rem;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+
+        .kpi-data h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .kpi-data p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        /* Category Cards */
+        .categories-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #00ffc6;
+            text-align: center;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .category-card {
+            background: linear-gradient(135deg, rgba(255, 204, 0, 0.1), rgba(255, 59, 59, 0.1));
+            border: 2px solid rgba(255, 204, 0, 0.3);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            border-color: rgba(255, 204, 0, 0.6);
+            box-shadow: 0 15px 35px rgba(255, 204, 0, 0.3);
+        }
+
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 15px currentColor);
+        }
+
+        .category-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .category-count {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffcc00;
+            margin-bottom: 15px;
+        }
+
+        .view-btn {
+            background: linear-gradient(45deg, #00ffc6, #00ff94);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            color: #0f172a;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 255, 198, 0.4);
+        }
+
+        /* Expandable Details */
+        .category-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            margin-top: 20px;
+        }
+
+        .category-details.expanded {
+            max-height: 800px;
+        }
+
+        .violation-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 198, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 15px;
+            align-items: center;
+            animation: slideInLeft 0.3s ease;
+        }
+
+        .violation-info {
+            font-size: 0.9rem;
+        }
+
+        .violation-info strong {
+            color: #00ffc6;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .resolve-btn, .escalate-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .resolve-btn {
+            background: linear-gradient(45deg, #00ff94, #00ffc6);
+            color: #0f172a;
+        }
+
+        .escalate-btn {
+            background: linear-gradient(45deg, #ff3b3b, #ffcc00);
+            color: white;
+        }
+
+        .resolve-btn:hover, .escalate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Violation Table */
+        .table-container {
+            margin-bottom: 40px;
+        }
+
+        .table-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 198, 0.3);
+            border-radius: 25px;
+            padding: 12px 20px;
+            color: white;
+            font-size: 1rem;
+            min-width: 300px;
+        }
+
+        .search-box::placeholder {
+            color: #94a3b8;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .violations-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .violations-table th {
+            background: linear-gradient(45deg, rgba(0, 255, 198, 0.2), rgba(0, 255, 148, 0.2));
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(0, 255, 198, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .violations-table th:hover {
+            background: linear-gradient(45deg, rgba(0, 255, 198, 0.3), rgba(0, 255, 148, 0.3));
+        }
+
+        .violations-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .violations-table tr:nth-child(even) {
+            background: rgba(0, 255, 198, 0.05);
+        }
+
+        .violations-table tr:hover {
+            background: rgba(0, 255, 198, 0.15);
+            transform: scale(1.01);
+            box-shadow: 0 5px 15px rgba(0, 255, 198, 0.2);
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .status-pending {
+            background: rgba(255, 204, 0, 0.2);
+            color: #ffcc00;
+            border: 1px solid #ffcc00;
+        }
+
+        .status-resolved {
+            background: rgba(0, 255, 148, 0.2);
+            color: #00ff94;
+            border: 1px solid #00ff94;
+        }
+
+        .status-escalated {
+            background: rgba(255, 59, 59, 0.2);
+            color: #ff3b3b;
+            border: 1px solid #ff3b3b;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .page-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 198, 0.3);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .page-btn.active,
+        .page-btn:hover {
+            background: linear-gradient(45deg, #00ffc6, #00ff94);
+            color: #0f172a;
+            border-color: transparent;
+        }
+
+        /* Winner Podium */
+        .podium-section {
+            margin-bottom: 40px;
+        }
+
+        .podium-container {
+            display: flex;
+            justify-content: center;
+            align-items: end;
+            gap: 20px;
+            height: 300px;
+            margin-bottom: 30px;
+        }
+
+        .podium-place {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .podium-place:hover {
+            transform: translateY(-10px);
+        }
+
+        .podium-bar {
+            width: 120px;
+            background: linear-gradient(to top, var(--color), transparent);
+            border: 2px solid var(--color);
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 0 30px var(--glow);
+            animation: growUp 1.5s ease forwards;
+            animation-delay: var(--delay);
+        }
+
+        .first-place .podium-bar {
+            height: 200px;
+            --color: #ffcc00;
+            --glow: rgba(255, 204, 0, 0.5);
+        }
+
+        .second-place .podium-bar {
+            height: 150px;
+            --color: #94a3b8;
+            --glow: rgba(148, 163, 184, 0.5);
+        }
+
+        .third-place .podium-bar {
+            height: 100px;
+            --color: #cd7f32;
+            --glow: rgba(205, 127, 50, 0.5);
+        }
+
+        .podium-label {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .ward-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .violation-count {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        /* AI Insights */
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .insight-card {
+            background: linear-gradient(135deg, rgba(0, 209, 255, 0.1), rgba(0, 255, 198, 0.1));
+            border: 2px solid rgba(0, 209, 255, 0.3);
+            position: relative;
+        }
+
+        .insight-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+
+        .insight-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Ward Heatmap */
+        .heatmap-section {
+            margin-bottom: 40px;
+        }
+
+        .heatmap-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .filter-dropdown {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 198, 0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .filter-dropdown:hover {
+            background: linear-gradient(45deg, #00ffc6, #00ff94);
+            color: #0f172a;
+            border-color: transparent;
+        }
+
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 8px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .ward-cell {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .ward-cell:hover {
+            transform: scale(1.1);
+            z-index: 10;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .ward-low {
+            background: linear-gradient(45deg, rgba(0, 255, 148, 0.3), rgba(0, 255, 198, 0.3));
+            color: #00ff94;
+        }
+
+        .ward-medium {
+            background: linear-gradient(45deg, rgba(255, 204, 0, 0.3), rgba(255, 165, 0, 0.3));
+            color: #ffcc00;
+        }
+
+        .ward-high {
+            background: linear-gradient(45deg, rgba(255, 59, 59, 0.3), rgba(255, 99, 71, 0.3));
+            color: #ff3b3b;
+        }
+
+        /* Hall of Compliance */
+        .compliance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .compliance-card {
+            background: linear-gradient(135deg, rgba(0, 255, 148, 0.1), rgba(0, 255, 198, 0.1));
+            border: 2px solid rgba(0, 255, 148, 0.3);
+            text-align: center;
+            position: relative;
+        }
+
+        .compliance-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: linear-gradient(45deg, #ffcc00, #ffd700);
+            color: #0f172a;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.5);
+        }
+
+        .compliance-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00ffc6, #00ff94);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 15px;
+            box-shadow: 0 0 20px rgba(0, 255, 198, 0.4);
+        }
+
+        .compliance-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .compliance-role {
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+
+        .compliance-achievement {
+            font-size: 0.9rem;
+            color: #00ff94;
+            font-weight: 500;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border: 1px solid rgba(0, 255, 198, 0.3);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes growUp {
+            from {
+                height: 0;
+            }
+            to {
+                height: var(--final-height);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5rem;
+            }
+            
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .categories-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+            
+            .podium-container {
+                height: 250px;
+            }
+            
+            .first-place .podium-bar {
+                height: 150px;
+            }
+            
+            .second-place .podium-bar {
+                height: 120px;
+            }
+            
+            .third-place .podium-bar {
+                height: 90px;
+            }
+            
+            .table-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                min-width: auto;
+            }
+
+            .violation-item {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .action-buttons {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .main-title {
+                font-size: 2rem;
+            }
+            
+            .heatmap-grid {
+                grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="main-title">Civic Violation Management / नागरिक उल्लंघन प्रबंधन</h1>
+            <p class="subtitle">Track and manage civic violations, penalties, and compliance with transparency.</p>
+        </header>
+
+        <!-- KPI Cards -->
+        <section class="kpi-grid">
+            <div class="glass-card kpi-card" style="--delay: 0.2s;">
+                <div class="kpi-content">
+                    <div class="kpi-icon" style="color: #ff3b3b;">📊</div>
+                    <div class="kpi-data">
+                        <h3 style="color: #ff3b3b;">2,847</h3>
+                        <p>Total Violations</p>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card kpi-card" style="--delay: 0.4s;">
+                <div class="kpi-content">
+                    <div class="kpi-icon" style="color: #00ff94;">💰</div>
+                    <div class="kpi-data">
+                        <h3 style="color: #00ff94;">₹18,45,600</h3>
+                        <p>Penalties Collected ↗️</p>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card kpi-card" style="--delay: 0.6s;">
+                <div class="kpi-content">
+                    <div class="kpi-icon" style="color: #ffcc00;">⚠️</div>
+                    <div class="kpi-data">
+                        <h3 style="color: #ffcc00;">432</h3>
+                        <p>Pending Cases</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Violation Categories -->
+        <section class="categories-section">
+            <h2 class="section-title">Violation Categories / उल्लंघन श्रेणियां</h2>
+            <div class="categories-grid">
+                <div class="glass-card category-card" onclick="toggleDetails('water')">
+                    <div class="category-icon" style="color: #00d1ff;">🚱</div>
+                    <div class="category-title">Illegal Motor Water Use<br>नर्मदा जल मोटर खींचना</div>
+                    <div class="category-count">847</div>
+                    <button class="view-btn">View Details</button>
+                    <div class="category-details" id="water-details">
+                        <div class="violation-item">
+                            <div class="violation-info"><strong>Ward:</strong> 22</div>
+                            <div class="violation-info"><strong>Location:</strong> Rajwada Square</div>
+                            <div class="violation-info"><strong>Date:</strong> 2024-01-15</div>
+                            <div class="action-buttons">
+                                <button class="resolve-btn">Resolve</button>
+                                <button class="escalate-btn">Escalate</button>
+                            </div>
+                        </div>
+                        <div class="violation-item">
+                            <div class="violation-info"><strong>Ward:</strong> 15</div>
+                            <div class="violation-info"><strong>Location:</strong> Sarafa Bazaar</div>
+                            <div class="violation-info"><strong>Date:</strong> 2024-01-14</div>
+                            <div class="action-buttons">
+                                <button class="resolve-btn">Resolve</button>
+                                <button class="escalate-btn">Escalate</button>
+                            </div>
+                        </div>
+                        <div class="violation-item">
+                            <div class="violation-info"><strong>Ward:</strong> 67</div>
+                            <div class="violation-info"><strong>Location:</strong> Palasia Square</div>
+                            <div class="violation-info"><strong>Date:</strong> 2024-01-10</div>
+                            <div class="action-buttons">
+                                <button class="resolve-btn">Resolve</button>
+                                <button class="escalate-btn">Escalate</button>
+                            </div>
+                        </div>
+                        <div class="violation-item">
+                            <div class="violation-info"><strong>Ward:</strong> 56</div>
+                            <div class="violation-info"><strong>Location:</strong> Treasure Island</div>
+                            <div class="violation-info"><strong>Date:</strong> 2024-01-06</div>
+                            <div class="action-buttons">
+                                <button class="resolve-btn">Resolve</button>
+                                <button class="escalate-btn">Escalate</button>
+                            </div>
+                        </div>
+                        <div class="violation-item">
+                            <div class="violation-info"><strong>Ward:</strong> 29</div>
+                            <div class="violation-info"><strong>Location:</strong> Scheme 78</div>
+                            <div class="violation-info"><strong>Date:</strong> 2024-01-02</div>
+                            <div class="action-buttons">
+                                <button class="resolve-btn">Resolve</button>
+                                <button class="escalate-btn">Escalate</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-card category-card" onclick="toggleDetails('plastic')">
+                    <div class="category-icon" style="color: #ff3b3b;">🛍️</div>
+                    <div class="category-title">Single-Use Plastic Violation<br>प्रतिबंधित प्लास्टिक उपयोग</div>
+                    <div class="category-count">1,234</div>
+                    <button class="view-btn">View Details</button>
+                    <div class="category-details" id="plastic-details">
+                        <div class="violation-item">
+                            <div class="violation-info"><strong>Ward:</strong> 45</div>
+                            <div class="violation-info"><strong>Location:</strong> Vijay Nagar</div>
+                            <div class="violation-info"><strong>Date:</strong> 2024-01-11</div>
+                            <div class="action-buttons">
+                                <button class="resolve-btn">Resolve</button>
+                                <button class="escalate-btn">Escalate</button>
+                            </div>
+                        </div>
+                        <div class="violation-item">
+                            <div class="violation-info"><strong>Ward:</strong> 78</div>
+                            <div class="violation-info"><strong>Location:</strong> Bhawar Kuan</div>
+                            <div class="violation-info"><strong>Date:</strong> 2024-01-08</div>
+                            <div class="action-buttons">
+                                <button class="resolve-btn">Resolve</button>
+                                <button class="escalate-btn">Escalate</button>
+                            </div>
+                        </div>
+                        <div class="violation-item">
+                            <div class="violation-info"><strong>Ward:</strong> 19</div>
+                            <div class="violation-info"><strong>Location:</strong> Regal Square</div>
+                            <div class="violation-info"><strong>Date:</strong> 2024-01-04</div>
+                            <div class="action-buttons">
+                                <button class="resolve-btn">Resolve</button>
+                                <button class="escalate-btn">Escalate</button>
+                            </div>
+                        </div>
+                        <div class="violation-item">
+                            <div class="violation-info"><strong>Ward:</strong> 33</div>
+                            <div class="violation-info"><strong>Location:</strong> Indore Central Mall</div>
+                            <div class="violation-info"><strong>Date:</strong> 2024-01-03</div>
+                            <div class="action-buttons">
+                                <button class="resolve-btn">Resolve</button>
+                                <button class="escalate-btn">Escalate</button>
+                            </div>
+                        </div>
+                        <div class="violation-item">
+                            <div class="violation-info"><strong>Ward:</strong> 51</div>
+                            <div class="violation-info"><strong>Location:</strong> Phoenix Citywalk</div>
+                            <div class="violation-info"><strong>Date:</strong> 2024-01-01</div>
+                            <div class="action-buttons">
+                                <button class="resolve-btn">Resolve</button>
+                                <button class="escalate-btn">Escalate</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-card category-card" onclick="toggleDetails('vendor')">
+                    <div class="category-icon" style="color: #ffcc00;">🛒</div>
+                    <div class="category-title">Unauthorized Roadside Vendor<br>अवैध ठेला/अतिक्रमण</div>
+                    <div class="category-count">523</div>
+                    <button class="view-btn">View Details</button>
+                    <div class="category-details" id="vendor-details">
+                        <div class="violation-item">
+                            <div class="violation-info"><strong>Ward:</strong> 8</div>
+                            <div class="violation-info"><strong>Location:</strong> Choti Gwaltoli</div>
+                            <div class="violation-info"><strong>Date:</strong> 2024-01-13</div>
+                            <div class="action-buttons">
+                                <button class="resolve-btn">Resolve</button>
+                                <button class="escalate-btn">Escalate</button>
+                            </div>
+                        </div>
+                        <div class="violation-item">
+                            <div class="violation-info"><strong>Ward:</strong> 12</div>
+                            <div class="violation-info"><strong>Location:</strong> MT Cloth Market</div>
+                            <div class="violation-info"><strong>Date:</strong> 2024-01-09</div>
+                            <div class="action-buttons">
+                                <button class="resolve-btn">Resolve</button>
+                                <button class="escalate-btn">Escalate</button>
+                            </div>
+                        </div>
+                        <div class="violation-item">
+                            <div class="violation-info"><strong>Ward:</strong> 34</div>
+                            <div class="violation-info"><strong>Location:</strong> Sapna Sangeeta Road</div>
+                            <div class="violation-info"><strong>Date:</strong> 2024-01-05</div>
+                            <div class="action-buttons">
+                                <button class="resolve-btn">Resolve</button>
+                                <button class="escalate-btn">Escalate</button>
+                            </div>
+                        </div>
+                        <div class="violation-item">
+                            <div class="violation-info"><strong>Ward:</strong> 63</div>
+                            <div class="violation-info"><strong>Location:</strong> Bhawarkuan Main Road</div>
+                            <div class="violation-info"><strong>Date:</strong> 2024-01-01</div>
+                            <div class="action-buttons">
+                                <button class="resolve-btn">Resolve</button>
+                                <button class="escalate-btn">Escalate</button>
+                            </div>
+                        </div>
+                        <div class="violation-item">
+                            <div class="violation-info"><strong>Ward:</strong> 27</div>
+                            <div class="violation-info"><strong>Location:</strong> Malhar Mega Mall</div>
+                            <div class="violation-info"><strong>Date:</strong> 2023-12-28</div>
+                            <div class="action-buttons">
+                                <button class="resolve-btn">Resolve</button>
+                                <button class="escalate-btn">Escalate</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-card category-card" onclick="toggleDetails('garbage')">
+                    <div class="category-icon" style="color: #00ff94;">🚛</div>
+                    <div class="category-title">Garbage Vehicle Issue<br>कचरा गाड़ी की शिकायत</div>
+                    <div class="category-count">243</div>
+                    <button class="view-btn">View Details</button>
+                    <div class="category-details" id="garbage-details">
+                        <div class="violation-item">
+                            <div class="violation-info"><strong>Ward:</strong> 31</div>
+                            <div class="violation-info"><strong>Location:</strong> Khajrana Road</div>
+                            <div class="violation-info"><strong>Date:</strong> 2024-01-12</div>
+                            <div class="action-buttons">
+                                <button class="resolve-btn">Resolve</button>
+                                <button class="escalate-btn">Escalate</button>
+                            </div>
+                        </div>
+                        <div class="violation-item">
+                            <div class="violation-info"><strong>Ward:</strong> 23</div>
+                            <div class="violation-info"><strong>Location:</strong> Geeta Bhawan</div>
+                            <div class="violation-info"><strong>Date:</strong> 2024-01-07</div>
+                            <div class="action-buttons">
+                                <button class="resolve-btn">Resolve</button>
+                                <button class="escalate-btn">Escalate</button>
+                            </div>
+                        </div>
+                        <div class="violation-item">
+                            <div class="violation-info"><strong>Ward:</strong> 41</div>
+                            <div class="violation-info"><strong>Location:</strong> Bombay Hospital Road</div>
+                            <div class="violation-info"><strong>Date:</strong> 2024-01-03</div>
+                            <div class="action-buttons">
+                                <button class="resolve-btn">Resolve</button>
+                                <button class="escalate-btn">Escalate</button>
+                            </div>
+                        </div>
+                        <div class="violation-item">
+                            <div class="violation-info"><strong>Ward:</strong> 52</div>
+                            <div class="violation-info"><strong>Location:</strong> AB Road</div>
+                            <div class="violation-info"><strong>Date:</strong> 2023-12-30</div>
+                            <div class="action-buttons">
+                                <button class="resolve-btn">Resolve</button>
+                                <button class="escalate-btn">Escalate</button>
+                            </div>
+                        </div>
+                        <div class="violation-item">
+                            <div class="violation-info"><strong>Ward:</strong> 18</div>
+                            <div class="violation-info"><strong>Location:</strong> Scheme 54</div>
+                            <div class="violation-info"><strong>Date:</strong> 2023-12-25</div>
+                            <div class="action-buttons">
+                                <button class="resolve-btn">Resolve</button>
+                                <button class="escalate-btn">Escalate</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Violation Table -->
+        <section class="table-container">
+            <div class="glass-card">
+                <h2 class="section-title">Recent Violations / हाल की उल्लंघन</h2>
+                <div class="table-controls">
+                    <input type="text" class="search-box" placeholder="Search violations..." id="searchInput">
+                    <div>
+                        <button class="page-btn active" onclick="sortTable('date')">Sort by Date</button>
+                        <button class="page-btn" onclick="sortTable('penalty')">Sort by Penalty</button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table class="violations-table" id="violationsTable">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable('id')">Violation ID</th>
+                                <th onclick="sortTable('category')">Category</th>
+                                <th onclick="sortTable('ward')">Ward</th>
+                                <th onclick="sortTable('location')">Location</th>
+                                <th onclick="sortTable('officer')">Officer Assigned</th>
+                                <th onclick="sortTable('penalty')">Fine/Penalty</th>
+                                <th onclick="sortTable('status')">Status</th>
+                                <th onclick="sortTable('date')">Date Reported</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Table rows will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="pagination">
+                    <!-- Pagination buttons will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Winner Podium -->
+        <section class="podium-section">
+            <div class="glass-card">
+                <h2 class="section-title">Best Performing Wards / सर्वश्रेष्ठ वार्ड</h2>
+                <div class="podium-container">
+                    <div class="podium-place second-place" style="--delay: 0.5s;" onmouseenter="showPodiumTooltip(event, 'Ward 15', 23, 89)" onmouseleave="hideTooltip()">
+                        <div class="podium-bar" style="--final-height: 150px;">
+                            <div class="ward-number">Ward 15</div>
+                            <div class="violation-count">23 violations</div>
+                        </div>
+                        <div class="podium-label">
+                            <div style="font-size: 2rem;">🥈</div>
+                            <div>2nd Place</div>
+                        </div>
+                    </div>
+                    <div class="podium-place first-place" style="--delay: 0.3s;" onmouseenter="showPodiumTooltip(event, 'Ward 42', 12, 95)" onmouseleave="hideTooltip()">
+                        <div class="podium-bar" style="--final-height: 200px;">
+                            <div class="ward-number">Ward 42</div>
+                            <div class="violation-count">12 violations</div>
+                        </div>
+                        <div class="podium-label">
+                            <div style="font-size: 2rem;">🏆</div>
+                            <div>1st Place</div>
+                        </div>
+                    </div>
+                    <div class="podium-place third-place" style="--delay: 0.7s;" onmouseenter="showPodiumTooltip(event, 'Ward 8', 31, 82)" onmouseleave="hideTooltip()">
+                        <div class="podium-bar" style="--final-height: 100px;">
+                            <div class="ward-number">Ward 8</div>
+                            <div class="violation-count">31 violations</div>
+                        </div>
+                        <div class="podium-label">
+                            <div style="font-size: 2rem;">🥉</div>
+                            <div>3rd Place</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Insights -->
+        <section class="insights-section">
+            <h2 class="section-title">AI-Driven Insights / एआई अंतर्दृष्टि</h2>
+            <div class="insights-grid">
+                <div class="glass-card insight-card">
+                    <div class="insight-icon" style="color: #00ff94;">⚡</div>
+                    <div class="insight-text">Ward 18 cut plastic violations by 45% through targeted awareness campaigns and strict enforcement measures.</div>
+                </div>
+                <div class="glass-card insight-card">
+                    <div class="insight-icon" style="color: #00ffc6;">✅</div>
+                    <div class="insight-text">Ward 7 achieved fastest resolution rate at 92% with average response time of 2.3 hours for all violations.</div>
+                </div>
+                <div class="glass-card insight-card">
+                    <div class="insight-icon" style="color: #ffcc00;">💰</div>
+                    <div class="insight-text">Ward 25 collected ₹1.2L penalties this month, highest in Zone 3, showing effective enforcement protocols.</div>
+                </div>
+                <div class="glass-card insight-card">
+                    <div class="insight-icon" style="color: #ff3b3b;">⚠️</div>
+                    <div class="insight-text">Unauthorized vendors spiked 35% in Zone 3 (Wards 21-30). Immediate patrol deployment recommended.</div>
+                </div>
+                <div class="glass-card insight-card">
+                    <div class="insight-icon" style="color: #00d1ff;">📉</div>
+                    <div class="insight-text">Garbage complaints dropped 30% city-wide due to improved collection schedules and citizen feedback system.</div>
+                </div>
+                <div class="glass-card insight-card">
+                    <div class="insight-icon" style="color: #ff3b3b;">📈</div>
+                    <div class="insight-text">Water misuse violations clustered in Wards 9, 14, 32 near Narmada connection points. Enhanced monitoring needed.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ward Heatmap -->
+        <section class="heatmap-section">
+            <div class="glass-card">
+                <h2 class="section-title">Ward-wise Violation Heatmap / वार्ड-वार उल्लंघन हीटमैप</h2>
+                <div class="heatmap-controls">
+                    <select class="filter-dropdown" id="categoryFilter" onchange="filterHeatmap()">
+                        <option value="all">All Violations</option>
+                        <option value="plastic">Plastic Violations</option>
+                        <option value="water">Water Violations</option>
+                        <option value="vendor">Vendor Violations</option>
+                        <option value="garbage">Garbage Violations</option>
+                    </select>
+                </div>
+                <div class="heatmap-grid" id="heatmapGrid">
+                    <!-- Ward cells will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Hall of Compliance -->
+        <section class="compliance-section">
+            <h2 class="section-title">Hall of Compliance & Responsibility / अनुपालन हॉल</h2>
+            <div class="compliance-grid">
+                <div class="glass-card compliance-card">
+                    <div class="compliance-badge">Guardian of Clean City</div>
+                    <div class="compliance-avatar">👮</div>
+                    <div class="compliance-name">Rajesh Kumar</div>
+                    <div class="compliance-role">Ward 42 Officer</div>
+                    <div class="compliance-achievement">0 Plastic Violations - 100% Compliance</div>
+                </div>
+                <div class="glass-card compliance-card">
+                    <div class="compliance-badge">Guardian of Clean City</div>
+                    <div class="compliance-avatar">👩‍💼</div>
+                    <div class="compliance-name">Neha Sharma</div>
+                    <div class="compliance-role">Ward 18 Officer</div>
+                    <div class="compliance-achievement">0 Pending Cases - Guardian of Trust</div>
+                </div>
+                <div class="glass-card compliance-card">
+                    <div class="compliance-badge">Zero Complaints</div>
+                    <div class="compliance-avatar">👨‍💼</div>
+                    <div class="compliance-name">Ankit Verma</div>
+                    <div class="compliance-role">Ward 5 Officer</div>
+                    <div class="compliance-achievement">Zero Complaints 6 Months - Excellence Award</div>
+                </div>
+                <div class="glass-card compliance-card">
+                    <div class="compliance-badge">Top Responder</div>
+                    <div class="compliance-avatar">👮‍♂️</div>
+                    <div class="compliance-name">Ravi Malhotra</div>
+                    <div class="compliance-role">Ward 11 Officer</div>
+                    <div class="compliance-achievement">100% Timely Resolutions - 98% Strike Rate</div>
+                </div>
+                <div class="glass-card compliance-card">
+                    <div class="compliance-badge">Guardian of Trust</div>
+                    <div class="compliance-avatar">👩‍💼</div>
+                    <div class="compliance-name">Sunita Joshi</div>
+                    <div class="compliance-role">Ward 25 Officer</div>
+                    <div class="compliance-achievement">No Vendor Complaints - Citizen Favorite</div>
+                </div>
+                <div class="glass-card compliance-card">
+                    <div class="compliance-badge">Top Responder</div>
+                    <div class="compliance-avatar">👨‍💼</div>
+                    <div class="compliance-name">Vikram Rathore</div>
+                    <div class="compliance-role">Ward 30 Officer</div>
+                    <div class="compliance-achievement">98% Strike Rate - Fastest Response Time</div>
+                </div>
+                <div class="glass-card compliance-card">
+                    <div class="compliance-badge">Citizen Favorite</div>
+                    <div class="compliance-avatar">👩‍💼</div>
+                    <div class="compliance-name">Priya Nair</div>
+                    <div class="compliance-role">Ward 9 Officer</div>
+                    <div class="compliance-achievement">0 Complaints - 5★ Citizen Rating</div>
+                </div>
+                <div class="glass-card compliance-card">
+                    <div class="compliance-badge">Waste Management Hero</div>
+                    <div class="compliance-avatar">👨‍💼</div>
+                    <div class="compliance-name">Arun Mishra</div>
+                    <div class="compliance-role">Ward 15 Officer</div>
+                    <div class="compliance-achievement">Best in Waste Management - Zero Issues</div>
+                </div>
+                <div class="glass-card compliance-card">
+                    <div class="compliance-badge">100% Resolution</div>
+                    <div class="compliance-avatar">👩‍💼</div>
+                    <div class="compliance-name">Kiran Gupta</div>
+                    <div class="compliance-role">Ward 20 Officer</div>
+                    <div class="compliance-achievement">100% Garbage Resolution - Perfect Record</div>
+                </div>
+                <div class="glass-card compliance-card">
+                    <div class="compliance-badge">5★ Rating</div>
+                    <div class="compliance-avatar">👨‍💼</div>
+                    <div class="compliance-name">Manoj Yadav</div>
+                    <div class="compliance-role">Ward 34 Officer</div>
+                    <div class="compliance-achievement">No Plastic Violations - 5★ Rating</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Enhanced violation data with 20+ entries
+        const violationData = [
+            {id: 'VL001', category: 'Plastic', ward: 22, location: 'Rajwada Square', officer: 'Inspector Kumar', penalty: 5000, status: 'Resolved', date: '2024-01-15'},
+            {id: 'VL002', category: 'Water', ward: 15, location: 'Sarafa Bazaar', officer: 'Officer Sharma', penalty: 10000, status: 'Pending', date: '2024-01-14'},
+            {id: 'VL003', category: 'Vendor', ward: 8, location: 'Choti Gwaltoli', officer: 'Inspector Patel', penalty: 2000, status: 'Resolved', date: '2024-01-13'},
+            {id: 'VL004', category: 'Garbage', ward: 31, location: 'Khajrana Road', officer: 'Officer Singh', penalty: 3000, status: 'Pending', date: '2024-01-12'},
+            {id: 'VL005', category: 'Plastic', ward: 45, location: 'Vijay Nagar', officer: 'Inspector Gupta', penalty: 5000, status: 'Resolved', date: '2024-01-11'},
+            {id: 'VL006', category: 'Water', ward: 67, location: 'Palasia Square', officer: 'Officer Jain', penalty: 15000, status: 'Escalated', date: '2024-01-10'},
+            {id: 'VL007', category: 'Vendor', ward: 12, location: 'MT Cloth Market', officer: 'Inspector Verma', penalty: 1500, status: 'Resolved', date: '2024-01-09'},
+            {id: 'VL008', category: 'Plastic', ward: 78, location: 'Bhawar Kuan', officer: 'Officer Tiwari', penalty: 4500, status: 'Pending', date: '2024-01-08'},
+            {id: 'VL009', category: 'Garbage', ward: 23, location: 'Geeta Bhawan', officer: 'Inspector Yadav', penalty: 2500, status: 'Resolved', date: '2024-01-07'},
+            {id: 'VL010', category: 'Water', ward: 56, location: 'Treasure Island', officer: 'Officer Mishra', penalty: 12000, status: 'Pending', date: '2024-01-06'},
+            {id: 'VL011', category: 'Vendor', ward: 34, location: 'Sapna Sangeeta Road', officer: 'Inspector Agarwal', penalty: 1800, status: 'Resolved', date: '2024-01-05'},
+            {id: 'VL012', category: 'Plastic', ward: 19, location: 'Regal Square', officer: 'Officer Dubey', penalty: 5500, status: 'Pending', date: '2024-01-04'},
+            {id: 'VL013', category: 'Garbage', ward: 41, location: 'Bombay Hospital Road', officer: 'Inspector Chouhan', penalty: 3200, status: 'Resolved', date: '2024-01-03'},
+            {id: 'VL014', category: 'Water', ward: 29, location: 'Scheme 78', officer: 'Officer Malviya', penalty: 8000, status: 'Escalated', date: '2024-01-02'},
+            {id: 'VL015', category: 'Vendor', ward: 63, location: 'Bhawarkuan Main Road', officer: 'Inspector Soni', penalty: 2200, status: 'Resolved', date: '2024-01-01'},
+            {id: 'VL016', category: 'Plastic', ward: 33, location: 'Indore Central Mall', officer: 'Officer Pandey', penalty: 4800, status: 'Pending', date: '2023-12-31'},
+            {id: 'VL017', category: 'Water', ward: 71, location: 'Scheme 140', officer: 'Inspector Rawat', penalty: 11000, status: 'Resolved', date: '2023-12-30'},
+            {id: 'VL018', category: 'Vendor', ward: 27, location: 'Malhar Mega Mall', officer: 'Officer Bhatt', penalty: 1900, status: 'Pending', date: '2023-12-29'},
+            {id: 'VL019', category: 'Garbage', ward: 52, location: 'AB Road', officer: 'Inspector Saxena', penalty: 2800, status: 'Resolved', date: '2023-12-28'},
+            {id: 'VL020', category: 'Plastic', ward: 14, location: 'Holkar Stadium', officer: 'Officer Thakur', penalty: 5200, status: 'Escalated', date: '2023-12-27'},
+            {id: 'VL021', category: 'Water', ward: 39, location: 'Scheme 94', officer: 'Inspector Joshi', penalty: 9500, status: 'Pending', date: '2023-12-26'},
+            {id: 'VL022', category: 'Vendor', ward: 58, location: 'C21 Mall', officer: 'Officer Dixit', penalty: 2100, status: 'Resolved', date: '2023-12-25'}
+        ];
+
+        // Ward data for heatmap
+        const wardData = {};
+        for (let i = 1; i <= 85; i++) {
+            const violations = Math.floor(Math.random() * 100) + 1;
+            let level = 'low';
+            if (violations > 60) level = 'high';
+            else if (violations > 30) level = 'medium';
+            
+            wardData[i] = {
+                violations: violations,
+                level: level,
+                penalties: violations * (Math.floor(Math.random() * 3000) + 1000),
+                resolution: Math.floor(Math.random() * 40) + 60,
+                officers: Math.floor(Math.random() * 5) + 2
+            };
+        }
+
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let filteredData = [...violationData];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+            createHeatmap();
+            setupEventListeners();
+            animateKPICards();
+        });
+
+        // Toggle category details
+        function toggleDetails(category) {
+            const details = document.getElementById(category + '-details');
+            details.classList.toggle('expanded');
+        }
+
+        // Populate violation table with pagination
+        function populateTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageData = filteredData.slice(startIndex, endIndex);
+            
+            pageData.forEach(violation => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${violation.id}</td>
+                    <td>${violation.category}</td>
+                    <td>Ward ${violation.ward}</td>
+                    <td>${violation.location}</td>
+                    <td>${violation.officer}</td>
+                    <td>₹${violation.penalty.toLocaleString()}</td>
+                    <td><span class="status-badge status-${violation.status.toLowerCase()}">${violation.status}</span></td>
+                    <td>${violation.date}</td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            updatePagination();
+        }
+
+        // Update pagination
+        function updatePagination() {
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+            
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                button.textContent = i;
+                button.onclick = () => {
+                    currentPage = i;
+                    populateTable();
+                };
+                pagination.appendChild(button);
+            }
+        }
+
+        // Create ward heatmap
+        function createHeatmap() {
+            const grid = document.getElementById('heatmapGrid');
+            grid.innerHTML = '';
+            
+            for (let i = 1; i <= 85; i++) {
+                const cell = document.createElement('div');
+                cell.className = `ward-cell ward-${wardData[i].level}`;
+                cell.textContent = i;
+                cell.setAttribute('data-ward', i);
+                
+                cell.addEventListener('mouseenter', showWardTooltip);
+                cell.addEventListener('mouseleave', hideTooltip);
+                
+                grid.appendChild(cell);
+            }
+        }
+
+        // Show ward tooltip
+        function showWardTooltip(e) {
+            const ward = e.target.getAttribute('data-ward');
+            const data = wardData[ward];
+            const tooltip = document.getElementById('tooltip');
+            
+            tooltip.innerHTML = `
+                <strong>Ward ${ward}</strong><br>
+                Officers: ${data.officers}<br>
+                Violations: ${data.violations}<br>
+                Resolution Rate: ${data.resolution}%
+            `;
+            
+            tooltip.style.left = e.pageX + 10 + 'px';
+            tooltip.style.top = e.pageY - 10 + 'px';
+            tooltip.style.opacity = '1';
+        }
+
+        // Show podium tooltip
+        function showPodiumTooltip(e, ward, violations, resolution) {
+            const tooltip = document.getElementById('tooltip');
+            
+            tooltip.innerHTML = `
+                <strong>${ward}</strong><br>
+                Violations: ${violations}<br>
+                Resolution Rate: ${resolution}%
+            `;
+            
+            tooltip.style.left = e.pageX + 10 + 'px';
+            tooltip.style.top = e.pageY - 10 + 'px';
+            tooltip.style.opacity = '1';
+        }
+
+        // Hide tooltip
+        function hideTooltip() {
+            document.getElementById('tooltip').style.opacity = '0';
+        }
+
+        // Filter heatmap by category
+        function filterHeatmap() {
+            const category = document.getElementById('categoryFilter').value;
+            console.log(`Filtering heatmap by ${category}`);
+            // Update heatmap visualization based on category
+        }
+
+        // Sort table
+        function sortTable(column) {
+            console.log(`Sorting by ${column}`);
+            // Implement sorting logic here
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                filteredData = violationData.filter(violation => 
+                    Object.values(violation).some(value => 
+                        value.toString().toLowerCase().includes(searchTerm)
+                    )
+                );
+                currentPage = 1;
+                populateTable();
+            });
+        }
+
+        // Animate KPI cards
+        function animateKPICards() {
+            const cards = document.querySelectorAll('.kpi-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        }
+
+        // Add smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add loading animation
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '1';
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97037a0854fc162a',t:'MTc1NTM3Mzk5NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

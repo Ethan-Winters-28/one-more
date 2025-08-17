@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings Panel | Nigam Setu – Smart Governance Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c5aa0;
+            --secondary-color: #f8f9fa;
+            --accent-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .header-section {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .logo {
+            height: 60px;
+            margin: 20px;
+            float: left;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .settings-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .settings-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            border: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .settings-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), #3d6bb3);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            padding: 20px;
+            border: none;
+        }
+
+        .card-header h5 {
+            margin: 0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(44, 90, 160, 0.25);
+        }
+
+        .btn-custom {
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--primary-color), #3d6bb3);
+            color: white;
+        }
+
+        .btn-primary-custom:hover {
+            background: linear-gradient(135deg, #1e3d6f, var(--primary-color));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(44, 90, 160, 0.4);
+        }
+
+        .btn-success-custom {
+            background: linear-gradient(135deg, var(--accent-color), #34ce57);
+            color: white;
+        }
+
+        .btn-success-custom:hover {
+            background: linear-gradient(135deg, #1e7e34, var(--accent-color));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-warning-custom {
+            background: linear-gradient(135deg, var(--warning-color), #ffcd39);
+            color: #333;
+        }
+
+        .btn-danger-custom {
+            background: linear-gradient(135deg, var(--danger-color), #e55370);
+            color: white;
+        }
+
+        .form-switch .form-check-input {
+            width: 3em;
+            height: 1.5em;
+            border-radius: 2em;
+        }
+
+        .form-switch .form-check-input:checked {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .profile-upload {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--primary-color);
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            font-size: 48px;
+            color: var(--primary-color);
+        }
+
+        .language-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .language-option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .language-option:hover {
+            border-color: var(--primary-color);
+            background: rgba(44, 90, 160, 0.1);
+        }
+
+        .language-option.active {
+            border-color: var(--accent-color);
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--accent-color);
+        }
+
+        .ward-info {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .theme-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .notification-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--accent-color);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification-toast.show {
+            transform: translateX(0);
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                height: 50px;
+                margin: 15px;
+            }
+            
+            .language-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .settings-container {
+                padding: 0 10px;
+            }
+        }
+
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <div class="header-section clearfix">
+        <img src="img/Nagar Nigam Logo.jpg" alt="Nagar Nigam Logo" class="logo">
+        <div class="text-center py-3">
+            <h2 class="mt-3 mb-2">⚙️ Settings Panel / सेटिंग्स</h2>
+            <p class="text-muted mb-0">Update your profile, preferences, and ward information</p>
+        </div>
+    </div>
+
+    <!-- Main Settings Container -->
+    <div class="settings-container">
+        <div class="row">
+            <!-- Personal Information Card -->
+            <div class="col-lg-6 col-md-12">
+                <div class="card settings-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-user"></i> Personal Information / व्यक्तिगत जानकारी</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="profile-upload">
+                            <div class="profile-preview" id="profilePreview">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <input type="file" class="form-control" id="profilePhoto" accept="image/*" style="display: none;">
+                            <button type="button" class="btn btn-outline-primary btn-custom" onclick="document.getElementById('profilePhoto').click()">
+                                <i class="fas fa-camera"></i> Upload Photo / फोटो अपलोड करें
+                            </button>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-user"></i> Full Name / पूरा नाम
+                            </label>
+                            <input type="text" class="form-control" id="fullName" value="राज कुमार शर्मा" placeholder="Enter your full name">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-phone"></i> Mobile Number / मोबाइल नंबर
+                            </label>
+                            <input type="tel" class="form-control" id="mobile" value="+91 9876543210" placeholder="Enter mobile number">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-envelope"></i> Email Address / ईमेल पता
+                            </label>
+                            <input type="email" class="form-control" id="email" value="raj.sharma@email.com" placeholder="Enter email address">
+                        </div>
+                        
+                        <button type="button" class="btn btn-success-custom btn-custom w-100" onclick="savePersonalInfo()">
+                            <i class="fas fa-save"></i> Save Changes / परिवर्तन सहेजें
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Language Settings Card -->
+            <div class="col-lg-6 col-md-12">
+                <div class="card settings-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-language"></i> Language Settings / भाषा सेटिंग्स</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted mb-3">Select your preferred language / अपनी पसंदीदा भाषा चुनें</p>
+                        
+                        <div class="language-options">
+                            <div class="language-option active" data-lang="en" onclick="selectLanguage('en')">
+                                <i class="fas fa-globe"></i>
+                                <div class="fw-bold">English</div>
+                                <small>English</small>
+                            </div>
+                            <div class="language-option" data-lang="hi" onclick="selectLanguage('hi')">
+                                <i class="fas fa-globe"></i>
+                                <div class="fw-bold">हिंदी</div>
+                                <small>Hindi</small>
+                            </div>
+                            <div class="language-option" data-lang="mr" onclick="selectLanguage('mr')">
+                                <i class="fas fa-globe"></i>
+                                <div class="fw-bold">मराठी</div>
+                                <small>Marathi</small>
+                            </div>
+                            <div class="language-option" data-lang="gu" onclick="selectLanguage('gu')">
+                                <i class="fas fa-globe"></i>
+                                <div class="fw-bold">ગુજરાતી</div>
+                                <small>Gujarati</small>
+                            </div>
+                            <div class="language-option" data-lang="ur" onclick="selectLanguage('ur')">
+                                <i class="fas fa-globe"></i>
+                                <div class="fw-bold">اردو</div>
+                                <small>Urdu</small>
+                            </div>
+                        </div>
+                        
+                        <button type="button" class="btn btn-primary-custom btn-custom w-100" onclick="saveLanguage()">
+                            <i class="fas fa-check"></i> Save Language Preference / भाषा प्राथमिकता सहेजें
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Ward & Zone Settings Card -->
+            <div class="col-lg-6 col-md-12">
+                <div class="card settings-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-map-marker-alt"></i> Ward & Zone Settings / वार्ड और जोन सेटिंग्स</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="ward-info">
+                            <h6><i class="fas fa-info-circle"></i> Current Location / वर्तमान स्थान</h6>
+                            <p class="mb-1"><strong>Ward:</strong> Ward No. 42</p>
+                            <p class="mb-0"><strong>Zone:</strong> Central Zone</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-map"></i> Select Ward / वार्ड चुनें
+                            </label>
+                            <select class="form-select" id="wardSelect">
+                                <option value="">Choose Ward / वार्ड चुनें</option>
+                                <script>
+                                    for(let i = 1; i <= 85; i++) {
+                                        document.write(`<option value="${i}" ${i === 42 ? 'selected' : ''}>Ward No. ${i}</option>`);
+                                    }
+                                </script>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-layer-group"></i> Zone / जोन
+                            </label>
+                            <select class="form-select" id="zoneSelect">
+                                <option value="north">North Zone / उत्तर जोन</option>
+                                <option value="south">South Zone / दक्षिण जोन</option>
+                                <option value="east">East Zone / पूर्व जोन</option>
+                                <option value="west">West Zone / पश्चिम जोन</option>
+                                <option value="central" selected>Central Zone / केंद्रीय जोन</option>
+                            </select>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <i class="fas fa-whatsapp text-success"></i>
+                            <small>Changing ward will automatically link you to the new WhatsApp group</small>
+                        </div>
+                        
+                        <button type="button" class="btn btn-warning-custom btn-custom w-100" onclick="updateLocation()">
+                            <i class="fas fa-sync-alt"></i> Update Location Info / स्थान जानकारी अपडेट करें
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security & Access Card -->
+            <div class="col-lg-6 col-md-12">
+                <div class="card settings-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-shield-alt"></i> Security & Access / सुरक्षा और पहुंच</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-lock"></i> Current Password / वर्तमान पासवर्ड
+                            </label>
+                            <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-key"></i> New Password / नया पासवर्ड
+                            </label>
+                            <input type="password" class="form-control" id="newPassword" placeholder="Enter new password">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-check-circle"></i> Confirm Password / पासवर्ड की पुष्टि करें
+                            </label>
+                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password">
+                        </div>
+                        
+                        <div class="theme-controls">
+                            <div>
+                                <i class="fas fa-mobile-alt"></i>
+                                <strong>Enable OTP Login / OTP लॉगिन सक्षम करें</strong>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="otpToggle" checked>
+                            </div>
+                        </div>
+                        
+                        <div class="theme-controls">
+                            <div>
+                                <i class="fas fa-bell"></i>
+                                <strong>Push Notifications / पुश नोटिफिकेशन</strong>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="notificationToggle" checked>
+                            </div>
+                        </div>
+                        
+                        <button type="button" class="btn btn-primary-custom btn-custom w-100" onclick="updateSecurity()">
+                            <i class="fas fa-shield-alt"></i> Update Security Settings / सुरक्षा सेटिंग्स अपडेट करें
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Theme & Display Preferences Card -->
+            <div class="col-lg-6 col-md-12">
+                <div class="card settings-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-palette"></i> Theme & Display / थीम और डिस्प्ले</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="theme-controls">
+                            <div>
+                                <i class="fas fa-moon"></i>
+                                <strong>Dark Mode / डार्क मोड</strong>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="darkModeToggle">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-text-height"></i> Font Size / फ़ॉन्ट साइज़
+                            </label>
+                            <input type="range" class="form-range" id="fontSizeSlider" min="12" max="20" value="16">
+                            <div class="d-flex justify-content-between">
+                                <small>Small</small>
+                                <small>Medium</small>
+                                <small>Large</small>
+                            </div>
+                        </div>
+                        
+                        <div class="theme-controls">
+                            <div>
+                                <i class="fas fa-icons"></i>
+                                <strong>Show Icons / आइकन दिखाएं</strong>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="iconToggle" checked>
+                            </div>
+                        </div>
+                        
+                        <button type="button" class="btn btn-success-custom btn-custom w-100" onclick="saveThemeSettings()">
+                            <i class="fas fa-save"></i> Save Display Settings / डिस्प्ले सेटिंग्स सहेजें
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Options Card -->
+            <div class="col-lg-6 col-md-12">
+                <div class="card settings-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-cog"></i> Additional Options / अतिरिक्त विकल्प</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-3">
+                            <button type="button" class="btn btn-outline-primary btn-custom" onclick="downloadProfile()">
+                                <i class="fas fa-download"></i> Download Profile PDF / प्रोफाइल PDF डाउनलोड करें
+                            </button>
+                            
+                            <button type="button" class="btn btn-outline-info btn-custom" onclick="linkAadhaar()">
+                                <i class="fas fa-id-card"></i> Link Aadhaar / आधार लिंक करें
+                            </button>
+                            
+                            <button type="button" class="btn btn-outline-warning btn-custom" onclick="linkVoterID()">
+                                <i class="fas fa-vote-yea"></i> Link Voter ID / वोटर ID लिंक करें
+                            </button>
+                            
+                            <button type="button" class="btn btn-outline-secondary btn-custom" onclick="requestDataRemoval()">
+                                <i class="fas fa-user-times"></i> Request Data Removal / डेटा हटाने का अनुरोध
+                            </button>
+                            
+                            <button type="button" class="btn btn-danger-custom btn-custom" onclick="deleteAccount()">
+                                <i class="fas fa-trash-alt"></i> Delete Account / खाता हटाएं
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="notification-toast" id="notificationToast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Settings saved successfully!</span>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let selectedLanguage = 'en';
+
+        // Profile photo upload preview
+        document.getElementById('profilePhoto').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('profilePreview');
+                    preview.innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Language selection
+        function selectLanguage(lang) {
+            selectedLanguage = lang;
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            document.querySelector(`[data-lang="${lang}"]`).classList.add('active');
+        }
+
+        // Save functions
+        function savePersonalInfo() {
+            const fullName = document.getElementById('fullName').value;
+            const mobile = document.getElementById('mobile').value;
+            const email = document.getElementById('email').value;
+            
+            if (!fullName || !mobile || !email) {
+                showNotification('Please fill all required fields / कृपया सभी आवश्यक फ़ील्ड भरें', 'error');
+                return;
+            }
+            
+            showNotification('Personal information updated successfully! / व्यक्तिगत जानकारी सफलतापूर्वक अपडेट की गई!');
+        }
+
+        function saveLanguage() {
+            showNotification(`Language changed to ${selectedLanguage.toUpperCase()} / भाषा ${selectedLanguage.toUpperCase()} में बदली गई`);
+        }
+
+        function updateLocation() {
+            const ward = document.getElementById('wardSelect').value;
+            const zone = document.getElementById('zoneSelect').value;
+            
+            if (!ward) {
+                showNotification('Please select a ward / कृपया एक वार्ड चुनें', 'error');
+                return;
+            }
+            
+            showNotification(`Location updated to Ward ${ward}, ${zone} zone / स्थान अपडेट किया गया वार्ड ${ward}, ${zone} जोन`);
+        }
+
+        function updateSecurity() {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (newPassword && newPassword !== confirmPassword) {
+                showNotification('Passwords do not match / पासवर्ड मेल नहीं खाते', 'error');
+                return;
+            }
+            
+            showNotification('Security settings updated successfully! / सुरक्षा सेटिंग्स सफलतापूर्वक अपडेट की गईं!');
+        }
+
+        function saveThemeSettings() {
+            const darkMode = document.getElementById('darkModeToggle').checked;
+            const fontSize = document.getElementById('fontSizeSlider').value;
+            const showIcons = document.getElementById('iconToggle').checked;
+            
+            if (darkMode) {
+                document.body.style.filter = 'invert(1) hue-rotate(180deg)';
+            } else {
+                document.body.style.filter = 'none';
+            }
+            
+            document.body.style.fontSize = fontSize + 'px';
+            
+            showNotification('Theme settings saved successfully! / थीम सेटिंग्स सफलतापूर्वक सहेजी गईं!');
+        }
+
+        function downloadProfile() {
+            showNotification('Profile PDF download started / प्रोफाइल PDF डाउनलोड शुरू हुआ');
+            // Simulate download
+            setTimeout(() => {
+                const link = document.createElement('a');
+                link.href = 'data:text/plain;charset=utf-8,Profile Data - Nigam Setu Portal';
+                link.download = 'profile.txt';
+                link.click();
+            }, 1000);
+        }
+
+        function linkAadhaar() {
+            const aadhaar = prompt('Enter your Aadhaar number / अपना आधार नंबर दर्ज करें:');
+            if (aadhaar && aadhaar.length === 12) {
+                showNotification('Aadhaar linked successfully! / आधार सफलतापूर्वक लिंक किया गया!');
+            } else if (aadhaar) {
+                showNotification('Invalid Aadhaar number / अमान्य आधार नंबर', 'error');
+            }
+        }
+
+        function linkVoterID() {
+            const voterID = prompt('Enter your Voter ID / अपना वोटर ID दर्ज करें:');
+            if (voterID && voterID.length >= 10) {
+                showNotification('Voter ID linked successfully! / वोटर ID सफलतापूर्वक लिंक किया गया!');
+            } else if (voterID) {
+                showNotification('Invalid Voter ID / अमान्य वोटर ID', 'error');
+            }
+        }
+
+        function requestDataRemoval() {
+            if (confirm('Are you sure you want to request data removal? / क्या आप वाकई डेटा हटाने का अनुरोध करना चाहते हैं?')) {
+                showNotification('Data removal request submitted / डेटा हटाने का अनुरोध सबमिट किया गया');
+            }
+        }
+
+        function deleteAccount() {
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone. / क्या आप वाकई अपना खाता हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।')) {
+                if (confirm('Final confirmation: Delete account permanently? / अंतिम पुष्टि: खाता स्थायी रूप से हटाएं?')) {
+                    showNotification('Account deletion request submitted / खाता हटाने का अनुरोध सबमिट किया गया', 'error');
+                }
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            const toast = document.getElementById('notificationToast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            
+            if (type === 'error') {
+                toast.style.background = 'var(--danger-color)';
+            } else {
+                toast.style.background = 'var(--accent-color)';
+            }
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Font size slider real-time update
+        document.getElementById('fontSizeSlider').addEventListener('input', function(e) {
+            document.body.style.fontSize = e.target.value + 'px';
+        });
+
+        //
+        // Dark mode toggle real-time update
+        document.getElementById('darkModeToggle').addEventListener('change', function(e) {
+            if (e.target.checked) {
+                document.body.style.background = 'linear-gradient(135deg, #2c3e50 0%, #34495e 100%)';
+                document.querySelectorAll('.settings-card').forEach(card => {
+                    card.style.background = '#34495e';
+                    card.style.color = '#ecf0f1';
+                });
+                document.querySelectorAll('.card-header').forEach(header => {
+                    header.style.background = 'linear-gradient(135deg, #1a252f, #2c3e50)';
+                });
+                document.querySelectorAll('.form-control, .form-select').forEach(input => {
+                    input.style.background = '#2c3e50';
+                    input.style.color = '#ecf0f1';
+                    input.style.borderColor = '#4a6741';
+                });
+                document.querySelectorAll('.theme-controls').forEach(control => {
+                    control.style.background = '#2c3e50';
+                });
+                document.querySelector('.header-section').style.background = '#34495e';
+                document.querySelector('.header-section h2').style.color = '#ecf0f1';
+                document.querySelector('.header-section p').style.color = '#bdc3c7';
+            } else {
+                document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                document.querySelectorAll('.settings-card').forEach(card => {
+                    card.style.background = 'white';
+                    card.style.color = '#333';
+                });
+                document.querySelectorAll('.card-header').forEach(header => {
+                    header.style.background = 'linear-gradient(135deg, var(--primary-color), #3d6bb3)';
+                });
+                document.querySelectorAll('.form-control, .form-select').forEach(input => {
+                    input.style.background = 'white';
+                    input.style.color = '#333';
+                    input.style.borderColor = '#e9ecef';
+                });
+                document.querySelectorAll('.theme-controls').forEach(control => {
+                    control.style.background = '#f8f9fa';
+                });
+                document.querySelector('.header-section').style.background = 'white';
+                document.querySelector('.header-section h2').style.color = '#333';
+                document.querySelector('.header-section p').style.color = '#6c757d';
+            }
+        });
+
+        // Icon toggle functionality
+        document.getElementById('iconToggle').addEventListener('change', function(e) {
+            const icons = document.querySelectorAll('i.fas');
+            icons.forEach(icon => {
+                icon.style.display = e.target.checked ? 'inline' : 'none';
+            });
+        });
+
+        // Ward selection auto-update zone
+        document.getElementById('wardSelect').addEventListener('change', function(e) {
+            const wardNumber = parseInt(e.target.value);
+            const zoneSelect = document.getElementById('zoneSelect');
+            
+            // Auto-assign zones based on ward numbers (dummy logic)
+            if (wardNumber >= 1 && wardNumber <= 17) {
+                zoneSelect.value = 'north';
+            } else if (wardNumber >= 18 && wardNumber <= 34) {
+                zoneSelect.value = 'south';
+            } else if (wardNumber >= 35 && wardNumber <= 51) {
+                zoneSelect.value = 'east';
+            } else if (wardNumber >= 52 && wardNumber <= 68) {
+                zoneSelect.value = 'west';
+            } else if (wardNumber >= 69 && wardNumber <= 85) {
+                zoneSelect.value = 'central';
+            }
+        });
+
+        // Auto-save functionality for toggles
+        document.getElementById('otpToggle').addEventListener('change', function(e) {
+            const status = e.target.checked ? 'enabled' : 'disabled';
+            showNotification(`OTP login ${status} / OTP लॉगिन ${status === 'enabled' ? 'सक्षम' : 'अक्षम'}`);
+        });
+
+        document.getElementById('notificationToggle').addEventListener('change', function(e) {
+            const status = e.target.checked ? 'enabled' : 'disabled';
+            showNotification(`Push notifications ${status} / पुश नोटिफिकेशन ${status === 'enabled' ? 'सक्षम' : 'अक्षम'}`);
+        });
+
+        // Password strength indicator
+        document.getElementById('newPassword').addEventListener('input', function(e) {
+            const password = e.target.value;
+            const strengthIndicator = document.getElementById('passwordStrength') || createPasswordStrengthIndicator();
+            
+            let strength = 0;
+            let strengthText = '';
+            let strengthColor = '';
+
+            if (password.length >= 8) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[a-z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+            switch (strength) {
+                case 0:
+                case 1:
+                    strengthText = 'Very Weak / बहुत कमजोर';
+                    strengthColor = '#dc3545';
+                    break;
+                case 2:
+                    strengthText = 'Weak / कमजोर';
+                    strengthColor = '#fd7e14';
+                    break;
+                case 3:
+                    strengthText = 'Medium / मध्यम';
+                    strengthColor = '#ffc107';
+                    break;
+                case 4:
+                    strengthText = 'Strong / मजबूत';
+                    strengthColor = '#28a745';
+                    break;
+                case 5:
+                    strengthText = 'Very Strong / बहुत मजबूत';
+                    strengthColor = '#20c997';
+                    break;
+            }
+
+            strengthIndicator.textContent = strengthText;
+            strengthIndicator.style.color = strengthColor;
+            strengthIndicator.style.display = password.length > 0 ? 'block' : 'none';
+        });
+
+        function createPasswordStrengthIndicator() {
+            const indicator = document.createElement('small');
+            indicator.id = 'passwordStrength';
+            indicator.style.fontWeight = 'bold';
+            indicator.style.marginTop = '5px';
+            indicator.style.display = 'none';
+            
+            const passwordField = document.getElementById('newPassword');
+            passwordField.parentNode.appendChild(indicator);
+            
+            return indicator;
+        }
+
+        // Form validation
+        function validateForm(formType) {
+            let isValid = true;
+            const requiredFields = [];
+
+            switch (formType) {
+                case 'personal':
+                    requiredFields.push(
+                        { field: 'fullName', message: 'Full name is required / पूरा नाम आवश्यक है' },
+                        { field: 'mobile', message: 'Mobile number is required / मोबाइल नंबर आवश्यक है' },
+                        { field: 'email', message: 'Email is required / ईमेल आवश्यक है' }
+                    );
+                    break;
+                case 'security':
+                    const newPassword = document.getElementById('newPassword').value;
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+                    
+                    if (newPassword && newPassword !== confirmPassword) {
+                        showNotification('Passwords do not match / पासवर्ड मेल नहीं खाते', 'error');
+                        isValid = false;
+                    }
+                    break;
+            }
+
+            requiredFields.forEach(({ field, message }) => {
+                const element = document.getElementById(field);
+                if (!element.value.trim()) {
+                    element.style.borderColor = 'var(--danger-color)';
+                    showNotification(message, 'error');
+                    isValid = false;
+                } else {
+                    element.style.borderColor = '#e9ecef';
+                }
+            });
+
+            return isValid;
+        }
+
+        // Email validation
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Mobile validation
+        function validateMobile(mobile) {
+            const mobileRegex = /^[\+]?[1-9][\d]{0,15}$/;
+            return mobileRegex.test(mobile.replace(/\s/g, ''));
+        }
+
+        // Enhanced save functions with validation
+        function savePersonalInfo() {
+            if (!validateForm('personal')) return;
+            
+            const email = document.getElementById('email').value;
+            const mobile = document.getElementById('mobile').value;
+            
+            if (!validateEmail(email)) {
+                showNotification('Please enter a valid email address / कृपया एक वैध ईमेल पता दर्ज करें', 'error');
+                return;
+            }
+            
+            if (!validateMobile(mobile)) {
+                showNotification('Please enter a valid mobile number / कृपया एक वैध मोबाइल नंबर दर्ज करें', 'error');
+                return;
+            }
+            
+            // Simulate API call
+            setTimeout(() => {
+                showNotification('Personal information updated successfully! / व्यक्तिगत जानकारी सफलतापूर्वक अपडेट की गई!');
+            }, 500);
+        }
+
+        function updateSecurity() {
+            if (!validateForm('security')) return;
+            
+            // Simulate API call
+            setTimeout(() => {
+                showNotification('Security settings updated successfully! / सुरक्षा सेटिंग्स सफलतापूर्वक अपडेट की गईं!');
+                // Clear password fields
+                document.getElementById('currentPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+            }, 500);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+S to save (prevent default browser save)
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                showNotification('Use individual save buttons for each section / प्रत्येक अनुभाग के लिए व्यक्तिगत सेव बटन का उपयोग करें');
+            }
+            
+            // Escape to close notifications
+            if (e.key === 'Escape') {
+                document.getElementById('notificationToast').classList.remove('show');
+            }
+        });
+
+        // Auto-save draft functionality
+        let autoSaveTimer;
+        const formInputs = document.querySelectorAll('input, select, textarea');
+        
+        formInputs.forEach(input => {
+            input.addEventListener('input', function() {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(() => {
+                    // Save to localStorage as draft
+                    const formData = {};
+                    formInputs.forEach(inp => {
+                        if (inp.type !== 'password') {
+                            formData[inp.id] = inp.value;
+                        }
+                    });
+                    localStorage.setItem('nigamSetuSettingsDraft', JSON.stringify(formData));
+                }, 2000);
+            });
+        });
+
+        // Load draft on page load
+        window.addEventListener('load', function() {
+            const savedDraft = localStorage.getItem('nigamSetuSettingsDraft');
+            if (savedDraft) {
+                const formData = JSON.parse(savedDraft);
+                Object.keys(formData).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element && element.type !== 'password') {
+                        element.value = formData[key];
+                    }
+                });
+            }
+        });
+
+        // Clear draft after successful save
+        function clearDraft() {
+            localStorage.removeItem('nigamSetuSettingsDraft');
+        }
+
+        // Add loading states to buttons
+        function showButtonLoading(buttonElement, originalText) {
+            buttonElement.disabled = true;
+            buttonElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            
+            setTimeout(() => {
+                buttonElement.disabled = false;
+                buttonElement.innerHTML = originalText;
+            }, 1500);
+        }
+
+        // Enhanced button click handlers with loading states
+        document.querySelectorAll('.btn-custom').forEach(button => {
+            button.addEventListener('click', function() {
+                if (!this.disabled) {
+                    const originalText = this.innerHTML;
+                    showButtonLoading(this, originalText);
+                }
+            });
+        });
+
+        // Responsive adjustments
+        function adjustForMobile() {
+            if (window.innerWidth <= 768) {
+                document.querySelectorAll('.language-options').forEach(container => {
+                    container.style.gridTemplateColumns = '1fr';
+                });
+                
+                document.querySelectorAll('.theme-controls').forEach(control => {
+                    control.style.flexDirection = 'column';
+                    control.style.alignItems = 'flex-start';
+                    control.style.gap = '10px';
+                });
+            }
+        }
+
+        window.addEventListener('resize', adjustForMobile);
+        window.addEventListener('load', adjustForMobile);
+
+        // Initialize tooltips for better UX
+        function initializeTooltips() {
+            const tooltipElements = [
+                { selector: '#profilePhoto', text: 'Upload a profile picture (JPG, PNG, max 2MB)' },
+                { selector: '#wardSelect', text: 'Select your residential ward for location-based services' },
+                { selector: '#otpToggle', text: 'Enable OTP-based login for enhanced security' },
+                { selector: '#darkModeToggle', text: 'Switch between light and dark themes' }
+            ];
+
+            tooltipElements.forEach(({ selector, text }) => {
+                const element = document.querySelector(selector);
+                if (element) {
+                    element.title = text;
+                }
+            });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTooltips();
+            adjustForMobile();
+            
+            // Show welcome message
+            setTimeout(() => {
+                showNotification('Welcome to Settings Panel! / सेटिंग्स पैनल में आपका स्वागत है!');
+            }, 1000);
+        });
+
+        // Export settings functionality
+        function exportSettings() {
+            const settings = {
+                personalInfo: {
+                    fullName: document.getElementById('fullName').value,
+                    mobile: document.getElementById('mobile').value,
+                    email: document.getElementById('email').value
+                },
+                preferences: {
+                    language: selectedLanguage,
+                    ward: document.getElementById('wardSelect').value,
+                    zone: document.getElementById('zoneSelect').value,
+                    darkMode: document.getElementById('darkModeToggle').checked,
+                    fontSize: document.getElementById('fontSizeSlider').value,
+                    showIcons: document.getElementById('iconToggle').checked,
+                    otpEnabled: document.getElementById('otpToggle').checked,
+                    notificationsEnabled: document.getElementById('notificationToggle').checked
+                },
+                exportDate: new Date().toISOString()
+            };
+
+            const dataStr = JSON.stringify(settings, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'nigam-setu-settings.json';
+            link.click();
+            URL.revokeObjectURL(url);
+            
+            showNotification('Settings exported successfully! / सेटिंग्स सफलतापूर्वक निर्यात की गईं!');
+        }
+
+        // Add export button to additional options
+        document.addEventListener('DOMContentLoaded', function() {
+            const additionalOptionsCard = document.querySelector('.card:last-child .card-body .d-grid');
+            if (additionalOptionsCard) {
+                const exportButton = document.createElement('button');
+                exportButton.type = 'button';
+                exportButton.className = 'btn btn-outline-success btn-custom';
+                exportButton.innerHTML = '<i class="fas fa-file-export"></i> Export Settings / सेटिंग्स निर्यात करें';
+                exportButton.onclick = exportSettings;
+                additionalOptionsCard.insertBefore(exportButton, additionalOptionsCard.lastElementChild);
+            }
+        });
+    </script>
+</body>
+</html>

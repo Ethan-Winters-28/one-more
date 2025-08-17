@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amrit Sparsh - Medical Certificate</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 flex justify-center items-center min-h-screen p-4">
+
+  <div class="bg-white w-full max-w-3xl shadow-2xl rounded-2xl border-4 border-blue-500 p-8 relative">
+
+    <!-- Amrit Sparsh Logo -->
+    <div class="flex justify-center mb-4">
+      <img src="img/WhatsApp Image 2025-02-28 at 10.44.03 PM (2).jpeg" alt="Amrit Sparsh Logo" class="w-32 h-auto rounded">
+    </div>
+
+    <!-- Header Section -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-blue-700">Amrit Sparsh</h1>
+      <p class="text-lg text-gray-600">Empowering Healthcare for IIT Students</p>
+    </div>
+
+    <!-- Verification Tick & Certificate ID -->
+    <div class="flex justify-between items-center mb-6">
+      <div class="flex items-center space-x-2">
+        <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+        <span class="text-green-600 font-semibold">Verified</span>
+      </div>
+      <div class="text-sm text-gray-500 font-mono">
+        Certificate ID: <span class="font-semibold">AMRIT-2025-0001</span>
+      </div>
+    </div>
+
+    <!-- Certificate Title -->
+    <h2 class="text-center text-2xl font-bold text-gray-800 underline mb-6">Medical Certificate</h2>
+
+    <!-- Certificate Body -->
+    <div class="space-y-4 text-gray-700 text-base leading-relaxed">
+      <p>This is to certify that <span id="studentName" class="font-semibold text-blue-700">[Student Name]</span>, student of IIT, has been under my care.</p>
+
+      <p>The student was under medical supervision from <span id="startDate" class="font-semibold text-blue-700">[Start Date]</span> to <span id="endDate" class="font-semibold text-blue-700">[End Date]</span>.</p>
+
+      <p>Based on the medical condition, the student was advised rest and was unable to attend academic activities during the mentioned period.</p>
+
+      <p>I recommend the student be granted medical leave for the above-mentioned duration.</p>
+    </div>
+
+    <!-- Doctor Signature -->
+    <div class="flex justify-between items-center mt-10 border-t pt-6">
+      <div>
+        <p class="font-semibold text-gray-700">Dr. <span id="doctorName">[Doctor Name]
+            <p class="font-semibold text-gray-700">Registration No. <span id="doctorName"> </span>
+        </span></p>
+        <p class="text-sm text-gray-500">Amrit Sparsh Medical Center</p>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-center space-x-4 mt-10">
+      <button class="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition">Download</button>
+      <button class="bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 transition">Print</button>
+      <button class="bg-yellow-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-yellow-600 transition">Send to Department</button>
+    </div>
+
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Retrieve stored values
+      let name = localStorage.getItem("studentName") || "[Student Name]";
+      let startDate = localStorage.getItem("startDate") || "[Start Date]";
+      let endDate = localStorage.getItem("endDate") || "[End Date]";
+  
+      // Insert values into the certificate
+      document.getElementById("studentName").textContent = name;
+      document.getElementById("startDate").textContent = startDate;
+      document.getElementById("endDate").textContent = endDate;
+    });
+  </script>
+  
+  
+
+</body>
+
+</html>

@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Services - Birth, Death & Marriage | Nigam Setu Smart Portal</title>
+    
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- jsPDF CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-blue: #0d6efd;
+            --success-green: #198754;
+            --warning-orange: #fd7e14;
+            --danger-red: #dc3545;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .header-section {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0a58ca 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .logo-container {
+            background: white;
+            border-radius: 50%;
+            padding: 10px;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .main-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            border: none;
+            overflow: hidden;
+        }
+
+        .nav-tabs {
+            border: none;
+            background: var(--light-bg);
+            padding: 1rem;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            border-radius: 15px;
+            margin: 0 5px;
+            padding: 1rem 1.5rem;
+            color: #6c757d;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-tabs .nav-link:hover {
+            color: var(--primary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.2);
+        }
+
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0a58ca 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+        }
+
+        .tab-content {
+            padding: 2rem;
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .form-section h5 {
+            color: white;  /* ✅ CHANGED: Was var(--primary-blue), now white */
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+        }
+
+        .input-group-text {
+            background: var(--light-bg);
+            border: 2px solid #e9ecef;
+            border-right: none;
+            color: var(--primary-blue);
+        }
+
+        .input-group .form-control {
+            border-left: none;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--primary-blue);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            background: rgba(13, 110, 253, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .upload-area:hover {
+            background: rgba(13, 110, 253, 0.1);
+            border-color: #0a58ca;
+        }
+
+        .upload-area.dragover {
+            background: rgba(13, 110, 253, 0.15);
+            border-color: #0a58ca;
+        }
+
+        .preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .preview-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .preview-image {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+        }
+
+        .preview-remove {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: var(--danger-red);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .radio-item {
+            position: relative;
+        }
+
+        .radio-item input[type="radio"] {
+            display: none;
+        }
+
+        .radio-item label {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .radio-item input[type="radio"]:checked + label {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0a58ca 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(13, 110, 253, 0.4);
+        }
+
+        .success-card {
+            background: linear-gradient(135deg, var(--success-green) 0%, #146c43 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            border-left: 5px solid var(--success-green);
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-verified {
+            background: #cff4fc;
+            color: #055160;
+        }
+
+        .status-approved {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .track-section {
+            background: rgba(13, 110, 253, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(13, 110, 253, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .header-section {
+                padding: 1rem 0;
+            }
+
+            .nav-tabs .nav-link {
+                padding: 0.75rem 1rem;
+                margin: 0 2px;
+                font-size: 0.875rem;
+            }
+
+            .tab-content {
+                padding: 1rem;
+            }
+
+            .form-section {
+                padding: 1rem;
+            }
+
+            .radio-group {
+                flex-direction: column;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .certificate-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .application-id {
+            background: var(--warning-orange);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Section -->
+    <div class="header-section">
+        <div class="container">
+            <div class="text-center">
+                <div class="logo-container mb-3">
+                    <img src="img/Nagar Nigam Logo.jpg" alt="Nagar Nigam Logo" height="80" style="margin-top: 15px;"
+                         onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iNDAiIGZpbGw9IiMwZDZlZmQiLz4KPHN2ZyB4PSIyMCIgeT0iMjAiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJ3aGl0ZSI+CjxwYXRoIGQ9Ik0xNCAySDZBMiAyIDAgMCAwIDQgNFYyMEEyIDIgMCAwIDAgNiAyMkgxOEEyIDIgMCAwIDAgMjAgMjBWOEwxNCAyTTE4IDIwSDZWNEgxM1Y5SDE4VjIwWiIvPgo8L3N2Zz4KPC9zdmc+Cg=='">
+                </div>
+                <h1 class="text-center text-primary mt-3">🧾 प्रमाण-पत्र सेवा | Certificate Services</h1>
+                <p class="text-center text-muted mb-4">
+                    Apply for Birth, Death, or Marriage Certificates easily through Nigam Setu – Smart, fast & transparent documentation for Indore residents.<br>
+                    जन्म, मृत्यु और विवाह प्रमाण पत्र के लिए स्मार्ट और सहज आवेदन प्रणाली – नगर निगम इंदौर के साथ।
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="card main-card fade-in">
+                    <!-- Navigation Tabs -->
+                    <ul class="nav nav-tabs" id="certificateTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="birth-tab" data-bs-toggle="tab" data-bs-target="#birth" type="button" role="tab">
+                                <i class="fas fa-baby me-2"></i>🍼 Birth Certificate<br>
+                                <small>जन्म प्रमाण पत्र</small>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="death-tab" data-bs-toggle="tab" data-bs-target="#death" type="button" role="tab">
+                                <i class="fas fa-cross me-2"></i>⚰️ Death Certificate<br>
+                                <small>मृत्यु प्रमाण पत्र</small>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="marriage-tab" data-bs-toggle="tab" data-bs-target="#marriage" type="button" role="tab">
+                                <i class="fas fa-heart me-2"></i>💍 Marriage Certificate<br>
+                                <small>विवाह प्रमाण पत्र</small>
+                            </button>
+                        </li>
+                    </ul>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content" id="certificateTabContent">
+                        <!-- Birth Certificate Tab -->
+                        <div class="tab-pane fade show active" id="birth" role="tabpanel">
+                            <!-- Track Status Section -->
+                            <div class="track-section">
+                                <h6 class="text-primary mb-3"><i class="fas fa-search me-2"></i>Already applied? Track your certificate status | पहले से आवेदन दिया है? स्थिति जांचें</h6>
+                                <div class="row align-items-end">
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="birthTrackId" placeholder="Enter Application ID | आवेदन संख्या दर्ज करें">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button class="btn btn-outline-primary w-100" onclick="trackStatus('birth')">
+                                            <i class="fas fa-search me-2"></i>Track | जांचें
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="birthTrackResult" class="mt-3" style="display: none;"></div>
+                            </div>
+
+                            <form id="birthForm">
+                                <!-- Child Details -->
+                                <div class="form-section">
+                                    <h5><i class="fas fa-baby me-2"></i>Child Details | बच्चे का विवरण</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Date of Birth | जन्म तिथि *</label>
+                                                <input type="date" class="form-control" id="birthDate" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Gender | लिंग *</label>
+                                                <div class="radio-group">
+                                                    <div class="radio-item">
+                                                        <input type="radio" id="male" name="gender" value="male" required>
+                                                        <label for="male">Male | पुरुष</label>
+                                                    </div>
+                                                    <div class="radio-item">
+                                                        <input type="radio" id="female" name="gender" value="female" required>
+                                                        <label for="female">Female | महिला</label>
+                                                    </div>
+                                                    <div class="radio-item">
+                                                        <input type="radio" id="transgender" name="gender" value="transgender" required>
+                                                        <label for="transgender">Transgender | तृतीय लिंग</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Child Name | बच्चे का नाम *</label>
+                                        <input type="text" class="form-control" id="childName" required>
+                                    </div>
+                                </div>
+
+                                <!-- Parent Details -->
+                                <div class="form-section">
+                                    <h5><i class="fas fa-users me-2"></i>Parent Details | माता-पिता का विवरण</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Father's Name | पिता का नाम *</label>
+                                                <input type="text" class="form-control" id="fatherName" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Mother's Name | माता का नाम *</label>
+                                                <input type="text" class="form-control" id="motherName" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Birth Place -->
+                                <div class="form-section">
+                                    <h5><i class="fas fa-hospital me-2"></i>Birth Place | जन्म स्थान</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Hospital Name / Home | अस्पताल का नाम / घर *</label>
+                                                <input type="text" class="form-control" id="birthPlace" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Full Address | पूरा पता *</label>
+                                                <textarea class="form-control" id="birthAddress" rows="3" required></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Location Info -->
+                                <div class="form-section">
+                                    <h5><i class="fas fa-map-marker-alt me-2"></i>Location Info | स्थान की जानकारी</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Zone | जोन *</label>
+                                                <select class="form-select" id="birthZone" required>
+                                                    <option value="">Select Zone | जोन चुनें</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Ward | वार्ड *</label>
+                                                <select class="form-select" id="birthWard" required>
+                                                    <option value="">Select Ward | वार्ड चुनें</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Attachments -->
+                                <div class="form-section">
+                                    <h5><i class="fas fa-paperclip me-2"></i>Attachments | संलग्नक</h5>
+                                    
+                                    <div class="mb-4">
+                                        <label class="form-label">Aadhaar of Mother or Father | माता या पिता का आधार *</label>
+                                        <div class="upload-area" onclick="document.getElementById('parentAadhaar').click()">
+                                            <i class="fas fa-cloud-upload-alt fa-2x text-primary mb-2"></i>
+                                            <p class="mb-0">Click to upload or drag files here</p>
+                                            <small class="text-muted">फाइल अपलोड करने के लिए क्लिक करें या यहाँ ड्रैग करें</small>
+                                        </div>
+                                        <input type="file" id="parentAadhaar" accept="image/*" multiple style="display: none;" onchange="handleFileUpload(this, 'parentAadhaarPreview')">
+                                        <div id="parentAadhaarPreview" class="preview-container"></div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Hospital Discharge Card | अस्पताल डिस्चार्ज कार्ड *</label>
+                                        <div class="upload-area" onclick="document.getElementById('dischargeCard').click()">
+                                            <i class="fas fa-cloud-upload-alt fa-2x text-primary mb-2"></i>
+                                            <p class="mb-0">Click to upload or drag files here</p>
+                                            <small class="text-muted">फाइल अपलोड करने के लिए क्लिक करें या यहाँ ड्रैग करें</small>
+                                        </div>
+                                        <input type="file" id="dischargeCard" accept="image/*" multiple style="display: none;" onchange="handleFileUpload(this, 'dischargeCardPreview')">
+                                        <div id="dischargeCardPreview" class="preview-container"></div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Child Photo | बच्चे की फोटो (Optional)</label>
+                                        <div class="upload-area" onclick="document.getElementById('childPhoto').click()">
+                                            <i class="fas fa-camera fa-2x text-primary mb-2"></i>
+                                            <p class="mb-0">📷 Capture from Camera or Upload</p>
+                                            <small class="text-muted">कैमरे से फोटो लें या अपलोड करें</small>
+                                        </div>
+                                        <input type="file" id="childPhoto" accept="image/*" capture="camera" style="display: none;" onchange="handleFileUpload(this, 'childPhotoPreview')">
+                                        <div id="childPhotoPreview" class="preview-container"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Reporter Details -->
+                                <div class="form-section">
+                                    <h5><i class="fas fa-user-tie me-2"></i>Reporter/Relative Details | रिपोर्टर/रिश्तेदार का विवरण</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Relation with Child | बच्चे से रिश्ता *</label>
+                                                <select class="form-select" id="relation" required>
+                                                    <option value="">Select Relation | रिश्ता चुनें</option>
+                                                    <option value="father">Father | पिता</option>
+                                                    <option value="mother">Mother | माता</option>
+                                                    <option value="grandfather">Grandfather | दादा</option>
+                                                    <option value="grandmother">Grandmother | दादी</option>
+                                                    <option value="uncle">Uncle | चाचा</option>
+                                                    <option value="aunt">Aunt | चाची</option>
+                                                    <option value="other">Other | अन्य</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Reporter Name | रिपोर्टर का नाम *</label>
+                                                <input type="text" class="form-control" id="reporterName" required>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Aadhaar Front | आधार सामने का भाग *</label>
+                                                <div class="upload-area" onclick="document.getElementById('reporterAadhaarFront').click()">
+                                                    <i class="fas fa-id-card fa-2x text-primary mb-2"></i>
+                                                    <p class="mb-0">Upload Aadhaar Front</p>
+                                                </div>
+                                                <input type="file" id="reporterAadhaarFront" accept="image/*" style="display: none;" onchange="handleFileUpload(this, 'reporterAadhaarFrontPreview')">
+                                                <div id="reporterAadhaarFrontPreview" class="preview-container"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Aadhaar Back | आधार पिछला भाग *</label>
+                                                <div class="upload-area" onclick="document.getElementById('reporterAadhaarBack').click()">
+                                                    <i class="fas fa-id-card fa-2x text-primary mb-2"></i>
+                                                    <p class="mb-0">Upload Aadhaar Back</p>
+                                                </div>
+                                                <input type="file" id="reporterAadhaarBack" accept="image/*" style="display: none;" onchange="handleFileUpload(this, 'reporterAadhaarBackPreview')">
+                                                <div id="reporterAadhaarBackPreview" class="preview-container"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-paper-plane me-2"></i>Submit Birth Certificate Application
+                                        <br><small>जन्म प्रमाण पत्र आवेदन जमा करें</small>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Death Certificate Tab -->
+                        <div class="tab-pane fade" id="death" role="tabpanel">
+                            <!-- Track Status Section -->
+                            <div class="track-section">
+                                <h6 class="text-primary mb-3"><i class="fas fa-search me-2"></i>Already applied? Track your certificate status | पहले से आवेदन दिया है? स्थिति जांचें</h6>
+                                <div class="row align-items-end">
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="deathTrackId" placeholder="Enter Application ID | आवेदन संख्या दर्ज करें">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button class="btn btn-outline-primary w-100" onclick="trackStatus('death')">
+                                            <i class="fas fa-search me-2"></i>Track | जांचें
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="deathTrackResult" class="mt-3" style="display: none;"></div>
+                            </div>
+
+                            <form id="deathForm">
+                                <!-- Deceased Details -->
+                                <div class="form-section">
+                                    <h5><i class="fas fa-cross me-2"></i>Deceased Details | मृतक का विवरण</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Deceased Name | मृतक का नाम *</label>
+                                                <input type="text" class="form-control" id="deceasedName" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Date of Death | मृत्यु तिथि *</label>
+                                              
+                                                <input type="date" class="form-control" id="deathDate" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Age at Death | मृत्यु के समय आयु *</label>
+                                                <input type="number" class="form-control" id="ageAtDeath" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Gender | लिंग *</label>
+                                                <div class="radio-group">
+                                                    <div class="radio-item">
+                                                        <input type="radio" id="deathMale" name="deathGender" value="male" required>
+                                                        <label for="deathMale">Male | पुरुष</label>
+                                                    </div>
+                                                    <div class="radio-item">
+                                                        <input type="radio" id="deathFemale" name="deathGender" value="female" required>
+                                                        <label for="deathFemale">Female | महिला</label>
+                                                    </div>
+                                                    <div class="radio-item">
+                                                        <input type="radio" id="deathTransgender" name="deathGender" value="transgender" required>
+                                                        <label for="deathTransgender">Transgender | तृतीय लिंग</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Father's Name | पिता का नाम *</label>
+                                                <input type="text" class="form-control" id="deceasedFatherName" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Mother's Name | माता का नाम *</label>
+                                                <input type="text" class="form-control" id="deceasedMotherName" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Death Details -->
+                                <div class="form-section">
+                                    <h5><i class="fas fa-hospital me-2"></i>Death Details | मृत्यु का विवरण</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Place of Death | मृत्यु स्थान *</label>
+                                                <input type="text" class="form-control" id="deathPlace" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Cause of Death | मृत्यु का कारण *</label>
+                                                <input type="text" class="form-control" id="causeOfDeath" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Full Address | पूरा पता *</label>
+                                        <textarea class="form-control" id="deathAddress" rows="3" required></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Location Info -->
+                                <div class="form-section">
+                                    <h5><i class="fas fa-map-marker-alt me-2"></i>Location Info | स्थान की जानकारी</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Zone | जोन *</label>
+                                                <select class="form-select" id="deathZone" required>
+                                                    <option value="">Select Zone | जोन चुनें</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Ward | वार्ड *</label>
+                                                <select class="form-select" id="deathWard" required>
+                                                    <option value="">Select Ward | वार्ड चुनें</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Attachments -->
+                                <div class="form-section">
+                                    <h5><i class="fas fa-paperclip me-2"></i>Attachments | संलग्नक</h5>
+                                    
+                                    <div class="mb-4">
+                                        <label class="form-label">Medical Certificate | चिकित्सा प्रमाण पत्र *</label>
+                                        <div class="upload-area" onclick="document.getElementById('medicalCertificate').click()">
+                                            <i class="fas fa-file-medical fa-2x text-primary mb-2"></i>
+                                            <p class="mb-0">Click to upload medical certificate</p>
+                                            <small class="text-muted">चिकित्सा प्रमाण पत्र अपलोड करें</small>
+                                        </div>
+                                        <input type="file" id="medicalCertificate" accept="image/*" multiple style="display: none;" onchange="handleFileUpload(this, 'medicalCertificatePreview')">
+                                        <div id="medicalCertificatePreview" class="preview-container"></div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Deceased Aadhaar | मृतक का आधार *</label>
+                                        <div class="upload-area" onclick="document.getElementById('deceasedAadhaar').click()">
+                                            <i class="fas fa-id-card fa-2x text-primary mb-2"></i>
+                                            <p class="mb-0">Click to upload Aadhaar</p>
+                                            <small class="text-muted">आधार कार्ड अपलोड करें</small>
+                                        </div>
+                                        <input type="file" id="deceasedAadhaar" accept="image/*" multiple style="display: none;" onchange="handleFileUpload(this, 'deceasedAadhaarPreview')">
+                                        <div id="deceasedAadhaarPreview" class="preview-container"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Reporter Details -->
+                                <div class="form-section">
+                                    <h5><i class="fas fa-user-tie me-2"></i>Reporter/Relative Details | रिपोर्टर/रिश्तेदार का विवरण</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Relation with Deceased | मृतक से रिश्ता *</label>
+                                                <select class="form-select" id="deathRelation" required>
+                                                    <option value="">Select Relation | रिश्ता चुनें</option>
+                                                    <option value="son">Son | पुत्र</option>
+                                                    <option value="daughter">Daughter | पुत्री</option>
+                                                    <option value="spouse">Spouse | पति/पत्नी</option>
+                                                    <option value="father">Father | पिता</option>
+                                                    <option value="mother">Mother | माता</option>
+                                                    <option value="brother">Brother | भाई</option>
+                                                    <option value="sister">Sister | बहन</option>
+                                                    <option value="other">Other | अन्य</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Reporter Name | रिपोर्टर का नाम *</label>
+                                                <input type="text" class="form-control" id="deathReporterName" required>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Reporter Aadhaar Front | रिपोर्टर आधार सामने *</label>
+                                                <div class="upload-area" onclick="document.getElementById('deathReporterAadhaarFront').click()">
+                                                    <i class="fas fa-id-card fa-2x text-primary mb-2"></i>
+                                                    <p class="mb-0">Upload Aadhaar Front</p>
+                                                </div>
+                                                <input type="file" id="deathReporterAadhaarFront" accept="image/*" style="display: none;" onchange="handleFileUpload(this, 'deathReporterAadhaarFrontPreview')">
+                                                <div id="deathReporterAadhaarFrontPreview" class="preview-container"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Reporter Aadhaar Back | रिपोर्टर आधार पीछे *</label>
+                                                <div class="upload-area" onclick="document.getElementById('deathReporterAadhaarBack').click()">
+                                                    <i class="fas fa-id-card fa-2x text-primary mb-2"></i>
+                                                    <p class="mb-0">Upload Aadhaar Back</p>
+                                                </div>
+                                                <input type="file" id="deathReporterAadhaarBack" accept="image/*" style="display: none;" onchange="handleFileUpload(this, 'deathReporterAadhaarBackPreview')">
+                                                <div id="deathReporterAadhaarBackPreview" class="preview-container"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-paper-plane me-2"></i>Submit Death Certificate Application
+                                        <br><small>मृत्यु प्रमाण पत्र आवेदन जमा करें</small>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Marriage Certificate Tab -->
+                        <div class="tab-pane fade" id="marriage" role="tabpanel">
+                            <!-- Track Status Section -->
+                            <div class="track-section">
+                                <h6 class="text-primary mb-3"><i class="fas fa-search me-2"></i>Already applied? Track your certificate status | पहले से आवेदन दिया है? स्थिति जांचें</h6>
+                                <div class="row align-items-end">
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="marriageTrackId" placeholder="Enter Application ID | आवेदन संख्या दर्ज करें">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button class="btn btn-outline-primary w-100" onclick="trackStatus('marriage')">
+                                            <i class="fas fa-search me-2"></i>Track | जांचें
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="marriageTrackResult" class="mt-3" style="display: none;"></div>
+                            </div>
+
+                            <form id="marriageForm">
+                                <!-- Marriage Details -->
+                                <div class="form-section">
+                                    <h5><i class="fas fa-heart me-2"></i>Marriage Details | विवाह का विवरण</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Date of Marriage | विवाह तिथि *</label>
+                                                <input type="date" class="form-control" id="marriageDate" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Place of Marriage | विवाह स्थान *</label>
+                                                <input type="text" class="form-control" id="marriagePlace" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Marriage Address | विवाह का पूरा पता *</label>
+                                        <textarea class="form-control" id="marriageAddress" rows="3" required></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Groom Details -->
+                                <div class="form-section">
+                                    <h5><i class="fas fa-male me-2"></i>Groom Details | वर का विवरण</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Groom Name | वर का नाम *</label>
+                                                <input type="text" class="form-control" id="groomName" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Groom Age | वर की आयु *</label>
+                                                <input type="number" class="form-control" id="groomAge" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Groom Father's Name | वर के पिता का नाम *</label>
+                                                <input type="text" class="form-control" id="groomFatherName" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Groom Mother's Name | वर की माता का नाम *</label>
+                                                <input type="text" class="form-control" id="groomMotherName" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Groom Address | वर का पता *</label>
+                                        <textarea class="form-control" id="groomAddress" rows="2" required></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Bride Details -->
+                                <div class="form-section">
+                                    <h5><i class="fas fa-female me-2"></i>Bride Details | वधू का विवरण</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Bride Name | वधू का नाम *</label>
+                                                <input type="text" class="form-control" id="brideName" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Bride Age | वधू की आयु *</label>
+                                                <input type="number" class="form-control" id="brideAge" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Bride Father's Name | वधू के पिता का नाम *</label>
+                                                <input type="text" class="form-control" id="brideFatherName" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Bride Mother's Name | वधू की माता का नाम *</label>
+                                                <input type="text" class="form-control" id="brideMotherName" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Bride Address | वधू का पता *</label>
+                                        <textarea class="form-control" id="brideAddress" rows="2" required></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Location Info -->
+                                <div class="form-section">
+                                    <h5><i class="fas fa-map-marker-alt me-2"></i>Location Info | स्थान की जानकारी</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Zone | जोन *</label>
+                                                <select class="form-select" id="marriageZone" required>
+                                                    <option value="">Select Zone | जोन चुनें</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Ward | वार्ड *</label>
+                                                <select class="form-select" id="marriageWard" required>
+                                                    <option value="">Select Ward | वार्ड चुनें</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Witnesses -->
+                                <div class="form-section">
+                                    <h5><i class="fas fa-users me-2"></i>Witnesses | गवाह</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Witness 1 Name | गवाह 1 का नाम *</label>
+                                                <input type="text" class="form-control" id="witness1Name" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Witness 1 Address | गवाह 1 का पता *</label>
+                                                <textarea class="form-control" id="witness1Address" rows="2" required></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Witness 2 Name | गवाह 2 का नाम *</label>
+                                                <input type="text" class="form-control" id="witness2Name" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Witness 2 Address | गवाह 2 का पता *</label>
+                                                <textarea class="form-control" id="witness2Address" rows="2" required></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Attachments -->
+                                <div class="form-section">
+                                    <h5><i class="fas fa-paperclip me-2"></i>Attachments | संलग्नक</h5>
+                                    
+                                    <div class="mb-4">
+                                        <label class="form-label">Groom Aadhaar | वर का आधार *</label>
+                                        <div class="upload-area" onclick="document.getElementById('groomAadhaar').click()">
+                                            <i class="fas fa-id-card fa-2x text-primary mb-2"></i>
+                                            <p class="mb-0">Click to upload Groom's Aadhaar</p>
+                                            <small class="text-muted">वर का आधार अपलोड करें</small>
+                                        </div>
+                                        <input type="file" id="groomAadhaar" accept="image/*" multiple style="display: none;" onchange="handleFileUpload(this, 'groomAadhaarPreview')">
+                                        <div id="groomAadhaarPreview" class="preview-container"></div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Bride Aadhaar | वधू का आधार *</label>
+                                        <div class="upload-area" onclick="document.getElementById('brideAadhaar').click()">
+                                            <i class="fas fa-id-card fa-2x text-primary mb-2"></i>
+                                            <p class="mb-0">Click to upload Bride's Aadhaar</p>
+                                            <small class="text-muted">वधू का आधार अपलोड करें</small>
+                                        </div>
+                                        <input type="file" id="brideAadhaar" accept="image/*" multiple style="display: none;" onchange="handleFileUpload(this, 'brideAadhaarPreview')">
+                                        <div id="brideAadhaarPreview" class="preview-container"></div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Marriage Photos | विवाह की फोटो *</label>
+                                        <div class="upload-area" onclick="document.getElementById('marriagePhotos').click()">
+                                            <i class="fas fa-camera fa-2x text-primary mb-2"></i>
+                                            <p class="mb-0">Click to upload marriage photos</p>
+                                            <small class="text-muted">विवाह की फोटो अपलोड करें</small>
+                                        </div>
+                                        <input type="file" id="marriagePhotos" accept="image/*" multiple style="display: none;" onchange="handleFileUpload(this, 'marriagePhotosPreview')">
+                                        <div id="marriagePhotosPreview" class="preview-container"></div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Witness Aadhaar | गवाह का आधार *</label>
+                                        <div class="upload-area" onclick="document.getElementById('witnessAadhaar').click()">
+                                            <i class="fas fa-id-card fa-2x text-primary mb-2"></i>
+                                            <p class="mb-0">Click to upload Witness Aadhaar</p>
+                                            <small class="text-muted">गवाह का आधार अपलोड करें</small>
+                                        </div>
+                                        <input type="file" id="witnessAadhaar" accept="image/*" multiple style="display: none;" onchange="handleFileUpload(this, 'witnessAadhaarPreview')">
+                                        <div id="witnessAadhaarPreview" class="preview-container"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Applicant Details -->
+                                <div class="form-section">
+                                    <h5><i class="fas fa-user-tie me-2"></i>Applicant Details | आवेदक का विवरण</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Applicant Name | आवेदक का नाम *</label>
+                                                <input type="text" class="form-control" id="marriageApplicantName" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Relation | रिश्ता *</label>
+                                                <select class="form-select" id="marriageApplicantRelation" required>
+                                                    <option value="">Select Relation | रिश्ता चुनें</option>
+                                                    <option value="groom">Groom | वर</option>
+                                                    <option value="bride">Bride | वधू</option>
+                                                    <option value="father">Father | पिता</option>
+                                                    <option value="mother">Mother | माता</option>
+                                                    <option value="brother">Brother | भाई</option>
+                                                    <option value="sister">Sister | बहन</option>
+                                                    <option value="other">Other | अन्य</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Applicant Aadhaar Front | आवेदक आधार सामने *</label>
+                                                <div class="upload-area" onclick="document.getElementById('marriageApplicantAadhaarFront').click()">
+                                                    <i class="fas fa-id-card fa-2x text-primary mb-2"></i>
+                                                    <p class="mb-0">Upload Aadhaar Front</p>
+                                                </div>
+                                                <input type="file" id="marriageApplicantAadhaarFront" accept="image/*" style="display: none;" onchange="handleFileUpload(this, 'marriageApplicantAadhaarFrontPreview')">
+                                                <div id="marriageApplicantAadhaarFrontPreview" class="preview-container"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Applicant Aadhaar Back | आवेदक आधार पीछे *</label>
+                                                <div class="upload-area" onclick="document.getElementById('marriageApplicantAadhaarBack').click()">
+                                                    <i class="fas fa-id-card fa-2x text-primary mb-2"></i>
+                                                    <p class="mb-0">Upload Aadhaar Back</p>
+                                                </div>
+                                                <input type="file" id="marriageApplicantAadhaarBack" accept="image/*" style="display: none;" onchange="handleFileUpload(this, 'marriageApplicantAadhaarBackPreview')">
+                                                <div id="marriageApplicantAadhaarBackPreview" class="preview-container"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-paper-plane me-2"></i>Submit Marriage Certificate Application
+                                        <br><small>विवाह प्रमाण पत्र आवेदन जमा करें</small>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center p-4">
+                    <div class="success-card">
+                        <i class="fas fa-check-circle certificate-icon"></i>
+                        <h4>Application Submitted Successfully!</h4>
+                        <p>आवेदन सफलतापूर्वक जमा हो गया!</p>
+                        <div class="application-id" id="applicationId">
+                            Application ID: #CERT2024001
+                        </div>
+                        <p class="mb-0">
+                            <small>Please save this Application ID for tracking your certificate status</small><br>
+                            <small>कृपया इस आवेदन संख्या को सुरक्षित रखें</small>
+                        </p>
+                    </div>
+                    <div class="d-flex gap-2 justify-content-center">
+                        <button type="button" class="btn btn-primary" onclick="downloadReceipt()">
+                            <i class="fas fa-download me-2"></i>Download Receipt
+                        </button>
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        
+        // Zone and Ward data
+        const zoneWardData = {
+            "Zone 1": ["Ward 1", "Ward 2", "Ward 3", "Ward 4", "Ward 5"],
+            "Zone 2": ["Ward 6", "Ward 7", "Ward 8", "Ward 9", "Ward 10"],
+            "Zone 3": ["Ward 11", "Ward 12", "Ward 13", "Ward 14", "Ward 15"],
+            "Zone 4": ["Ward 16", "Ward 17", "Ward 18", "Ward 19", "Ward 20"],
+            "Zone 5": ["Ward 21", "Ward 22", "Ward 23", "Ward 24", "Ward 25"],
+            "Zone 6": ["Ward 26", "Ward 27", "Ward 28", "Ward 29", "Ward 30"],
+            "Zone 7": ["Ward 31", "Ward 32", "Ward 33", "Ward 34", "Ward 35"],
+            "Zone 8": ["Ward 36", "Ward 37", "Ward 38", "Ward 39", "Ward 40"],
+            "Zone 9": ["Ward 41", "Ward 42", "Ward 43", "Ward 44", "Ward 45"],
+            "Zone 10": ["Ward 46", "Ward 47", "Ward 48", "Ward 49", "Ward 50"]
+        };
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            populateZones();
+            setupEventListeners();
+            setupDragAndDrop();
+        });
+
+        // Populate zones in all dropdowns
+        function populateZones() {
+            const zoneSelects = ['birthZone', 'deathZone', 'marriageZone'];
+            
+            zoneSelects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                if (select) {
+                    Object.keys(zoneWardData).forEach(zone => {
+                        const option = document.createElement('option');
+                        option.value = zone;
+                        option.textContent = zone;
+                        select.appendChild(option);
+                    });
+                }
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Zone change listeners
+            document.getElementById('birthZone')?.addEventListener('change', function() {
+                updateWards('birthZone', 'birthWard');
+            });
+            
+            document.getElementById('deathZone')?.addEventListener('change', function() {
+                updateWards('deathZone', 'deathWard');
+            });
+            
+            document.getElementById('marriageZone')?.addEventListener('change', function() {
+                updateWards('marriageZone', 'marriageWard');
+            });
+
+            // Form submit listeners
+            document.getElementById('birthForm')?.addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitForm('birth');
+            });
+            
+            document.getElementById('deathForm')?.addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitForm('death');
+            });
+            
+            document.getElementById('marriageForm')?.addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitForm('marriage');
+            });
+        }
+
+        // Update wards based on selected zone
+        function updateWards(zoneSelectId, wardSelectId) {
+            const zoneSelect = document.getElementById(zoneSelectId);
+            const wardSelect = document.getElementById(wardSelectId);
+            
+            if (!zoneSelect || !wardSelect) return;
+            
+            const selectedZone = zoneSelect.value;
+            
+            // Clear existing options
+            wardSelect.innerHTML = '<option value="">Select Ward | वार्ड चुनें</option>';
+            
+            if (selectedZone && zoneWardData[selectedZone]) {
+                zoneWardData[selectedZone].forEach(ward => {
+                    const option = document.createElement('option');
+                    option.value = ward;
+                    option.textContent = ward;
+                    wardSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Handle file upload
+        function handleFileUpload(input, previewId) {
+            const files = input.files;
+            const previewContainer = document.getElementById(previewId);
+            
+            if (!previewContainer) return;
+            
+            Array.from(files).forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const previewItem = document.createElement('div');
+                        previewItem.className = 'preview-item';
+                        previewItem.innerHTML = `
+                            <img src="${e.target.result}" alt="Preview" class="preview-image">
+                            <button type="button" class="preview-remove" onclick="removePreview(this)">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        `;
+                        previewContainer.appendChild(previewItem);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // Remove preview image
+        function removePreview(button) {
+            button.parentElement.remove();
+        }
+
+        // Setup drag and drop
+        function setupDragAndDrop() {
+            const uploadAreas = document.querySelectorAll('.upload-area');
+            
+            uploadAreas.forEach(area => {
+                area.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('dragover');
+                });
+                
+                area.addEventListener('dragleave', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                });
+                
+                area.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                    
+                    const files = e.dataTransfer.files;
+                    const input = this.nextElementSibling;
+                    if (input && input.type === 'file') {
+                        input.files = files;
+                        const previewId = input.getAttribute('onchange').match(/'([^']+)'/)[1];
+                        handleFileUpload(input, previewId);
+                    }
+                });
+            });
+        }
+
+        // Submit form
+        function submitForm(type) {
+            // Show loading state
+            const submitBtn = document.querySelector(`#${type}Form button[type="submit"]`);
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
+            submitBtn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                // Generate application ID
+                const applicationId = generateApplicationId(type);
+                
+                // Show success modal
+                document.getElementById('applicationId').textContent = `Application ID: ${applicationId}`;
+                const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                successModal.show();
+                
+                // Reset form
+                document.getElementById(`${type}Form`).reset();
+                
+                // Clear previews
+                document.querySelectorAll('.preview-container').forEach(container => {
+                    container.innerHTML = '';
+                });
+                
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                
+                // Store application for tracking
+                storeApplication(applicationId, type);
+                
+            }, 2000);
+        }
+
+        // Generate application ID
+        function generateApplicationId(type) {
+            const prefix = type.toUpperCase().substring(0, 3);
+            const timestamp = Date.now().toString().slice(-6);
+            const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+            return `${prefix}${timestamp}${random}`;
+        }
+
+        // Store application for tracking
+        function storeApplication(applicationId, type) {
+            const applications = JSON.parse(localStorage.getItem('certificateApplications') || '{}');
+            applications[applicationId] = {
+                type: type,
+                status: 'pending',
+                submittedDate: new Date().toISOString(),
+                statusHistory: [
+                    {
+                        status: 'pending',
+                        date: new Date().toISOString(),
+                        description: 'Application submitted successfully'
+                    }
+                ]
+            };
+            localStorage.setItem('certificateApplications', JSON.stringify(applications));
+        }
+
+        // Track status
+        function trackStatus(type) {
+            const trackId = document.getElementById(`${type}TrackId`).value.trim();
+            const resultDiv = document.getElementById(`${type}TrackResult`);
+            
+            if (!trackId) {
+                alert('Please enter Application ID | कृपया आवेदन संख्या दर्ज करें');
+                return;
+            }
+            
+            const applications = JSON.parse(localStorage.getItem('certificateApplications') || '{}');
+            const application = applications[trackId];
+            
+            if (application) {
+                const statusClass = getStatusClass(application.status);
+                const statusText = getStatusText(application.status);
+                
+                resultDiv.innerHTML = `
+                    <div class="summary-card card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="mb-0">Application Status | आवेदन स्थिति</h6>
+                                <span class="status-badge ${statusClass}">${statusText}</span>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <small class="text-muted">Application ID</small>
+                                    <p class="mb-2"><strong>${trackId}</strong></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="text-muted">Certificate Type</small>
+                                    <p class="mb-2"><strong>${application.type.charAt(0).toUpperCase() + application.type.slice(1)}</strong></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="text-muted">Submitted Date</small>
+                                    <p class="mb-2"><strong>${new Date(application.submittedDate).toLocaleDateString()}</strong></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="text-muted">Expected Completion</small>
+                                    <p class="mb-2"><strong>${getExpectedDate(application.submittedDate)}</strong></p>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <small class="text-muted">Status History</small>
+                                <div class="mt-2">
+                                    ${application.statusHistory.map(history => `
+                                        <div class="d-flex justify-content-between align-items-center py-1">
+                                            <span>${history.description}</span>
+                                            <small class="text-muted">${new Date(history.date).toLocaleDateString()}</small>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                resultDiv.style.display = 'block';
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Application not found. Please check your Application ID.
+                        <br><small>आवेदन नहीं मिला। कृपया अपनी आवेदन संख्या जांचें।</small>
+                    </div>
+                `;
+                resultDiv.style.display = 'block';
+            }
+        }
+
+        // Get status class
+        function getStatusClass(status) {
+            switch(status) {
+                case 'pending': return 'status-pending';
+                case 'verified': return 'status-verified';
+                case 'approved': return 'status-approved';
+                default: return 'status-pending';
+            }
+        }
+
+        // Get status text
+        function getStatusText(status) {
+            switch(status) {
+                case 'pending': return 'Pending Review | समीक्षाधीन';
+                case 'verified': return 'Verified | सत्यापित';
+                case 'approved': return 'Approved | अनुमोदित';
+                default: return 'Unknown | अज्ञात';
+            }
+        }
+
+        // Get expected completion date
+        function getExpectedDate(submittedDate) {
+            const date = new Date(submittedDate);
+            date.setDate(date.getDate() + 7); // 7 days from submission
+            return date.toLocaleDateString();
+        }
+
+        // Download receipt
+        function downloadReceipt() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Add header
+            doc.setFontSize(20);
+            doc.text('Certificate Application Receipt', 20, 30);
+            doc.text('प्रमाण पत्र आवेदन रसीद', 20, 45);
+            
+            // Add application details
+            doc.setFontSize(12);
+            const applicationId = document.getElementById('applicationId').textContent;
+            doc.text(applicationId, 20, 70);
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 85);
+            doc.text(`Status: Application Submitted Successfully`, 20, 100);
+            
+            // Add instructions
+            doc.text('Instructions:', 20, 125);
+            doc.text('1. Keep this receipt safe for future reference', 25, 140);
+            doc.text('2. Use Application ID to track your certificate status', 25, 155);
+            doc.text('3. Certificate will be ready within 7 working days', 25, 170);
+            
+            // Add footer
+            doc.text('Nagar Nigam Indore - Digital Certificate Services', 20, 200);
+            doc.text('For support: support@nigamsetu.in | Phone: 0731-XXXXXX', 20, 215);
+            
+            // Save the PDF
+            doc.save(`Certificate_Receipt_${applicationId.replace('Application ID: ', '')}.pdf`);
+        }
+
+        // Tab switching animation
+        document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
+            tab.addEventListener('shown.bs.tab', function (e) {
+                const targetPane = document.querySelector(e.target.getAttribute('data-bs-target'));
+                targetPane.classList.add('fade-in');
+                setTimeout(() => {
+                    targetPane.classList.remove('fade-in');
+                }, 500);
+            });
+        });
+
+        // Auto-save form data (optional feature)
+        function autoSaveForm(formId) {
+            const form = document.getElementById(formId);
+            if (!form) return;
+            
+            const formData = new FormData(form);
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+            
+            localStorage.setItem(`${formId}_draft`, JSON.stringify(data));
+        }
+
+        // Load saved form data
+        function loadSavedForm(formId) {
+            const savedData = localStorage.getItem(`${formId}_draft`);
+            if (!savedData) return;
+            
+            const data = JSON.parse(savedData);
+            const form = document.getElementById(formId);
+            
+            Object.keys(data).forEach(key => {
+                const input = form.querySelector(`[name="${key}"]`);
+                if (input) {
+                    input.value = data[key];
+                }
+            });
+        }
+
+        // Clear saved form data
+        function clearSavedForm(formId) {
+            localStorage.removeItem(`${formId}_draft`);
+        }
+
+        // Form validation
+        function validateForm(formId) {
+            const form = document.getElementById(formId);
+            const requiredFields = form.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+            
+            return isValid;
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            notification.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+
+        // Initialize tooltips (if using Bootstrap tooltips)
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        // Print functionality
+        function printApplication(applicationId) {
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Certificate Application - ${applicationId}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        .header { text-align: center; margin-bottom: 30px; }
+                        .details { margin-bottom: 20px; }
+                        .footer { margin-top: 30px; text-align: center; font-size: 12px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h2>Nagar Nigam Indore</h2>
+                        <h3>Certificate Application Receipt</h3>
+                    </div>
+                    <div class="details">
+                        <p><strong>Application ID:</strong> ${applicationId}</p>
+                        <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+                        <p><strong>Status:</strong> Application Submitted Successfully</p>
+                    </div>
+                    <div class="footer">
+                        <p>This is a computer generated receipt. No signature required.</p>
+                        <p>For queries: support@nigamsetu.in</p>
+                    </div>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        // Error handling
+        window.addEventListener('error', function(e) {
+            console.error('Application Error:', e.error);
+            showNotification('An error occurred. Please try again.', 'danger');
+        });
+
+        // Service worker registration (for offline functionality)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(function(err) {
+                        console.log('ServiceWorker registration failed');
+                    });
+            });
+        }
+    </script>
+</body>
+</html>

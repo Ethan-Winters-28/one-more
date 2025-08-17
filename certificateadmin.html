@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Certificates Management - Nigam Setu Admin</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Enhanced Header */
+        .section-header {
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00ffc6, #00d1ff, #00ff94);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+
+        .section-subtitle {
+            font-size: 1.3rem;
+            color: #94a3b8;
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 255, 148, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 148, 0.3);
+            margin-top: 1rem;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff94;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        /* Enhanced Glassmorphic Cards */
+        .glass-card {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(0, 255, 198, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 198, 0.1), transparent);
+            transition: left 0.8s;
+        }
+
+        .glass-card:hover::before {
+            left: 100%;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(0, 255, 198, 0.5);
+            box-shadow: 0 20px 60px rgba(0, 255, 198, 0.15);
+            transform: translateY(-5px) scale(1.02);
+        }
+
+        /* Advanced Summary Grid */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .summary-card {
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            min-height: 180px;
+        }
+
+        .summary-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent-gradient);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .summary-card.birth { 
+            --accent-gradient: linear-gradient(90deg, #00ff94, #00ffc6);
+            --accent-color: #00ff94;
+        }
+        .summary-card.death { 
+            --accent-gradient: linear-gradient(90deg, #ff3b3b, #ff6b6b);
+            --accent-color: #ff3b3b;
+        }
+        .summary-card.marriage { 
+            --accent-gradient: linear-gradient(90deg, #00d1ff, #0099cc);
+            --accent-color: #00d1ff;
+        }
+        .summary-card.trading { 
+            --accent-gradient: linear-gradient(90deg, #ffcc00, #ffd700);
+            --accent-color: #ffcc00;
+        }
+        .summary-card.blockchain { 
+            --accent-gradient: linear-gradient(90deg, #00ffc6, #00ff94);
+            --accent-color: #00ffc6;
+        }
+
+        .summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: #0f172a;
+            font-weight: bold;
+        }
+
+        .summary-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--accent-color);
+        }
+
+        .summary-value {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .summary-label {
+            font-size: 1rem;
+            color: #94a3b8;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .summary-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        /* Advanced Controls */
+        .controls-section {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 198, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .controls-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .controls-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #00ffc6;
+        }
+
+        .view-toggle {
+            display: flex;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 0.25rem;
+        }
+
+        .view-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn.active {
+            background: linear-gradient(135deg, #00ffc6, #00d1ff);
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group {
+            position: relative;
+        }
+
+        .filter-label {
+            display: block;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .search-input, .filter-select, .date-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 255, 198, 0.3);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus, .filter-select:focus, .date-input:focus {
+            outline: none;
+            border-color: #00ffc6;
+            box-shadow: 0 0 0 3px rgba(0, 255, 198, 0.1);
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00ffc6, #00d1ff);
+            color: #0f172a;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 10px 30px rgba(0, 255, 198, 0.4);
+            transform: translateY(-3px);
+        }
+
+        .btn-secondary {
+            background: rgba(0, 255, 198, 0.1);
+            color: #00ffc6;
+            border: 1px solid rgba(0, 255, 198, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 255, 198, 0.2);
+            border-color: #00ffc6;
+            transform: translateY(-2px);
+        }
+
+        /* Advanced Table */
+        .table-section {
+            margin-bottom: 3rem;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .table-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #00ffc6;
+        }
+
+        .table-stats {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        .table-container {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(0, 255, 198, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            background: rgba(0, 255, 198, 0.1);
+            padding: 1.5rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #00ffc6;
+            border-bottom: 2px solid rgba(0, 255, 198, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .table th:hover {
+            background: rgba(0, 255, 198, 0.2);
+        }
+
+        .table th.sortable::after {
+            content: '↕️';
+            position: absolute;
+            right: 0.5rem;
+            opacity: 0.5;
+        }
+
+        .table th.sort-asc::after {
+            content: '↑';
+            opacity: 1;
+        }
+
+        .table th.sort-desc::after {
+            content: '↓';
+            opacity: 1;
+        }
+
+        .table td {
+            padding: 1.5rem 1rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .table tr:hover {
+            background: rgba(0, 255, 198, 0.05);
+            transform: scale(1.01);
+        }
+
+        .table tr:hover td {
+            border-color: rgba(0, 255, 198, 0.2);
+        }
+
+        /* Enhanced Status Badges */
+        .status-badge {
+            padding: 0.4rem 1rem;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.8s;
+        }
+
+        .status-badge:hover::before {
+            left: 100%;
+        }
+
+        .status-verified {
+            background: rgba(0, 255, 148, 0.2);
+            color: #00ff94;
+            border: 1px solid rgba(0, 255, 148, 0.4);
+            box-shadow: 0 0 20px rgba(0, 255, 148, 0.2);
+        }
+
+        .status-pending {
+            background: rgba(255, 204, 0, 0.2);
+            color: #ffcc00;
+            border: 1px solid rgba(255, 204, 0, 0.4);
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.2);
+        }
+
+        .status-rejected {
+            background: rgba(255, 59, 59, 0.2);
+            color: #ff3b3b;
+            border: 1px solid rgba(255, 59, 59, 0.4);
+            box-shadow: 0 0 20px rgba(255, 59, 59, 0.2);
+        }
+
+        .blockchain-link {
+            background: linear-gradient(135deg, #00ffc6, #00d1ff);
+            color: #0f172a;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .blockchain-link:hover {
+            box-shadow: 0 6px 20px rgba(0, 255, 198, 0.5);
+            transform: scale(1.1);
+        }
+
+        /* Advanced Analytics Grid */
+        .analytics-section {
+            margin-bottom: 3rem;
+        }
+
+        .analytics-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .analytics-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00ffc6, #00d1ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .analytics-subtitle {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            padding: 2rem;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #00ffc6;
+        }
+
+        .chart-period {
+            background: rgba(0, 255, 198, 0.1);
+            color: #00ffc6;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(0, 255, 198, 0.3);
+        }
+
+        .chart-container {
+            flex: 1;
+            position: relative;
+            min-height: 300px;
+        }
+
+        /* Status Widgets */
+        .status-widgets {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .status-widget {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .blockchain-status {
+            border-left: 4px solid #00ffc6;
+        }
+
+        .alert-widget {
+            border-left: 4px solid #ffcc00;
+            background: rgba(255, 204, 0, 0.05);
+        }
+
+        .security-widget {
+            border-left: 4px solid #00ff94;
+        }
+
+        .status-indicator {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--indicator-color, #00ffc6);
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 10px var(--indicator-color, #00ffc6);
+        }
+
+        .status-content {
+            flex: 1;
+        }
+
+        .status-title {
+            font-weight: 600;
+            color: var(--title-color, #00ffc6);
+            margin-bottom: 0.25rem;
+            font-size: 1.1rem;
+        }
+
+        .status-subtitle {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
+        .status-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--value-color, #00ffc6);
+        }
+
+        /* Animations */
+        @keyframes titleGlow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(0, 255, 198, 0.5)); }
+            50% { filter: drop-shadow(0 0 20px rgba(0, 255, 198, 0.8)); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-in {
+            animation: slideIn 0.6s ease-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .table {
+                min-width: 900px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Loading States */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 255, 198, 0.3);
+            border-radius: 50%;
+            border-top-color: #00ffc6;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Enhanced Header -->
+        <div class="section-header slide-in">
+            <h1 class="section-title">Certificates Management</h1>
+            <p class="section-subtitle">Advanced digital certificate management with real-time blockchain verification and comprehensive analytics</p>
+            <div class="live-indicator">
+                <div class="pulse-dot"></div>
+                <span>Live System • Last Updated: <span id="lastUpdate">Just now</span></span>
+            </div>
+        </div>
+
+        <!-- Enhanced Summary Cards -->
+        <div class="summary-grid">
+            <div class="glass-card summary-card birth slide-in">
+                <div class="summary-header">
+                    <div class="summary-icon">👶</div>
+                    <div class="summary-trend">
+                        <span>↗️ +12.5%</span>
+                    </div>
+                </div>
+                <div class="summary-value" id="birthCount">2,847</div>
+                <div class="summary-label">Birth Certificates Issued</div>
+                <div class="summary-details">
+                    <span>This Month: 234</span>
+                    <span>Avg/Day: 8.2</span>
+                </div>
+            </div>
+
+            <div class="glass-card summary-card death slide-in">
+                <div class="summary-header">
+                    <div class="summary-icon">🕊️</div>
+                    <div class="summary-trend">
+                        <span>↗️ +3.2%</span>
+                    </div>
+                </div>
+                <div class="summary-value" id="deathCount">1,203</div>
+                <div class="summary-label">Death Certificates Issued</div>
+                <div class="summary-details">
+                    <span>This Month: 89</span>
+                    <span>Avg/Day: 3.1</span>
+                </div>
+            </div>
+
+            <div class="glass-card summary-card marriage slide-in">
+                <div class="summary-header">
+                    <div class="summary-icon">💑</div>
+                    <div class="summary-trend">
+                        <span>↗️ +18.7%</span>
+                    </div>
+                </div>
+                <div class="summary-value" id="marriageCount">956</div>
+                <div class="summary-label">Marriage Certificates Issued</div>
+                <div class="summary-details">
+                    <span>This Month: 156</span>
+                    <span>Avg/Day: 5.5</span>
+                </div>
+            </div>
+
+            <div class="glass-card summary-card trading slide-in">
+                <div class="summary-header">
+                    <div class="summary-icon">🏪</div>
+                    <div class="summary-trend">
+                        <span>↗️ +25.1%</span>
+                    </div>
+                </div>
+                <div class="summary-value" id="tradingCount">1,542</div>
+                <div class="summary-label">Trading Licenses & Others</div>
+                <div class="summary-details">
+                    <span>This Month: 298</span>
+                    <span>Avg/Day: 10.4</span>
+                </div>
+            </div>
+
+            <div class="glass-card summary-card blockchain slide-in">
+                <div class="summary-header">
+                    <div class="summary-icon">🔗</div>
+                    <div class="summary-trend">
+                        <span>↗️ +0.3%</span>
+                    </div>
+                </div>
+                <div class="summary-value" id="blockchainPercent">98.7%</div>
+                <div class="summary-label">Blockchain Verified</div>
+                <div class="summary-details">
+                    <span>Verified: 6,461</span>
+                    <span>Pending: 87</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Controls -->
+        <div class="glass-card controls-section slide-in">
+            <div class="controls-header">
+                <h3 class="controls-title">🔍 Advanced Filters & Controls</h3>
+                <div class="view-toggle">
+                    <button class="view-btn active" onclick="switchView('table')">📋 Table View</button>
+                    <button class="view-btn" onclick="switchView('cards')">🗃️ Card View</button>
+                    <button class="view-btn" onclick="switchView('analytics')">📊 Analytics</button>
+                </div>
+            </div>
+
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label class="filter-label">🔍 Search Certificates</label>
+                    <input type="text" class="search-input" placeholder="Search by ID, name, or ward..." id="searchInput">
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">📋 Certificate Type</label>
+                    <select class="filter-select" id="typeFilter">
+                        <option value="">All Types</option>
+                        <option value="birth">Birth Certificate</option>
+                        <option value="death">Death Certificate</option>
+                        <option value="marriage">Marriage Certificate</option>
+                        <option value="trading">Trading License</option>
+                        <option value="other">Other Documents</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">⚡ Status Filter</label>
+                    <select class="filter-select" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="verified">✅ Verified</option>
+                        <option value="pending">⚠️ Pending</option>
+                        <option value="rejected">❌ Rejected</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">🏘️ Ward/Zone</label>
+                    <select class="filter-select" id="wardFilter">
+                        <option value="">All Wards</option>
+                        <option value="Zone A">Zone A</option>
+                        <option value="Zone B">Zone B</option>
+                        <option value="Zone C">Zone C</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">📅 From Date</label>
+                    <input type="date" class="date-input" id="fromDate">
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">📅 To Date</label>
+                    <input type="date" class="date-input" id="toDate">
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="issueNewCertificate()">
+                    <span>➕</span> Issue New Certificate
+                </button>
+                <button class="btn btn-secondary" onclick="bulkVerifyBlockchain()">
+                    <span>🔗</span> Bulk Blockchain Verify
+                </button>
+                <button class="btn btn-secondary" onclick="generateReport()">
+                    <span>📊</span> Generate Report
+                </button>
+                <button class="btn btn-secondary" onclick="exportData()">
+                    <span>📤</span> Export Data
+                </button>
+                <button class="btn btn-secondary" onclick="auditTrail()">
+                    <span>🔍</span> Audit Trail
+                </button>
+            </div>
+        </div>
+
+        <!-- Advanced Table Section -->
+        <div class="table-section slide-in" id="tableView">
+            <div class="table-header">
+                <h3 class="table-title">📋 Certificates Database</h3>
+                <div class="table-stats">
+                    <span>Total: <strong id="totalRecords">6,548</strong></span>
+                    <span>Filtered: <strong id="filteredRecords">6,548</strong></span>
+                    <span>Selected: <strong id="selectedRecords">0</strong></span>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAll" onchange="toggleSelectAll()"></th>
+                            <th class="sortable" onclick="sortTable('id')">🆔 Certificate ID</th>
+                            <th class="sortable" onclick="sortTable('type')">📋 Type</th>
+                            <th class="sortable" onclick="sortTable('applicant')">👤 Applicant Name</th>
+                            <th class="sortable" onclick="sortTable('ward')">🏘️ Ward / Zone</th>
+                            <th class="sortable" onclick="sortTable('date')">📅 Issued Date</th>
+                            <th class="sortable" onclick="sortTable('status')">⚡ Status</th>
+                            <th>🔗 Blockchain</th>
+                            <th>⚙️ Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="certificatesTable">
+                        <!-- Table rows populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Advanced Analytics Section -->
+        <div class="analytics-section slide-in">
+            <div class="analytics-header">
+                <h2 class="analytics-title">📊 Advanced Analytics Dashboard</h2>
+                <p class="analytics-subtitle">Real-time insights and comprehensive certificate analytics</p>
+            </div>
+
+            <div class="analytics-grid">
+                <div class="glass-card chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">📊 Certificate Distribution</h3>
+                        <span class="chart-period">Last 30 Days</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="distributionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="glass-card chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">📈 Issuance Trends</h3>
+                        <span class="chart-period">Last 6 Months</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="trendsChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="glass-card chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">🏘️ Ward-wise Distribution</h3>
+                        <span class="chart-period">Current Month</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="wardChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="glass-card chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">⚡ Status Analytics</h3>
+                        <span class="chart-period">Real-time</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Widgets -->
+        <div class="status-widgets slide-in">
+            <div class="glass-card status-widget blockchain-status">
+                <div class="status-indicator" style="--indicator-color: #00ffc6;"></div>
+                <div class="status-content">
+                    <div class="status-title" style="--title-color: #00ffc6;">🔗 Blockchain Network Status</div>
+                    <div class="status-subtitle">Last sync: <span id="lastSync">2 minutes ago</span> • Network: Ethereum Mainnet</div>
+                    <div class="status-value" style="--value-color: #00ffc6;">98.7% Verified</div>
+                </div>
+            </div>
+
+            <div class="glass-card status-widget alert-widget">
+                <div class="status-indicator" style="--indicator-color: #ffcc00;"></div>
+                <div class="status-content">
+                    <div class="status-title" style="--title-color: #ffcc00;">⚠️ Pending Validations</div>
+                    <div class="status-subtitle">Certificates awaiting blockchain verification</div>
+                    <div class="status-value" style="--value-color: #ffcc00;">87 Pending</div>
+                </div>
+            </div>
+
+            <div class="glass-card status-widget security-widget">
+                <div class="status-indicator" style="--indicator-color: #00ff94;"></div>
+                <div class="status-content">
+                    <div class="status-title" style="--title-color: #00ff94;">🛡️ Security Status</div>
+                    <div class="status-subtitle">All systems secure • No fraud detected</div>
+                    <div class="status-value" style="--value-color: #00ff94;">100% Secure</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced certificate data with more realistic information
+        const certificatesData = [
+            {
+                id: "0x7f9a2b8c3d4e5f6a1b2c3d4e",
+                type: "Birth Certificate",
+                applicant: "Rajesh Kumar Singh",
+                ward: "Ward 15, Zone A",
+                date: "2024-01-15",
+                status: "verified",
+                blockchainHash: "0x7f9a2b8c3d4e5f6a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c",
+                officer: "Priya Sharma",
+                priority: "normal"
+            },
+            {
+                id: "0x8e1b3c5d7f9a2b4c6e8a1b3c",
+                type: "Marriage Certificate",
+                applicant: "Priya Patel & Amit Sharma",
+                ward: "Ward 8, Zone B",
+                date: "2024-01-14",
+                status: "verified",
+                blockchainHash: "0x8e1b3c5d7f9a2b4c6e8a1b3c5d7f9a2b4c6e8a1b3c5d7f9a2b4c6e8a1b3c5d7f9a",
+                officer: "Rahul Gupta",
+                priority: "high"
+            },
+            {
+                id: "0x9f2c4d6e8a1b3c5d7f9a2b4c",
+                type: "Death Certificate",
+                applicant: "Sunita Devi (for Late Ramesh Devi)",
+                ward: "Ward 22, Zone C",
+                date: "2024-01-13",
+                status: "pending",
+                blockchainHash: null,
+                officer: "Anjali Singh",
+                priority: "urgent"
+            },
+            {
+                id: "0xa3d5f7e9b2c4d6e8a1b3c5d7",
+                type: "Trading License",
+                applicant: "Mohan Electronics Pvt Ltd",
+                ward: "Ward 5, Zone A",
+                date: "2024-01-12",
+                status: "verified",
+                blockchainHash: "0xa3d5f7e9b2c4d6e8a1b3c5d7f9a2b4c6e8a1b3c5d7f9a2b4c6e8a1b3c5d7f9a2b",
+                officer: "Vikash Kumar",
+                priority: "normal"
+            },
+            {
+                id: "0xb4e6a8f1c3d5f7e9b2c4d6e8",
+                type: "Birth Certificate",
+                applicant: "Ananya Patel",
+                ward: "Ward 18, Zone B",
+                date: "2024-01-11",
+                status: "rejected",
+                blockchainHash: null,
+                officer: "Meera Joshi",
+                priority: "normal"
+            },
+            {
+                id: "0xc5f7b9a2d4e6a8f1c3d5f7e9",
+                type: "Marriage Certificate",
+                applicant: "Deepak Gupta & Kavita Sharma",
+                ward: "Ward 12, Zone C",
+                date: "2024-01-10",
+                status: "verified",
+                blockchainHash: "0xc5f7b9a2d4e6a8f1c3d5f7e9b2c4d6e8a1b3c5d7f9a2b4c6e8a1b3c5d7f9a2b4c",
+                officer: "Suresh Yadav",
+                priority: "normal"
+            },
+            {
+                id: "0xd6e8a1b3c5d7f9a2b4c6e8a1",
+                type: "Trading License",
+                applicant: "Sharma Medical Store",
+                ward: "Ward 7, Zone A",
+                date: "2024-01-09",
+                status: "pending",
+                blockchainHash: null,
+                officer: "Ravi Tiwari",
+                priority: "high"
+            },
+            {
+                id: "0xe7f9a2b4c6e8a1b3c5d7f9a2",
+                type: "Birth Certificate",
+                applicant: "Arjun Singh Rajput",
+                ward: "Ward 25, Zone C",
+                date: "2024-01-08",
+                status: "verified",
+                blockchainHash: "0xe7f9a2b4c6e8a1b3c5d7f9a2b4c6e8a1b3c5d7f9a2b4c6e8a1b3c5d7f9a2b4c6e",
+                officer: "Pooja Verma",
+                priority: "urgent"
+            }
+        ];
+
+        let currentSort = { field: null, direction: 'asc' };
+        let selectedCertificates = new Set();
+        let filteredData = [...certificatesData];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            populateTable();
+            setupEventListeners();
+            startRealTimeUpdates();
+            updateLastUpdateTime();
+        });
+
+        // Setup event listeners
+        function setupEventListeners() {
+            document.getElementById('searchInput').addEventListener('input', filterCertificates);
+            document.getElementById('typeFilter').addEventListener('change', filterCertificates);
+            document.getElementById('statusFilter').addEventListener('change', filterCertificates);
+            document.getElementById('wardFilter').addEventListener('change', filterCertificates);
+            document.getElementById('fromDate').addEventListener('change', filterCertificates);
+            document.getElementById('toDate').addEventListener('change', filterCertificates);
+        }
+
+        // Enhanced table population with more features
+        function populateTable(data = certificatesData) {
+            const tbody = document.getElementById('certificatesTable');
+            tbody.innerHTML = '';
+
+            data.forEach((cert, index) => {
+                const row = document.createElement('tr');
+                row.className = 'slide-in';
+                row.style.animationDelay = `${index * 0.1}s`;
+                
+                const statusClass = `status-${cert.status}`;
+                const statusText = cert.status.charAt(0).toUpperCase() + cert.status.slice(1);
+                const statusIcon = cert.status === 'verified' ? '✅' : cert.status === 'pending' ? '⚠️' : '❌';
+                
+                const priorityIcon = cert.priority === 'urgent' ? '🔴' : cert.priority === 'high' ? '🟡' : '🟢';
+
+                row.innerHTML = `
+                    <td><input type="checkbox" class="cert-checkbox" data-id="${cert.id}" onchange="toggleCertificateSelection('${cert.id}')"></td>
+                    <td>
+                        <div class="tooltip" data-tooltip="Click to copy">
+                            <code style="color: #00ffc6; font-size: 0.75rem; cursor: pointer;" onclick="copyToClipboard('${cert.id}')">${cert.id.substring(0, 20)}...</code>
+                        </div>
+                        <div style="font-size: 0.7rem; color: #64748b; margin-top: 0.25rem;">${priorityIcon} ${cert.priority.toUpperCase()}</div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 600;">${cert.type}</div>
+                        <div style="font-size: 0.8rem; color: #94a3b8;">Officer: ${cert.officer}</div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 500;">${cert.applicant}</div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 500;">${cert.ward}</div>
+                    </td>
+                    <td>
+                        <div>${formatDate(cert.date)}</div>
+                        <div style="font-size: 0.8rem; color: #94a3b8;">${getTimeAgo(cert.date)}</div>
+                    </td>
+                    <td><span class="status-badge ${statusClass}">${statusIcon} ${statusText}</span></td>
+                    <td>
+                        ${cert.blockchainHash ? 
+                            `<a href="#" class="blockchain-link" onclick="viewBlockchain('${cert.blockchainHash}')">
+                                🔗 View
+                            </a>` : 
+                            `<span style="color: #64748b; font-size: 0.8rem;">Not synced</span>`
+                        }
+                    </td>
+                    <td>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.7rem;" onclick="editCertificate('${cert.id}')">✏️</button>
+                            <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.7rem;" onclick="downloadCertificate('${cert.id}')">📄</button>
+                            <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.7rem;" onclick="viewDetails('${cert.id}')">👁️</button>
+                        </div>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+
+            updateTableStats(data.length);
+        }
+
+        // Enhanced filtering with multiple criteria
+        function filterCertificates() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const typeFilter = document.getElementById('typeFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            const wardFilter = document.getElementById('wardFilter').value;
+            const fromDate = document.getElementById('fromDate').value;
+            const toDate = document.getElementById('toDate').value;
+
+            filteredData = certificatesData.filter(cert => {
+                const matchesSearch = cert.applicant.toLowerCase().includes(searchTerm) || 
+                                    cert.id.toLowerCase().includes(searchTerm) ||
+                                    cert.officer.toLowerCase().includes(searchTerm);
+                
+                const matchesType = !typeFilter || cert.type.toLowerCase().includes(typeFilter);
+                const matchesStatus = !statusFilter || cert.status === statusFilter;
+                const matchesWard = !wardFilter || cert.ward.includes(wardFilter);
+                
+                const certDate = new Date(cert.date);
+                const matchesFromDate = !fromDate || certDate >= new Date(fromDate);
+                const matchesToDate = !toDate || certDate <= new Date(toDate);
+
+                return matchesSearch && matchesType && matchesStatus && matchesWard && matchesFromDate && matchesToDate;
+            });
+
+            populateTable(filteredData);
+        }
+
+        // Enhanced sorting functionality
+        function sortTable(field) {
+            const direction = currentSort.field === field && currentSort.direction === 'asc' ? 'desc' : 'asc';
+            currentSort = { field, direction };
+
+            // Update sort indicators
+            document.querySelectorAll('.table th').forEach(th => {
+                th.classList.remove('sort-asc', 'sort-desc');
+            });
+            
+            const header = document.querySelector(`th[onclick="sortTable('${field}')"]`);
+            header.classList.add(direction === 'asc' ? 'sort-asc' : 'sort-desc');
+
+            filteredData.sort((a, b) => {
+                let aVal = a[field];
+                let bVal = b[field];
+
+                if (field === 'date') {
+                    aVal = new Date(aVal);
+                    bVal = new Date(bVal);
+                }
+
+                if (aVal < bVal) return direction === 'asc' ? -1 : 1;
+                if (aVal > bVal) return direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            populateTable(filteredData);
+        }
+
+        // Certificate selection management
+        function toggleSelectAll() {
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.cert-checkbox');
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAll.checked;
+                if (selectAll.checked) {
+                    selectedCertificates.add(checkbox.dataset.id);
+                } else {
+                    selectedCertificates.delete(checkbox.dataset.id);
+                }
+            });
+            
+            updateSelectedCount();
+        }
+
+        function toggleCertificateSelection(certId) {
+            if (selectedCertificates.has(certId)) {
+                selectedCertificates.delete(certId);
+            } else {
+                selectedCertificates.add(certId);
+            }
+            updateSelectedCount();
+        }
+
+        function updateSelectedCount() {
+            document.getElementById('selectedRecords').textContent = selectedCertificates.size;
+        }
+
+        function updateTableStats(filteredCount) {
+            document.getElementById('filteredRecords').textContent = filteredCount;
+        }
+
+        // Initialize advanced charts
+        function initializeCharts() {
+            // Distribution Chart (Doughnut)
+            const distributionCtx = document.getElementById('distributionChart').getContext('2d');
+            new Chart(distributionCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Birth Certificates', 'Death Certificates', 'Marriage Certificates', 'Trading Licenses'],
+                    datasets: [{
+                        data: [2847, 1203, 956, 1542],
+                        backgroundColor: ['#00ff94', '#ff3b3b', '#00d1ff', '#ffcc00'],
+                        borderColor: ['#00ff94', '#ff3b3b', '#00d1ff', '#ffcc00'],
+                        borderWidth: 2,
+                        hoverBorderWidth: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#e2e8f0',
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Trends Chart (Line)
+            const trendsCtx = document.getElementById('trendsChart').getContext('2d');
+            new Chart(trendsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'],
+                    datasets: [
+                        {
+                            label: 'Birth Certificates',
+                            data: [180, 220, 250, 280, 260, 234],
+                            borderColor: '#00ff94',
+                            backgroundColor: 'rgba(0, 255, 148, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Marriage Certificates',
+                            data: [80, 95, 110, 125, 140, 156],
+                            borderColor: '#00d1ff',
+                            backgroundColor: 'rgba(0, 209, 255, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Trading Licenses',
+                            data: [150, 180, 200, 220, 250, 298],
+                            borderColor: '#ffcc00',
+                            backgroundColor: 'rgba(255, 204, 0, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.1)'
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.1)'
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#e2e8f0',
+                                usePointStyle: true
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Ward Chart (Bar)
+            const wardCtx = document.getElementById('wardChart').getContext('2d');
+            new Chart(wardCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Zone A', 'Zone B', 'Zone C'],
+                    datasets: [{
+                        label: 'Certificates Issued',
+                        data: [2150, 2398, 2000],
+                        backgroundColor: [
+                            'rgba(0, 255, 198, 0.8)',
+                            'rgba(0, 209, 255, 0.8)',
+                            'rgba(0, 255, 148, 0.8)'
+                        ],
+                        borderColor: [
+                            '#00ffc6',
+                            '#00d1ff',
+                            '#00ff94'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.1)'
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Status Chart (Polar Area)
+            const statusCtx = document.getElementById('statusChart').getContext('2d');
+            new Chart(statusCtx, {
+                type: 'polarArea',
+                data: {
+                    labels: ['Verified', 'Pending', 'Rejected'],
+                    datasets: [{
+                        data: [6461, 87, 0],
+                        backgroundColor: [
+                            'rgba(0, 255, 148, 0.8)',
+                            'rgba(255, 204, 0, 0.8)',
+                            'rgba(255, 59, 59, 0.8)'
+                        ],
+                        borderColor: [
+                            '#00ff94',
+                            '#ffcc00',
+                            '#ff3b3b'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#e2e8f0',
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.2)'
+                            },
+                            ticks: {
+                                color: '#94a3b8',
+                                backdropColor: 'transparent'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // View switching functionality
+        function switchView(view) {
+            // Update active button
+            document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Show/hide sections based on view
+            const tableView = document.getElementById('tableView');
+            const analyticsSection = document.querySelector('.analytics-section');
+
+            switch(view) {
+                case 'table':
+                    tableView.style.display = 'block';
+                    analyticsSection.style.display = 'block';
+                    break;
+                case 'cards':
+                    // Implement card view
+                    alert('Card view coming soon!');
+                    break;
+                case 'analytics':
+                    tableView.style.display = 'none';
+                    analyticsSection.style.display = 'block';
+                    break;
+            }
+        }
+
+        // Action button functions
+        function issueNewCertificate() {
+            alert('🎉 Opening advanced certificate issuance wizard...\n\n✨ Features:\n• Smart form validation\n• Real-time document verification\n• Automatic blockchain registration\n• Digital signature integration');
+        }
+
+        function bulkVerifyBlockchain() {
+            if (selectedCertificates.size === 0) {
+                alert('⚠️ Please select certificates to verify on blockchain.');
+                return;
+            }
+            alert(`🔗 Initiating blockchain verification for ${selectedCertificates.size} selected certificates...\n\n⏳ Estimated time: ${selectedCertificates.size * 2} minutes\n💰 Gas fee: ~$${(selectedCertificates.size * 0.05).toFixed(2)}`);
+        }
+
+        function generateReport() {
+            alert('📊 Generating comprehensive analytics report...\n\n📋 Report includes:\n• Certificate statistics\n• Blockchain verification status\n• Ward-wise distribution\n• Trend analysis\n• Performance metrics');
+        }
+
+        function exportData() {
+            alert('📤 Exporting certificate data...\n\n📁 Available formats:\n• Excel (.xlsx)\n• CSV (.csv)\n• PDF Report\n• JSON Data\n• Blockchain Export');
+        }
+
+        function auditTrail() {
+            alert('🔍 Opening audit trail dashboard...\n\n📋 Tracking:\n• All certificate modifications\n• User access logs\n• Blockchain transactions\n• System changes\n• Security events');
+        }
+
+        // Certificate action functions
+        function editCertificate(certId) {
+            alert(`✏️ Opening certificate editor for:\n${certId}\n\n🔒 Secure editing with:\n• Version control\n• Digital signatures\n• Audit logging\n• Blockchain updates`);
+        }
+
+        function downloadCertificate(certId) {
+            alert(`📄 Downloading certificate:\n${certId}\n\n📋 Available formats:\n• Official PDF\n• Digital copy with QR\n• Blockchain proof\n• Verification certificate`);
+        }
+
+        function viewDetails(certId) {
+            const cert = certificatesData.find(c => c.id === certId);
+            if (cert) {
+                alert(`👁️ Certificate Details:\n\n🆔 ID: ${cert.id}\n📋 Type: ${cert.type}\n👤 Applicant: ${cert.applicant}\n🏘️ Ward: ${cert.ward}\n📅 Date: ${cert.date}\n⚡ Status: ${cert.status}\n👮 Officer: ${cert.officer}\n🔴 Priority: ${cert.priority}`);
+            }
+        }
+
+        function viewBlockchain(hash) {
+            alert(`🔗 Opening blockchain explorer...\n\n🔍 Transaction Hash:\n${hash}\n\n📋 Blockchain Details:\n• Network: Ethereum Mainnet\n• Block confirmations: 1,247\n• Gas used: 21,000\n• Timestamp: ${new Date().toLocaleString()}`);
+        }
+
+        // Utility functions
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-IN', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            });
+        }
+
+        function getTimeAgo(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 1) return 'Yesterday';
+            if (diffDays < 7) return `${diffDays} days ago`;
+            if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+            return `${Math.floor(diffDays / 30)} months ago`;
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Show temporary success message
+                const toast = document.createElement('div');
+                toast.textContent = '✅ Copied to clipboard!';
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: rgba(0, 255, 148, 0.9);
+                    color: #0f172a;
+                    padding: 1rem 2rem;
+                    border-radius: 10px;
+                    font-weight: 600;
+                    z-index: 10000;
+                    animation: slideIn 0.3s ease-out;
+                `;
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 2000);
+            });
+        }
+
+        function updateLastUpdateTime() {
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = now.toLocaleTimeString('en-IN', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        }
+
+        // Real-time updates simulation
+        function startRealTimeUpdates() {
+            setInterval(() => {
+                // Update blockchain percentage
+                const blockchainPercent = document.getElementById('blockchainPercent');
+                const currentPercent = parseFloat(blockchainPercent.textContent);
+                const newPercent = Math.min(99.9, currentPercent + (Math.random() * 0.1));
+                blockchainPercent.textContent = newPercent.toFixed(1) + '%';
+
+                // Update last sync time
+                const syncTimes = ['1 minute ago', '2 minutes ago', '3 minutes ago', 'Just now'];
+                document.getElementById('lastSync').textContent = syncTimes[Math.floor(Math.random() * syncTimes.length)];
+
+                // Update last update time
+                updateLastUpdateTime();
+            }, 30000); // Update every 30 seconds
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9704980a54d88826',t:'MTc1NTM4NTcwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

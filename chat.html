@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 Nigam Saathi | नगर साथी - Indore Nagar Nigam AI Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --bot-bubble: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --user-bubble: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            --shadow-soft: 0 10px 40px rgba(0,0,0,0.1);
+            --shadow-hover: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--primary-gradient);
+        }
+
+        .animated-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(1deg); }
+        }
+
+        .logo-container {
+            text-align: center;
+            padding: 20px 0;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        .logo-container img {
+            height: 85px;
+            width: auto;
+            border-radius: 50%;
+            box-shadow: var(--shadow-soft);
+            border: 4px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .logo-container img:hover {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 0 20px 30px;
+            animation: slideUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero-title {
+            background: linear-gradient(45deg, #fff, #f8f9fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .hero-subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 15px;
+            animation: slideUp 0.8s ease-out 0.4s both;
+        }
+
+        .chat-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(255,255,255,0.2);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .chat-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-5px);
+        }
+
+        .chat-header {
+            background: var(--bot-bubble);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+
+        .chat-header h4 {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .chat-messages {
+            height: 500px;
+            overflow-y: auto;
+            padding: 20px;
+            background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+            scroll-behavior: smooth;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--primary-gradient);
+            border-radius: 10px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            animation: messageSlide 0.5s ease-out;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bot-message {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .bot-avatar {
+            width: 35px;
+            height: 35px;
+            background: var(--bot-bubble);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .bot-bubble {
+            background: var(--bot-bubble);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 20px 20px 20px 5px;
+            max-width: 70%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bot-bubble::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .bot-bubble:hover::before {
+            left: 100%;
+        }
+
+        .user-message {
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .user-bubble {
+            background: var(--user-bubble);
+            color: #333;
+            padding: 12px 18px;
+            border-radius: 20px 20px 5px 20px;
+            max-width: 70%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            background: var(--secondary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .typing-dots {
+            background: var(--bot-bubble);
+            padding: 15px 20px;
+            border-radius: 20px 20px 20px 5px;
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 50%;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typingAnimation {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .chat-input {
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            padding: 12px 60px 12px 20px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .chat-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            background: white;
+            outline: none;
+        }
+
+        .send-btn {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--success-gradient);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .send-btn:hover {
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .send-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .quick-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .quick-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            cursor: pointer;
+        }
+
+        .quick-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .dropdown-container {
+            margin-top: 10px;
+        }
+
+        .custom-select {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 10px 15px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .custom-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            outline: none;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .chat-messages {
+                height: 400px;
+            }
+            
+            .bot-bubble, .user-bubble {
+                max-width: 85%;
+            }
+        }
+
+        .footer-info {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+        }
+
+        .footer-info a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-info a:hover {
+            color: white;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    
+    <div class="container-fluid">
+        <!-- Logo Section -->
+        <div class="logo-container">
+            <img src="img/Nagar Nigam Logo.jpg" alt="Indore Nagar Nigam Logo" class="pulse">
+        </div>
+
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1 class="hero-title">🤖 Nigam Saathi – Indore Nagar Nigam AI Assistant</h1>
+            <p class="hero-subtitle">Complaint file karni hai? Bill bharna hai? Apna ward pata karna hai? Sab kuch yahan batao, Nigam Saathi madad karega!</p>
+        </div>
+
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <div class="chat-card">
+                <div class="chat-header">
+                    <h4><i class="fas fa-robot"></i> नगर साथी - आपका डिजिटल सहायक</h4>
+                </div>
+                
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Initial bot message -->
+                    <div class="message bot-message">
+                        <div class="bot-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="bot-bubble">
+                            🙏 नमस्कार! मैं निगम साथी हूँ। Aur bhaiyon, kya haal hai? <br><br>
+                            मैं आपकी इन सभी चीजों में मदद कर सकता हूँ:
+                            <div class="quick-options">
+                                <button class="quick-btn" onclick="startComplaint()">📝 Complaint File करें</button>
+                                <button class="quick-btn" onclick="showBillOptions()">💳 Online Bill Payment</button>
+                                <button class="quick-btn" onclick="findWard()">📍 Ward/Zone पता करें</button>
+                                <button class="quick-btn" onclick="joinWhatsApp()">📲 WhatsApp Group Join</button>
+                                <button class="quick-btn" onclick="generalHelp()">👨‍🔧 General Help</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-container">
+                    <div class="input-group">
+                        <input type="text" class="form-control chat-input" id="userInput" placeholder="यहाँ अपना message type करें..." onkeypress="handleKeyPress(event)">
+                        <button class="send-btn" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer-info">
+            <p>🏛️ Indore Smart City Initiative | <a href="#">Nigam Setu Portal</a> | 24x7 Digital Seva</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Area to Ward/Zone mapping
+        const areaMapping = {
+            "vijay nagar": { ward: 80, zone: 9, parshad: "Neeta Sharma" },
+            "rajwada": { ward: 45, zone: 5, parshad: "Rajesh Gupta" },
+            "sarafa": { ward: 23, zone: 3, parshad: "Sunita Verma" },
+            "palasia": { ward: 67, zone: 7, parshad: "Amit Jain" },
+            "bhawarkua": { ward: 34, zone: 4, parshad: "Priya Sharma" },
+            "mhow": { ward: 12, zone: 2, parshad: "Vikash Singh" },
+            "rau": { ward: 89, zone: 10, parshad: "Kavita Patel" },
+            "indore gpo": { ward: 56, zone: 6, parshad: "Mohan Lal" },
+            "treasure island": { ward: 78, zone: 8, parshad: "Deepak Kumar" },
+            "silicon city": { ward: 82, zone: 9, parshad: "Ritu Agarwal" }
+        };
+
+        let currentFlow = '';
+        let complaintData = {};
+        let chatMessages = document.getElementById('chatMessages');
+
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typing';
+            typingDiv.innerHTML = `
+                <div class="bot-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            scrollToBottom();
+        }
+
+        function hideTypingIndicator() {
+            const typing = document.getElementById('typing');
+            if (typing) {
+                typing.remove();
+            }
+        }
+
+        function addBotMessage(message, delay = 1500) {
+            showTypingIndicator();
+            
+            setTimeout(() => {
+                hideTypingIndicator();
+                
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message bot-message';
+                messageDiv.innerHTML = `
+                    <div class="bot-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="bot-bubble">
+                        ${message}
+                    </div>
+                `;
+                chatMessages.appendChild(messageDiv);
+                scrollToBottom();
+            }, delay);
+        }
+
+        function addUserMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user-message';
+            messageDiv.innerHTML = `
+                <div class="user-bubble">
+                    ${message}
+                </div>
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            
+            if (message === '') return;
+            
+            addUserMessage(message);
+            input.value = '';
+            
+            processUserMessage(message);
+        }
+
+        function processUserMessage(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (currentFlow === 'complaint_area') {
+                handleComplaintArea(lowerMessage);
+            } else if (currentFlow === 'complaint_category') {
+                handleComplaintCategory(message);
+            } else if (currentFlow === 'complaint_description') {
+                complaintData.description = message;
+                addBotMessage("Perfect! Ab apna naam aur phone number batao bhai (e.g., Rahul Sharma - 9876543210)");
+                currentFlow = 'complaint_contact';
+            } else if (currentFlow === 'complaint_contact') {
+                handleComplaintContact(message);
+            } else if (currentFlow === 'find_ward') {
+                handleFindWard(lowerMessage);
+            } else if (currentFlow === 'whatsapp_ward') {
+                handleWhatsAppWard(message);
+            } else {
+                // General responses
+                if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('namaste')) {
+                    addBotMessage("🙏 Namaste bhai! Kya madad chahiye? Main yahan hoon aapki seva ke liye!");
+                } else {
+                    addBotMessage("Sorry bhai, samajh nahi aaya. Kripya upar diye gaye options mein se choose kariye ya fir 'help' type kariye! 😊");
+                }
+            }
+        }
+
+        // Complaint Flow
+        function startComplaint() {
+            currentFlow = 'complaint_area';
+            complaintData = {};
+            addBotMessage("Chalo complaint banaate hain! 📝<br><br>Pehle batao kis area se ho bhai? <br><br>Example: Vijay Nagar, Rajwada, Sarafa, Palasia, Bhawarkua, etc.");
+        }
+
+        function handleComplaintArea(area) {
+            const areaData = areaMapping[area];
+            
+            if (areaData) {
+                complaintData.area = area;
+                complaintData.ward = areaData.ward;
+                complaintData.zone = areaData.zone;
+                complaintData.parshad = areaData.parshad;
+                
+                addBotMessage(`✅ Perfect! <br><br>📍 Area: ${area.toUpperCase()}<br>🏠 Ward: ${areaData.ward}<br>🌐 Zone: ${areaData.zone}<br>👤 Parshad: ${areaData.parshad}<br><br>Ab batao kya problem hai?
+                    <div class="quick-options">
+                        <button class="quick-btn" onclick="selectComplaintCategory('पानी की समस्या 🚱')">पानी की समस्या 🚱</button>
+                        <button class="quick-btn" onclick="selectComplaintCategory('कचरा गाड़ी नहीं आई 🗑️')">कचरा गाड़ी 🗑️</button>
+                        <button class="quick-btn" onclick="selectComplaintCategory('प्लास्टिक बैन उल्लंघन 🚫')">प्लास्टिक बैन 🚫</button>
+                        <button class="quick-btn" onclick="selectComplaintCategory('दुकानदार अतिक्रमण 🛒')">दुकानदार अतिक्रमण 🛒</button>
+                    </div>`);
+                currentFlow = 'complaint_category';
+            } else {
+                addBotMessage("Sorry bhai, yeh area meri list mein nahi hai. Kripya koi aur area name try kariye jaise: Vijay Nagar, Rajwada, Sarafa, Palasia, etc.");
+            }
+        }
+
+        function selectComplaintCategory(category) {
+            addUserMessage(category);
+            handleComplaintCategory(category);
+        }
+
+        function handleComplaintCategory(category) {
+            complaintData.category = category;
+            addBotMessage(`👍 Samjh gaya bhai! Problem hai: <strong>${category}</strong><br><br>Ab thoda detail mein batao kya exactly problem hai? (2-3 lines mein)`);
+            currentFlow = 'complaint_description';
+        }
+
+        function handleComplaintContact(contact) {
+            complaintData.contact = contact;
+            
+            // Generate complaint ID
+            const complaintId = 'INC' + Date.now().toString().slice(-6);
+            
+            addBotMessage(`🎉 Complaint successfully register ho gayi bhai!<br><br>
+                📋 <strong>Complaint Summary:</strong><br>
+                🆔 ID: ${complaintId}<br>
+                📍 Area: ${complaintData.area.toUpperCase()}<br>
+                🏠 Ward: ${complaintData.ward} | Zone: ${complaintData.zone}<br>
+                ❗ Problem: ${complaintData.category}<br>
+                📝 Details: ${complaintData.description}<br>
+                👤 Contact: ${complaintData.contact}<br><br>
+                ✅ <strong>Complaint recorded! Nigam team will try to resolve in 7 days. Dhanyawad! 🙏</strong><br><br>
+                Kuch aur madad chahiye?
+                <div class="quick-options">
+                    <button class="quick-btn" onclick="showMainMenu()">🏠 Main Menu</button>
+                    <button class="quick-btn" onclick="startComplaint()">📝 Another Complaint</button>
+                </div>`);
+            
+            currentFlow = '';
+        }
+
+        // Bill Payment
+        function showBillOptions() {
+            addBotMessage(`💳 Online Bill Payment ke liye yeh links hai bhai:<br><br>
+                <div class="quick-options">
+                    <button class="quick-btn" onclick="openBillLink('water')">💧 Water Bill Payment</button>
+                    <button class="quick-btn" onclick="openBillLink('property')">🏠 Property Tax Payment</button>
+                    <button class="quick-btn" onclick="openBillLink('trade')">📜 Trade License Payment</button>
+                </div><br>
+                Bilkul secure hai, tension mat lo! 😊`);
+        }
+
+        function openBillLink(type) {
+            const links = {
+                water: 'https://imcindore.gov.in/water-bill-payment',
+                property: 'https://imcindore.gov.in/property-tax',
+                trade: 'https://imcindore.gov.in/trade-license'
+            };
+            
+            const names = {
+                water: 'Water Bill',
+                property: 'Property Tax',
+                trade: 'Trade License'
+            };
+            
+            addUserMessage(`${names[type]} Payment`);
+            addBotMessage(`🔗 Bilkul! Yeh raha ${names[type]} payment ka link bhai:<br><br>
+                <a href="${links[type]}" target="_blank" class="btn btn-primary">
+                    <i class="fas fa-external-link-alt"></i> ${names[type]} Payment Portal
+                </a><br><br>
+                Link pe click karo aur payment kar do. Safe hai bilkul! 👍`);
+        }
+
+        // Ward Finder
+        function findWard() {
+            currentFlow = 'find_ward';
+            addBotMessage("📍 Ward aur Zone pata karne ke liye apna area batao bhai!<br><br>Example: Vijay Nagar, Rajwada, Sarafa, etc.");
+        }
+
+        function handleFindWard(area) {
+            const areaData = areaMapping[area];
+            
+            if (areaData) {
+                addBotMessage(`🎯 Perfect! Yeh rahi aapki details:<br><br>
+                    📍 <strong>Area:</strong> ${area.toUpperCase()}<br>
+                    🏠 <strong>Ward:</strong> ${areaData.ward}<br>
+                    🌐 <strong>Zone:</strong> ${areaData.zone}<br>
+                    👤 <strong>Parshad:</strong> ${areaData.parshad} ji<br><br>
+                    Kuch aur pata karna hai?
+                    <div class="quick-options">
+                        <button class="quick-btn" onclick="showMainMenu()
+                        <button class="quick-btn" onclick="showMainMenu()">🏠 Main Menu</button>
+                        <button class="quick-btn" onclick="joinWhatsApp()">📲 WhatsApp Group</button>
+                    </div>`);
+                currentFlow = '';
+            } else {
+                addBotMessage("Sorry bhai, yeh area meri database mein nahi hai. Kripya koi aur area try kariye jaise: Vijay Nagar, Rajwada, Sarafa, Palasia, Bhawarkua, etc.");
+            }
+        }
+
+        // WhatsApp Group
+        function joinWhatsApp() {
+            currentFlow = 'whatsapp_ward';
+            addBotMessage(`📲 WhatsApp Group join karne ke liye apna ward number select karo:<br><br>
+                <div class="dropdown-container">
+                    <select class="form-select custom-select" onchange="selectWard(this.value)">
+                        <option value="">Ward Select करें (1-85)</option>
+                        <option value="1">Ward 1</option>
+                        <option value="12">Ward 12</option>
+                        <option value="23">Ward 23</option>
+                        <option value="34">Ward 34</option>
+                        <option value="45">Ward 45</option>
+                        <option value="56">Ward 56</option>
+                        <option value="67">Ward 67</option>
+                        <option value="78">Ward 78</option>
+                        <option value="80">Ward 80</option>
+                        <option value="82">Ward 82</option>
+                        <option value="85">Ward 85</option>
+                        <option value="89">Ward 89</option>
+                    </select>
+                </div><br>
+                Ya fir apna area name bhi bata sakte ho! 😊`);
+        }
+
+        function selectWard(wardNumber) {
+            if (wardNumber) {
+                handleWhatsAppWard(wardNumber);
+            }
+        }
+
+        function handleWhatsAppWard(input) {
+            let wardNumber;
+            
+            // Check if input is area name or ward number
+            const areaData = areaMapping[input.toLowerCase()];
+            if (areaData) {
+                wardNumber = areaData.ward;
+                addUserMessage(`${input} (Ward ${wardNumber})`);
+            } else {
+                wardNumber = input;
+                addUserMessage(`Ward ${wardNumber}`);
+            }
+            
+            const whatsappLink = `https://chat.whatsapp.com/ward${wardNumber}indore`;
+            
+            addBotMessage(`🎉 Perfect! Yeh raha aapka Ward ${wardNumber} ka official WhatsApp group:<br><br>
+                <a href="${whatsappLink}" target="_blank" class="btn btn-success btn-lg">
+                    <i class="fab fa-whatsapp"></i> Join Ward ${wardNumber} WhatsApp Group
+                </a><br><br>
+                📱 Is group mein aap:<br>
+                ✅ Local updates mil jayenge<br>
+                ✅ Parshad ji se direct baat kar sakte ho<br>
+                ✅ Area ki problems share kar sakte ho<br><br>
+                Bas link pe click karo aur join ho jao! 😊
+                <div class="quick-options">
+                    <button class="quick-btn" onclick="showMainMenu()">🏠 Main Menu</button>
+                    <button class="quick-btn" onclick="startComplaint()">📝 File Complaint</button>
+                </div>`);
+            
+            currentFlow = '';
+        }
+
+        // General Help
+        function generalHelp() {
+            addBotMessage(`👨‍🔧 <strong>Indore Nagar Nigam - Complete Help Center</strong><br><br>
+                📞 <strong>Emergency Helpline:</strong> 1800-233-1234<br>
+                🕘 <strong>Office Hours:</strong> 10:00 AM - 5:00 PM (Mon-Sat)<br>
+                ✉️ <strong>Email:</strong> support@imcindore.gov.in<br>
+                🌐 <strong>Website:</strong> www.imcindore.gov.in<br><br>
+                
+                🔗 <strong>Quick Links:</strong><br>
+                <div class="quick-options">
+                    <button class="quick-btn" onclick="openServiceLink('sanitation')">🧹 Sanitation Services</button>
+                    <button class="quick-btn" onclick="openServiceLink('drainage')">🚰 Drainage Issues</button>
+                    <button class="quick-btn" onclick="openServiceLink('lighting')">💡 Street Lighting</button>
+                    <button class="quick-btn" onclick="openServiceLink('roads')">🛣️ Road Maintenance</button>
+                </div><br>
+                
+                📍 <strong>Main Office Address:</strong><br>
+                Indore Municipal Corporation<br>
+                Town Hall, Indore - 452001<br><br>
+                
+                Kuch aur puchna hai bhai? 😊`);
+        }
+
+        function openServiceLink(service) {
+            const services = {
+                sanitation: { name: 'Sanitation Services', url: 'https://imcindore.gov.in/sanitation' },
+                drainage: { name: 'Drainage Services', url: 'https://imcindore.gov.in/drainage' },
+                lighting: { name: 'Street Lighting', url: 'https://imcindore.gov.in/lighting' },
+                roads: { name: 'Road Maintenance', url: 'https://imcindore.gov.in/roads' }
+            };
+            
+            const serviceData = services[service];
+            addUserMessage(serviceData.name);
+            addBotMessage(`🔗 ${serviceData.name} ke liye yeh link hai bhai:<br><br>
+                <a href="${serviceData.url}" target="_blank" class="btn btn-info">
+                    <i class="fas fa-external-link-alt"></i> ${serviceData.name} Portal
+                </a><br><br>
+                Yahan pe sab details mil jayengi! 👍`);
+        }
+
+        function showMainMenu() {
+            addUserMessage("Main Menu");
+            addBotMessage(`🏠 <strong>Main Menu</strong> - Kya karna hai bhai?<br><br>
+                <div class="quick-options">
+                    <button class="quick-btn" onclick="startComplaint()">📝 Complaint File करें</button>
+                    <button class="quick-btn" onclick="showBillOptions()">💳 Online Bill Payment</button>
+                    <button class="quick-btn" onclick="findWard()">📍 Ward/Zone पता करें</button>
+                    <button class="quick-btn" onclick="joinWhatsApp()">📲 WhatsApp Group Join</button>
+                    <button class="quick-btn" onclick="generalHelp()">👨‍🔧 General Help</button>
+                </div><br>
+                Koi bhi option choose karo, main ready hoon! 😊`);
+            currentFlow = '';
+        }
+
+        // Auto-responses for common queries
+        function setupAutoResponses() {
+            const commonQueries = {
+                'help': () => showMainMenu(),
+                'menu': () => showMainMenu(),
+                'complaint': () => startComplaint(),
+                'bill': () => showBillOptions(),
+                'ward': () => findWard(),
+                'whatsapp': () => joinWhatsApp(),
+                'contact': () => generalHelp()
+            };
+
+            // Enhanced message processing
+            const originalProcess = processUserMessage;
+            processUserMessage = function(message) {
+                const lowerMessage = message.toLowerCase().trim();
+                
+                // Check for common queries first
+                for (let query in commonQueries) {
+                    if (lowerMessage.includes(query)) {
+                        commonQueries[query]();
+                        return;
+                    }
+                }
+                
+                // Fall back to original processing
+                originalProcess(message);
+            };
+        }
+
+        // Initialize auto-responses
+        setupAutoResponses();
+
+        // Add some fun Easter eggs
+        function addEasterEggs() {
+            const easterEggs = {
+                'indore': () => addBotMessage("🏛️ Indore - Smart City, Clean City! Hamara pyara sheher! ❤️"),
+                'sarafa': () => addBotMessage("🍛 Sarafa! Raat ka khana yaad aa gaya bhai! Poha-Jalebi ki city! 😋"),
+                'ujjain': () => addBotMessage("🕉️ Ujjain bhi achha hai, lekin Indore se better kuch nahi! 😄"),
+                'bhopal': () => addBotMessage("🏛️ Capital hai Bhopal, lekin dil mein Indore basta hai! 💖"),
+                'thank you': () => addBotMessage("🙏 Arre bhai, yeh kya thank you! Seva karna hamara kaam hai! Aur kuch chahiye?"),
+                'thanks': () => addBotMessage("😊 Koi baat nahi bhai! Khushi hui madad karke! Aur kuch?"),
+                'good': () => addBotMessage("😄 Achha laga sunke! Nigam Saathi hamesha ready hai aapki seva mein!"),
+                'bad': () => addBotMessage("😔 Sorry bhai, kya problem hai? Batao, sudhaar denge!"),
+                'love': () => addBotMessage("❤️ Love you too bhai! Indore ki seva mein hum sab ek hain!")
+            };
+
+            const originalProcess = processUserMessage;
+            processUserMessage = function(message) {
+                const lowerMessage = message.toLowerCase().trim();
+                
+                // Check for Easter eggs
+                for (let egg in easterEggs) {
+                    if (lowerMessage.includes(egg)) {
+                        easterEggs[egg]();
+                        return;
+                    }
+                }
+                
+                // Fall back to original processing
+                originalProcess(message);
+            };
+        }
+
+        // Initialize Easter eggs
+        addEasterEggs();
+
+        // Add welcome animation on page load
+        window.addEventListener('load', function() {
+            // Add some sparkle effect
+            setTimeout(() => {
+                const sparkles = ['✨', '🌟', '⭐', '💫'];
+                const randomSparkle = sparkles[Math.floor(Math.random() * sparkles.length)];
+                
+                addBotMessage(`${randomSparkle} Welcome to Digital Indore! Main hoon aapka Nigam Saathi - 24x7 ready for seva! <br><br>Kya madad chahiye aaj? 😊`);
+            }, 2000);
+        });
+
+        // Add smooth scrolling behavior
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scroll for all internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Add focus management for accessibility
+            const chatInput = document.getElementById('userInput');
+            chatInput.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            chatInput.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        });
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Alt + M for main menu
+            if (e.altKey && e.key === 'm') {
+                e.preventDefault();
+                showMainMenu();
+            }
+            
+            // Alt + C for complaint
+            if (e.altKey && e.key === 'c') {
+                e.preventDefault();
+                startComplaint();
+            }
+            
+            // Alt + H for help
+            if (e.altKey && e.key === 'h') {
+                e.preventDefault();
+                generalHelp();
+            }
+            
+            // Escape to focus input
+            if (e.key === 'Escape') {
+                document.getElementById('userInput').focus();
+            }
+        });
+
+        // Add periodic encouragement messages
+        let encouragementTimer;
+        function startEncouragement() {
+            encouragementTimer = setTimeout(() => {
+                if (currentFlow === '') {
+                    const encouragements = [
+                        "😊 Koi aur madad chahiye bhai?",
+                        "🤔 Kuch aur puchna hai?",
+                        "💡 Main yahan hoon aapki seva ke liye!",
+                        "🙋‍♂️ Koi doubt hai toh batao!",
+                        "⚡ Quick service chahiye? Main ready hoon!"
+                    ];
+                    
+                    const randomMsg = encouragements[Math.floor(Math.random() * encouragements.length)];
+                    addBotMessage(randomMsg);
+                }
+                startEncouragement(); // Restart timer
+            }, 30000); // 30 seconds
+        }
+
+        // Start encouragement after initial load
+        setTimeout(startEncouragement, 10000);
+
+        // Clear encouragement timer when user is active
+        document.getElementById('userInput').addEventListener('input', function() {
+            clearTimeout(encouragementTimer);
+            setTimeout(startEncouragement, 30000);
+        });
+
+        // Add connection status indicator
+        function checkConnection() {
+            const isOnline = navigator.onLine;
+            if (!isOnline) {
+                addBotMessage("⚠️ Internet connection weak hai bhai! Kuch features work nahi kar sakte. Connection check karo! 📶");
+            }
+        }
+
+        window.addEventListener('online', function() {
+            addBotMessage("✅ Internet connection restore ho gaya! Sab kuch normal hai ab! 🌐");
+        });
+
+        window.addEventListener('offline', function() {
+            addBotMessage("❌ Internet connection lost! Offline mode mein limited features available hain. 📵");
+        });
+
+        // Add time-based greetings
+        function getTimeBasedGreeting() {
+            const hour = new Date().getHours();
+            
+            if (hour < 12) {
+                return "🌅 Good Morning bhai!";
+            } else if (hour < 17) {
+                return "☀️ Good Afternoon!";
+            } else if (hour < 21) {
+                return "🌆 Good Evening!";
+            } else {
+                return "🌙 Good Evening bhai!";
+            }
+        }
+
+        // Enhanced initial greeting with time
+        setTimeout(() => {
+            const greeting = getTimeBasedGreeting();
+            addBotMessage(`${greeting}  😊`);
+        }, 5000);
+
+        // Add analytics tracking (dummy)
+        function trackUserAction(action, details = {}) {
+            console.log(`User Action: ${action}`, details);
+            // In real implementation, this would send data to analytics service
+        }
+
+        // Track complaint submissions
+        const originalHandleComplaintContact = handleComplaintContact;
+        handleComplaintContact = function(contact) {
+            trackUserAction('complaint_submitted', {
+                area: complaintData.area,
+                category: complaintData.category,
+                timestamp: new Date().toISOString()
+            });
+            originalHandleComplaintContact(contact);
+        };
+
+        // Add print functionality for complaint receipt
+        function printComplaintReceipt(complaintId) {
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Complaint Receipt - ${complaintId}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        .header { text-align: center; margin-bottom: 30px; }
+                        .details { margin: 10px 0; }
+                        .footer { margin-top: 30px; font-size: 12px; color: #666; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h2>Indore Nagar Nigam</h2>
+                        <h3>Complaint Receipt</h3>
+                    </div>
+                    <div class="details">
+                        <strong>Complaint ID:</strong> ${complaintId}<br>
+                        <strong>Date:</strong> ${new Date().toLocaleDateString()}<br>
+                        <strong>Area:</strong> ${complaintData.area}<br>
+                        <strong>Ward:</strong> ${complaintData.ward}<br>
+                        <strong>Category:</strong> ${complaintData.category}<br>
+                        <strong>Description:</strong> ${complaintData.description}<br>
+                        <strong>Contact:</strong> ${complaintData.contact}
+                    </div>
+                    <div class="footer">
+                        <p>This is a computer generated receipt. Please keep it for your records.</p>
+                        <p>For queries, contact: 1800-233-1234</p>
+                    </div>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        // Add voice input support (if available)
+        if ('webkitSpeechRecognition' in window) {
+            const recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'hi-IN';
+
+            // Add voice button to input
+            const voiceBtn = document.createElement('button');
+            voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+            voiceBtn.className = 'btn btn-outline-secondary voice-btn';
+            voiceBtn.style.cssText = 'position: absolute; right: 50px; top: 50%; transform: translateY(-50%); border-radius: 50%; width: 35px; height: 35px; border: none;';
+            
+            document.querySelector('.input-group').appendChild(voiceBtn);
+
+            voiceBtn.addEventListener('click', function() {
+                recognition.start();
+                this.innerHTML = '<i class="fas fa-stop"></i>';
+                this.style.background = '#dc3545';
+                this.style.color = 'white';
+            });
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('userInput').value = transcript;
+                voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                voiceBtn.style.background = '';
+                voiceBtn.style.color = '';
+            };
+
+            recognition.onerror = function() {
+                voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                voiceBtn.style.background = '';
+                voiceBtn.style.color = '';
+                addBotMessage("🎤 Voice input mein problem hai bhai! Type kar do message.");
+            };
+        }
+
+        // Final initialization
+        console.log("🤖 Nigam Saathi initialized successfully!");
+        console.log("💡 Keyboard shortcuts: Alt+M (Menu), Alt+C (Complaint), Alt+H (Help)");
+    </script>
+</body>
+</html>

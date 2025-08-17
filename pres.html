@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nigam Setu - Smart Civic Complaint Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #1e40af;
+            --secondary-color: #f59e0b;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --light-bg: #f8fafc;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .header-section {
+            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo-container {
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            height: 90px;
+            width: auto;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            background: white;
+            padding: 10px;
+        }
+
+        .header-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+            outline: none;
+        }
+
+        /* Complaint Type Cards */
+        .complaint-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .complaint-card {
+            background: white;
+            border: 3px solid #e5e7eb;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .complaint-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .complaint-card.selected {
+            border-color: var(--success-color);
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .complaint-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: var(--success-color);
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .complaint-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .complaint-title {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+
+        .complaint-hindi {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .info-box {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .info-box.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .file-upload {
+            border: 2px dashed #d1d5db;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary-color);
+            background: #f8fafc;
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .map-container {
+            height: 300px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+
+        .declaration-box {
+            background: #fef2f2;
+            border: 2px solid #fecaca;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .declaration-title {
+            font-weight: 700;
+            color: var(--danger-color);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .declaration-text {
+            line-height: 1.6;
+            color: #374151;
+        }
+
+        .checkbox-container {
+            margin-top: 20px;
+        }
+
+        .custom-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .custom-checkbox input {
+            width: 20px;
+            height: 20px;
+            margin: 0;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--success-color), #059669);
+            border: none;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .submit-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success-message {
+            display: none;
+            background: #ecfdf5;
+            border: 2px solid var(--success-color);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: var(--success-color);
+            margin-bottom: 20px;
+        }
+
+        .pdf-btn {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .pdf-btn:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .header-title {
+                font-size: 1.8rem;
+            }
+            
+            .complaint-types {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .complaint-card {
+                padding: 20px 10px;
+            }
+            
+            .complaint-icon {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="logo-container">
+                <img src="img/Nagar Nigam Logo.jpg" alt="Nagar Nigam Logo" class="logo">
+            </div>
+            <h1 class="header-title">निगम सेतु - Nigam Setu</h1>
+            <p class="header-subtitle">Smart Civic Complaint Portal | स्मार्ट नागरिक शिकायत पोर्टल</p>
+        </div>
+
+        <!-- Form Container -->
+        <div class="form-container">
+            <form id="complaintForm">
+                <!-- Personal Information -->
+                <div class="section-title">
+                    <i class="fas fa-user"></i> Personal Information | व्यक्तिगत जानकारी
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Full Name | पूरा नाम *</label>
+                            <input type="text" class="form-control" id="fullName" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Phone Number | फोन नंबर *</label>
+                            <input type="tel" class="form-control" id="phoneNumber" pattern="[0-9]{10}" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Email ID *</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Ward Number | वार्ड नंबर *</label>
+                            <select class="form-select" id="wardNumber" required>
+                                <option value="">Select Ward | वार्ड चुनें</option>
+                                <option value="1">Ward 1 - Rajwada</option>
+                                <option value="2">Ward 2 - Sarafa Bazaar</option>
+                                <option value="3">Ward 3 - Chappan Dukan</option>
+                                <option value="4">Ward 4 - Palasia</option>
+                                <option value="5">Ward 5 - Vijay Nagar</option>
+                                <option value="6">Ward 6 - Bhawar Kuan</option>
+                                <option value="7">Ward 7 - Rau</option>
+                                <option value="8">Ward 8 - Sanwer Road</option>
+                                <option value="9">Ward 9 - AB Road</option>
+                                <option value="10">Ward 10 - Ring Road</option>
+                                <!-- Add more wards as needed -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Complaint Details -->
+                <div class="section-title">
+                    <i class="fas fa-exclamation-triangle"></i> Complaint Details | शिकायत विवरण
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Select Complaint Type | शिकायत का प्रकार चुनें *</label>
+                    <div class="complaint-types">
+                        <div class="complaint-card" data-type="water" data-info="Illegal extraction of Narmada water using unauthorized motors is prohibited under Water Conservation Act 2019 | नर्मदा जल का अवैध मोटर द्वारा दोहन जल संरक्षण अधिनियम 2019 के तहत प्रतिबंधित है">
+                            <div class="complaint-icon">💧</div>
+                            <div class="complaint-title">Illegal Motor Water Use</div>
+                            <div class="complaint-hindi">नर्मदा जल मोटर खींचना</div>
+                        </div>
+                        <div class="complaint-card" data-type="plastic" data-info="Single-use plastic items are banned under Plastic Waste Management Rules 2016 | एकल उपयोग प्लास्टिक वस्तुएं प्लास्टिक अपशिष्ट प्रबंधन नियम 2016 के तहत प्रतिबंधित हैं">
+                            <div class="complaint-icon">🛍️</div>
+                            <div class="complaint-title">Single-Use Plastic Violation</div>
+                            <div class="complaint-hindi">प्रतिबंधित प्लास्टिक उपयोग</div>
+                        </div>
+                        <div class="complaint-card" data-type="vendor" data-info="Unauthorized street vendors violate Municipal Corporation bylaws and require proper licensing | अवैध स्ट्रीट वेंडर नगर निगम के उपनियमों का उल्लंघन करते हैं और उचित लाइसेंसिंग की आवश्यकता होती है">
+                            <div class="complaint-icon">🛒</div>
+                            <div class="complaint-title">Unauthorized Roadside Vendor</div>
+                            <div class="complaint-hindi">अवैध ठेला/अतिक्रमण</div>
+                        </div>
+                        <div class="complaint-card" data-type="garbage" data-info="Report issues with garbage collection vehicles including missed pickups, spillage, or irregular timing | कचरा संग्रह वाहनों की समस्याओं की रिपोर्ट करें जिसमें छूटे हुए पिकअप, फैलाव या अनियमित समय शामिल है">
+                            <div class="complaint-icon">🚛</div>
+                            <div class="complaint-title">Garbage Vehicle Issue</div>
+                            <div class="complaint-hindi">कचरा गाड़ी की शिकायत</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="complaintType" required>
+                    <div class="info-box" id="infoBox">
+                        <strong><i class="fas fa-info-circle"></i> Rule Information:</strong>
+                        <p id="infoText"></p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Address of Violation | घटना का पता *</label>
+                    <textarea class="form-control" id="violationAddress" rows="3" placeholder="Enter complete address with landmarks | पूरा पता लैंडमार्क के साथ दर्ज करें" required></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Incident Date & Time | घटना की तारीख और समय *</label>
+                            <input type="datetime-local" class="form-control" id="incidentDateTime" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Witnesses | गवाह</label>
+                            <input type="text" class="form-control" id="witnesses" placeholder="Name and contact of witnesses | गवाहों का नाम और संपर्क">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description of Complaint | विवरण *</label>
+                    <textarea class="form-control" id="complaintDescription" rows="4" placeholder="Provide detailed description of the incident | घटना का विस्तृत विवरण प्रदान करें" required></textarea>
+                </div>
+
+                <!-- File Uploads -->
+                <div class="section-title">
+                    <i class="fas fa-upload"></i> Evidence Upload | साक्ष्य अपलोड
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="form-label">Upload Photo | फोटो अपलोड *</label>
+                            <div class="file-upload" onclick="document.getElementById('photoUpload').click()">
+                                <div class="upload-icon"><i class="fas fa-camera"></i></div>
+                                <div>Click to upload photo</div>
+                                <small>JPG, PNG (Max 5MB)</small>
+                                <input type="file" id="photoUpload" accept="image/*" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="form-label">Upload Video | वीडियो अपलोड</label>
+                            <div class="file-upload" onclick="document.getElementById('videoUpload').click()">
+                                <div class="upload-icon"><i class="fas fa-video"></i></div>
+                                <div>Click to upload video</div>
+                                <small>MP4, AVI (Max 50MB)</small>
+                                <input type="file" id="videoUpload" accept="video/*">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="form-label">Upload Document | दस्तावेज़ अपलोड</label>
+                            <div class="file-upload" onclick="document.getElementById('documentUpload').click()">
+                                <div class="upload-icon"><i class="fas fa-file-alt"></i></div>
+                                <div>Click to upload document</div>
+                                <small>PDF, DOC (Max 10MB)</small>
+                                <input type="file" id="documentUpload" accept=".pdf,.doc,.docx">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location Map -->
+                <div class="section-title">
+                    <i class="fas fa-map-marker-alt"></i> Location | स्थान
+                </div>
+                <div class="map-container">
+                    <div>
+                        <i class="fas fa-map-marked-alt" style="font-size: 3rem; margin-bottom: 10px;"></i>
+                        <div>Interactive Map of Indore</div>
+                        <small>इंदौर का इंटरैक्टिव मैप</small>
+                    </div>
+                </div>
+
+                <!-- Legal Declaration -->
+                <div class="declaration-box">
+                    <div class="declaration-title">
+                        <i class="fas fa-gavel"></i> Legal Declaration | कानूनी घोषणा
+                    </div>
+                    <div class="declaration-text">
+                        <strong>I hereby declare that | मैं एतद्द्वारा घोषणा करता/करती हूं कि:</strong><br>
+                        • The information provided is true and accurate | प्रदान की गई जानकारी सत्य और सटीक है<br>
+                        • I understand that false complaints may result in legal action | मैं समझता/समझती हूं कि झूठी शिकायतों के परिणामस्वरूप कानूनी कार्रवाई हो सकती है<br>
+                        • I consent to the processing of my personal data for complaint resolution | मैं शिकायत निवारण के लिए अपने व्यक्तिगत डेटा के प्रसंस्करण की सहमति देता/देती हूं<br>
+                        • मैं घोषणा करता/करती हूं कि दी गई जानकारी सत्य और सटीक है
+                    </div>
+                    <div class="checkbox-container">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" id="legalDeclaration" required>
+                            <span>I agree to the above declaration | मैं उपरोक्त घोषणा से सहमत हूं *</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn" disabled>
+                    <i class="fas fa-paper-plane"></i> Submit Complaint | शिकायत दर्ज करें
+                </button>
+            </form>
+
+            <!-- Success Message -->
+            <div class="success-message" id="successMessage">
+                <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+                <h3>Complaint Submitted Successfully!</h3>
+                <h4>शिकायत सफलतापूर्वक दर्ज की गई!</h4>
+                <p>Your complaint ID is: <strong id="complaintId"></strong></p>
+                <p>आपकी शिकायत आईडी है: <strong id="complaintIdHindi"></strong></p>
+                <button class="pdf-btn" onclick="generatePDF()">
+                    <i class="fas fa-file-pdf"></i> Download PDF Receipt
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        let selectedComplaintType = '';
+        let complaintData = {};
+
+        // Complaint type selection
+        document.querySelectorAll('.complaint-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // Remove selection from all cards
+                document.querySelectorAll('.complaint-card').forEach(c => c.classList.remove('selected'));
+                
+                // Add selection to clicked card
+                this.classList.add('selected');
+                
+                // Store selected type
+                selectedComplaintType = this.dataset.type;
+                document.getElementById('complaintType').value = selectedComplaintType;
+                
+                // Show info box
+                const infoBox = document.getElementById('infoBox');
+                const infoText = document.getElementById('infoText');
+                infoText.textContent = this.dataset.info;
+                infoBox.classList.add('show');
+            });
+        });
+
+        // Legal declaration checkbox
+        document.getElementById('legalDeclaration').addEventListener('change', function() {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = !this.checked;
+        });
+
+        // File upload handlers
+        ['photoUpload', 'videoUpload', 'documentUpload'].forEach(id => {
+            document.getElementById(id).addEventListener('change', function() {
+                const parent = this.parentElement;
+                if (this.files.length > 0) {
+                    parent.style.background = '#ecfdf5';
+                    parent.style.borderColor = '#10b981';
+                    parent.querySelector('.upload-icon').innerHTML = '<i class="fas fa-check-circle" style="color: #10b981;"></i>';
+                }
+            });
+        });
+
+        // Form submission
+        document.getElementById('complaintForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!selectedComplaintType) {
+                alert('Please select a complaint type | कृपया शिकायत का प्रकार चुनें');
+                return;
+            }
+
+            // Collect form data
+            complaintData = {
+                fullName: document.getElementById('fullName').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                email: document.getElementById('email').value,
+                wardNumber: document.getElementById('wardNumber').value,
+                complaintType: selectedComplaintType,
+                violationAddress: document.getElementById('violationAddress').value,
+                incidentDateTime: document.getElementById('incidentDateTime').value,
+                witnesses: document.getElementById('witnesses').value,
+                complaintDescription: document.getElementById('complaintDescription').value,
+                submissionDate: new Date().toLocaleString(),
+                complaintId: 'NC' + Date.now().toString().slice(-8)
+            };
+
+            // Hide form and show success message
+            document.getElementById('complaintForm').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
+            document.getElementById('complaintId').textContent = complaintData.complaintId;
+            document.getElementById('complaintIdHindi').textContent = complaintData.complaintId;
+            
+            // Scroll to success message
+            document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // PDF Generation
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Header
+            doc.setFontSize(20);
+            doc.setFont(undefined, 'bold');
+            doc.text('NIGAM SETU - COMPLAINT RECEIPT', 105, 30, { align: 'center' });
+            
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'normal');
+            doc.text('निगम सेतु - शिकायत रसीद', 105, 40, { align: 'center' });
+
+            // Complaint Details
+            let yPos = 60;
+            const lineHeight = 10;
+
+            const details = [
+                ['Complaint ID | शिकायत आईडी:', complaintData.complaintId],
+                ['Submission Date | दर्ज करने की तारीख:', complaintData.submissionDate],
+                ['Name | नाम:', complaintData.fullName],
+                ['Phone | फोन:', complaintData.phoneNumber],
+                ['Email | ईमेल:', complaintData.email],
+                ['Ward | वार्ड:', complaintData.wardNumber],
+                ['Complaint Type | शिकायत प्रकार:', getComplaintTypeText(complaintData.complaintType)],
+                ['Address | पता:', complaintData.violationAddress],
+                ['Incident Date | घटना तारीख:', complaintData.incidentDateTime],
+                ['Witnesses | गवाह:', complaintData.witnesses || 'None | कोई नहीं'],
+                ['Description | विवरण:', complaintData.complaintDescription]
+            ];
+
+            doc.setFontSize(12);
+            details.forEach(([label, value]) => {
+                doc.setFont(undefined, 'bold');
+                doc.text(label, 20, yPos);
+                doc.setFont(undefined, 'normal');
+                
+                // Handle long text
+                const splitText = doc.splitTextToSize(value, 120);
+                doc.text(splitText, 20, yPos + 5);
+                yPos += (splitText.length * 5) + 10;
+            });
+
+            // Footer
+            yPos += 20;
+            doc.setFont(undefined, 'bold');
+            doc.text('Officer Assigned | नियुक्त अधिकारी: Shri Rajesh Kumar', 20, yPos);
+            doc.text('Expected Resolution | अपेक्षित समाधान: ' + getExpectedDate(), 20, yPos + 10);
+            
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'italic');
+            doc.text('This is a computer generated receipt | यह कंप्यूटर जनरेटेड रसीद है', 105, yPos + 30, { align: 'center' });
+
+            // Save PDF
+            doc.save(`Complaint_${complaintData.complaintId}.pdf`);
+        }
+
+        
+        function getComplaintTypeText(type) {
+            const types = {
+                'water': 'Illegal Motor Water Use | नर्मदा जल मोटर खींचना',
+                'plastic': 'Single-Use Plastic Violation | प्रतिबंधित प्लास्टिक उपयोग',
+                'vendor': 'Unauthorized Roadside Vendor | अवैध ठेला/अतिक्रमण',
+                'garbage': 'Garbage Vehicle Issue | कचरा गाड़ी की शिकायत'
+            };
+            return types[type] || type;
+        }
+
+        function getExpectedDate() {
+            const date = new Date();
+            date.setDate(date.getDate() + 7);
+            return date.toLocaleDateString('en-IN') + ' | ' + date.toLocaleDateString('hi-IN');
+        }
+
+        // Set max date for incident date to today
+        document.getElementById('incidentDateTime').max = new Date().toISOString().slice(0, 16);
+
+        // Phone number validation
+        document.getElementById('phoneNumber').addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
+        });
+
+        // Form validation enhancements
+        document.querySelectorAll('input[required], select[required], textarea[required]').forEach(field => {
+            field.addEventListener('blur', function() {
+                if (!this.value.trim()) {
+                    this.style.borderColor = '#ef4444';
+                } else {
+                    this.style.borderColor = '#10b981';
+                }
+            });
+        });
+
+        // Auto-resize textareas
+        document.querySelectorAll('textarea').forEach(textarea => {
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            });
+        });
+
+        // Add loading animation to submit button
+        document.getElementById('submitBtn').addEventListener('click', function() {
+            if (!this.disabled) {
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing... | प्रसंस्करण...';
+                setTimeout(() => {
+                    // Form submission logic continues here
+                }, 1000);
+            }
+        });
+
+        // Enhanced file upload with preview
+        function setupFileUpload(inputId, previewId) {
+            const input = document.getElementById(inputId);
+            input.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const parent = this.parentElement;
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        if (file.type.startsWith('image/')) {
+                            parent.innerHTML = `
+                                <img src="${e.target.result}" style="max-width: 100%; max-height: 150px; border-radius: 8px;">
+                                <div style="margin-top: 10px; font-size: 0.9rem; color: #10b981;">
+                                    <i class="fas fa-check-circle"></i> ${file.name}
+                                </div>
+                            `;
+                        } else {
+                            parent.querySelector('.upload-icon').innerHTML = '<i class="fas fa-check-circle" style="color: #10b981;"></i>';
+                            parent.querySelector('div').innerHTML = `File uploaded: ${file.name}`;
+                        }
+                    };
+                    
+                    if (file.type.startsWith('image/')) {
+                        reader.readAsDataURL(file);
+                    }
+                }
+            });
+        }
+
+        // Initialize file upload previews
+        setupFileUpload('photoUpload');
+        setupFileUpload('videoUpload');
+        setupFileUpload('documentUpload');
+
+        // Add more wards to the dropdown
+        const wardSelect = document.getElementById('wardNumber');
+        const additionalWards = [
+            { value: '11', text: 'Ward 11 - Khajrana' },
+            { value: '12', text: 'Ward 12 - Rajendra Nagar' },
+            { value: '13', text: 'Ward 13 - Indore GPO' },
+            { value: '14', text: 'Ward 14 - Mhow Naka' },
+            { value: '15', text: 'Ward 15 - Dewas Naka' },
+            { value: '16', text: 'Ward 16 - Khandwa Road' },
+            { value: '17', text: 'Ward 17 - Bhawarkuan' },
+            { value: '18', text: 'Ward 18 - Geeta Bhawan' },
+            { value: '19', text: 'Ward 19 - Rajwada Area' },
+            { value: '20', text: 'Ward 20 - Cloth Market' },
+            { value: '21', text: 'Ward 21 - Treasure Island' },
+            { value: '22', text: 'Ward 22 - C21 Mall Area' },
+            { value: '23', text: 'Ward 23 - Phoenix Mall' },
+            { value: '24', text: 'Ward 24 - Orbit Mall' },
+            { value: '25', text: 'Ward 25 - Sapna Sangeeta' },
+            { value: '26', text: 'Ward 26 - Bombay Hospital' },
+            { value: '27', text: 'Ward 27 - Choithram Hospital' },
+            { value: '28', text: 'Ward 28 - Apollo Hospital' },
+            { value: '29', text: 'Ward 29 - Medanta Hospital' },
+            { value: '30', text: 'Ward 30 - IDA Scheme' },
+            { value: '31', text: 'Ward 31 - Pipliyahana' },
+            { value: '32', text: 'Ward 32 - Lasudia Mori' },
+            { value: '33', text: 'Ward 33 - Manglia Square' },
+            { value: '34', text: 'Ward 34 - Kanadiya Road' },
+            { value: '35', text: 'Ward 35 - Ujjain Road' },
+            { value: '36', text: 'Ward 36 - Bypass Road' },
+            { value: '37', text: 'Ward 37 - Super Corridor' },
+            { value: '38', text: 'Ward 38 - Scheme 78' },
+            { value: '39', text: 'Ward 39 - Scheme 94' },
+            { value: '40', text: 'Ward 40 - Scheme 114' },
+            { value: '41', text: 'Ward 41 - Bengali Square' },
+            { value: '42', text: 'Ward 42 - Tilak Nagar' },
+            { value: '43', text: 'Ward 43 - Pardesipura' },
+            { value: '44', text: 'Ward 44 - Aerodrome Road' },
+            { value: '45', text: 'Ward 45 - Airport Area' },
+            { value: '46', text: 'Ward 46 - Pithampur Road' },
+            { value: '47', text: 'Ward 47 - Simrol Road' },
+            { value: '48', text: 'Ward 48 - Hatod Industrial' },
+            { value: '49', text: 'Ward 49 - Sanwer Industrial' },
+            { value: '50', text: 'Ward 50 - Rau Circle' },
+            { value: '51', text: 'Ward 51 - Niranjanpur' },
+            { value: '52', text: 'Ward 52 - Kalani Nagar' },
+            { value: '53', text: 'Ward 53 - Sudama Nagar' },
+            { value: '54', text: 'Ward 54 - Annapurna Road' },
+            { value: '55', text: 'Ward 55 - MR 4 Road' },
+            { value: '56', text: 'Ward 56 - MR 9 Road' },
+            { value: '57', text: 'Ward 57 - MR 10 Road' },
+            { value: '58', text: 'Ward 58 - Bhicholi Mardana' },
+            { value: '59', text: 'Ward 59 - Khudel' },
+            { value: '60', text: 'Ward 60 - Banganga' },
+            { value: '61', text: 'Ward 61 - Tejaji Nagar' },
+            { value: '62', text: 'Ward 62 - Shivaji Nagar' },
+            { value: '63', text: 'Ward 63 - Nehru Nagar' },
+            { value: '64', text: 'Ward 64 - Gandhi Nagar' },
+            { value: '65', text: 'Ward 65 - Azad Nagar' },
+            { value: '66', text: 'Ward 66 - Subhash Nagar' },
+            { value: '67', text: 'Ward 67 - Malviya Nagar' },
+            { value: '68', text: 'Ward 68 - Saket Nagar' },
+            { value: '69', text: 'Ward 69 - LIG Colony' },
+            { value: '70', text: 'Ward 70 - HIG Colony' },
+            { value: '71', text: 'Ward 71 - EWS Colony' },
+            { value: '72', text: 'Ward 72 - Janata Colony' },
+            { value: '73', text: 'Ward 73 - Krishi Upaj Mandi' },
+            { value: '74', text: 'Ward 74 - Grain Market' },
+            { value: '75', text: 'Ward 75 - Vegetable Market' },
+            { value: '76', text: 'Ward 76 - Fruit Market' },
+            { value: '77', text: 'Ward 77 - Fish Market' },
+            { value: '78', text: 'Ward 78 - Poultry Market' },
+            { value: '79', text: 'Ward 79 - Dairy Market' },
+            { value: '80', text: 'Ward 80 - Flower Market' },
+            { value: '81', text: 'Ward 81 - Scrap Market' },
+            { value: '82', text: 'Ward 82 - Auto Market' },
+            { value: '83', text: 'Ward 83 - Bike Market' },
+            { value: '84', text: 'Ward 84 - Car Market' },
+            { value: '85', text: 'Ward 85 - Electronics Market' }
+        ];
+
+        additionalWards.forEach(ward => {
+            const option = document.createElement('option');
+            option.value = ward.value;
+            option.textContent = ward.text;
+            wardSelect.appendChild(option);
+        });
+
+        // Add smooth scrolling for form sections
+        function smoothScrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // Add progress indicator
+        function updateProgress() {
+            const requiredFields = document.querySelectorAll('input[required], select[required], textarea[required]');
+            const filledFields = Array.from(requiredFields).filter(field => field.value.trim() !== '');
+            const progress = (filledFields.length / requiredFields.length) * 100;
+            
+            // You can add a progress bar here if needed
+            console.log(`Form completion: ${Math.round(progress)}%`);
+        }
+
+        // Add event listeners to track progress
+        document.querySelectorAll('input, select, textarea').forEach(field => {
+            field.addEventListener('input', updateProgress);
+            field.addEventListener('change', updateProgress);
+        });
+
+        // Initialize progress tracking
+        updateProgress();
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl + Enter to submit form
+            if (e.ctrlKey && e.key === 'Enter') {
+                const submitBtn = document.getElementById('submitBtn');
+                if (!submitBtn.disabled) {
+                    submitBtn.click();
+                }
+            }
+        });
+
+        // Add form auto-save to localStorage
+        function autoSaveForm() {
+            const formData = {};
+            document.querySelectorAll('input, select, textarea').forEach(field => {
+                if (field.type !== 'file') {
+                    formData[field.id] = field.value;
+                }
+            });
+            localStorage.setItem('complaintFormData', JSON.stringify(formData));
+        }
+
+        function loadSavedForm() {
+            const savedData = localStorage.getItem('complaintFormData');
+            if (savedData) {
+                const formData = JSON.parse(savedData);
+                Object.keys(formData).forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (field && formData[fieldId]) {
+                        field.value = formData[fieldId];
+                    }
+                });
+            }
+        }
+
+        // Auto-save every 30 seconds
+        setInterval(autoSaveForm, 30000);
+
+        // Load saved data on page load
+        window.addEventListener('load', loadSavedForm);
+
+        // Clear saved data on successful submission
+        document.getElementById('complaintForm').addEventListener('submit', function() {
+            localStorage.removeItem('complaintFormData');
+        });
+
+        // Add notification for unsaved changes
+        let formChanged = false;
+        document.querySelectorAll('input, select, textarea').forEach(field => {
+            field.addEventListener('input', () => formChanged = true);
+        });
+
+        window.addEventListener('beforeunload', function(e) {
+            if (formChanged) {
+                e.preventDefault();
+                e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+            }
+        });
+
+        // Enhanced PDF with better formatting
+        function generateEnhancedPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Add logo placeholder
+            doc.setFillColor(240, 240, 240);
+            doc.rect(85, 10, 40, 20, 'F');
+            doc.setFontSize(8);
+            doc.text('NAGAR NIGAM LOGO', 105, 22, { align: 'center' });
+
+            // Header with better styling
+            doc.setFontSize(18);
+            doc.setFont(undefined, 'bold');
+            doc.setTextColor(30, 64, 175);
+            doc.text('NIGAM SETU', 105, 40, { align: 'center' });
+            
+            doc.setFontSize(14);
+            doc.setTextColor(0, 0, 0);
+            doc.text('Smart Civic Complaint Receipt', 105, 48, { align: 'center' });
+            doc.text('स्मार्ट नागरिक शिकायत रसीद', 105, 55, { align: 'center' });
+
+            // Add border
+            doc.setDrawColor(30, 64, 175);
+            doc.setLineWidth(0.5);
+            doc.rect(15, 65, 180, 200);
+
+            // Content with better formatting
+            let yPos = 75;
+            const leftMargin = 20;
+            const rightMargin = 190;
+
+            // Complaint ID in a box
+            doc.setFillColor(240, 248, 255);
+            doc.rect(leftMargin, yPos - 5, 160, 15, 'F');
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'bold');
+            doc.text(`Complaint ID: ${complaintData.complaintId}`, leftMargin + 5, yPos + 5);
+            
+            yPos += 25;
+
+            // Details in a structured format
+            const details = [
+                { label: 'Complainant Name', value: complaintData.fullName, hindi: 'शिकायतकर्ता का नाम' },
+                { label: 'Phone Number', value: complaintData.phoneNumber, hindi: 'फोन नंबर' },
+                { label: 'Email Address', value: complaintData.email, hindi: 'ईमेल पता' },
+                { label: 'Ward Number', value: complaintData.wardNumber, hindi: 'वार्ड नंबर' },
+                { label: 'Complaint Type', value: getComplaintTypeText(complaintData.complaintType), hindi: 'शिकायत प्रकार' },
+                { label: 'Incident Location', value: complaintData.violationAddress, hindi: 'घटना स्थल' },
+                { label: 'Incident Date/Time', value: new Date(complaintData.incidentDateTime).toLocaleString(), hindi: 'घटना दिनांक/समय' },
+                { label: 'Submission Date', value: complaintData.submissionDate, hindi: 'दर्ज करने की तारीख' }
+            ];
+
+            doc.setFontSize(10);
+            details.forEach((detail, index) => {
+                if (yPos > 240) {
+                    doc.addPage();
+                    yPos = 30;
+                }
+
+                // Alternate row background
+                if (index % 2 === 0) {
+                    doc.setFillColor(248, 250, 252);
+                    doc.rect(leftMargin, yPos - 3, 160, 12, 'F');
+                }
+
+                doc.setFont(undefined, 'bold');
+                doc.text(`${detail.label} | ${detail.hindi}:`, leftMargin + 2, yPos + 5);
+                
+                doc.setFont(undefined, 'normal');
+                const splitText = doc.splitTextToSize(detail.value, 100);
+                doc.text(splitText, leftMargin + 2, yPos + 10);
+                
+                yPos += Math.max(12, splitText.length * 4 + 8);
+            });
+
+            // Description section
+            yPos += 10;
+            doc.setFont(undefined, 'bold');
+            doc.text('Complaint Description | शिकायत विवरण:', leftMargin + 2, yPos);
+            doc.setFont(undefined, 'normal');
+            const descriptionText = doc.splitTextToSize(complaintData.complaintDescription, 160);
+            doc.text(descriptionText, leftMargin + 2, yPos + 8);
+            
+            yPos += descriptionText.length * 4 + 20;
+
+            // Footer section
+            doc.setFillColor(30, 64, 175);
+            doc.rect(leftMargin, yPos, 160, 25, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFont(undefined, 'bold');
+            doc.text('Assigned Officer | नियुक्त अधिकारी: Shri Rajesh Kumar', leftMargin + 5, yPos + 8);
+            doc.text(`Expected Resolution | अपेक्षित समाधान: ${getExpectedDate()}`, leftMargin + 5, yPos + 16);
+
+            // QR Code placeholder
+            doc.setFillColor(255, 255, 255);
+            doc.rect(rightMargin - 25, yPos - 40, 20, 20, 'F');
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(6);
+            doc.text('QR CODE', rightMargin - 15, yPos - 28, { align: 'center' });
+
+            // Save the PDF
+            doc.save(`Nigam_Setu_Complaint_${complaintData.complaintId}.pdf`);
+        }
+
+        // Replace the original generatePDF function
+        window.generatePDF = generateEnhancedPDF;
+
+        // Add print functionality
+        function printReceipt() {
+            window.print();
+        }
+
+        // Add social sharing
+        function shareComplaint() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Nigam Setu Complaint Filed',
+                    text: `I have filed a complaint with ID: ${complaintData.complaintId} through Nigam Setu portal.`,
+                    url: window.location.href
+                });
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                const text = `I have filed a complaint with ID: ${complaintData.complaintId} through Nigam Setu portal.`;
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('Complaint details copied to clipboard!');
+                });
+            }
+        }
+
+        console.log('Nigam Setu Smart Civic Complaint Form Loaded Successfully! 🚀');
+    </script>
+</body>
+</html>

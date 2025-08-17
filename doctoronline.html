@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nigam Setu - शिकायत स्थिति ट्रैकिंग</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Mukta:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #2c5aa0;
+            --secondary-color: #f8f9fa;
+            --accent-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --text-dark: #2d3436;
+            --border-color: #e9ecef;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-success: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            --gradient-warning: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+            --gradient-danger: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Mukta', sans-serif;
+            background: var(--gradient-primary);
+            min-height: 100vh;
+            color: var(--text-dark);
+            padding: 20px 0;
+        }
+
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            margin: 0 auto;
+            max-width: 1400px;
+            overflow: hidden;
+        }
+
+        /* Header Styles */
+        .header-section {
+            background: linear-gradient(135deg, var(--primary-color), #1e3c72);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .logo-container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .nagar-nigam-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 15px;
+            object-fit: cover;
+            background: white;
+            padding: 3px;
+        }
+
+        .logo-fallback {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow-lg);
+            border: 3px solid white;
+        }
+
+        .logo-fallback i {
+            font-size: 40px;
+            color: var(--primary-color);
+        }
+
+        .main-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 2;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .nigam-setu-brand {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ffd700;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Main Content Styles */
+        .content-container {
+            padding: 40px;
+        }
+
+        .main-box {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            height: fit-content;
+        }
+
+        .main-box:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .box-title {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Form Styles */
+        .form-label {
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .required {
+            color: var(--danger-color);
+        }
+
+        .form-control, .form-select {
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(44, 90, 160, 0.25);
+            background: white;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+            z-index: 3;
+        }
+
+        .form-control.with-icon {
+            padding-left: 45px;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Complaint Details Styles */
+        .complaint-details {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--primary-color);
+            flex: 1;
+        }
+
+        .detail-value {
+            flex: 2;
+            text-align: right;
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pending {
+            background: var(--gradient-warning);
+            color: white;
+        }
+
+        .status-progress {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .status-resolved {
+            background: var(--gradient-success);
+            color: white;
+        }
+
+        /* Image Gallery Styles */
+        .image-gallery {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .complaint-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            border: 2px solid var(--border-color);
+        }
+
+        .complaint-image:hover {
+            transform: scale(1.1);
+        }
+
+        /* Rating Styles */
+        .rating-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .star-rating {
+            display: inline-flex;
+            gap: 5px;
+            margin: 10px 0;
+        }
+
+        .star {
+            font-size: 2rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #ffd700;
+            transform: scale(1.1);
+        }
+
+        .star.active {
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Feedback Section */
+        .feedback-section {
+            display: none;
+            margin-top: 25px;
+            padding: 25px;
+            background: white;
+            border-radius: 15px;
+            border: 2px solid var(--accent-color);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .feedback-title {
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            background: #fafafa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin: 15px 0;
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--accent-color);
+            background: rgba(40, 167, 69, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-top: 20px;
+        }
+
+        .chart-filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: var(--gradient-success);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: var(--shadow);
+            animation: bounceIn 0.6s ease-out;
+        }
+
+        .success-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            animation: bounce 0.6s ease-in-out;
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 60%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            80% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .content-container {
+                padding: 20px;
+            }
+            
+            .main-box {
+                padding: 20px;
+            }
+            
+            .main-title {
+                font-size: 1.6rem;
+            }
+            
+            .chart-filters {
+                flex-direction: column;
+            }
+            
+            .filter-group {
+                min-width: auto;
+            }
+            
+            .detail-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            
+            .detail-value {
+                text-align: left;
+            }
+            
+            .star {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Floating Background Elements */
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            opacity: 0.05;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .floating-element:nth-child(2) { top: 20%; right: 10%; animation-delay: 1s; }
+        .floating-element:nth-child(3) { bottom: 20%; left: 20%; animation-delay: 2s; }
+        .floating-element:nth-child(4) { bottom: 10%; right: 20%; animation-delay: 3s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Elements -->
+    <div class="floating-elements">
+        <i class="fas fa-chart-line floating-element" style="font-size: 60px;"></i>
+        <i class="fas fa-clipboard-check floating-element" style="font-size: 40px;"></i>
+        <i class="fas fa-search floating-element" style="font-size: 50px;"></i>
+        <i class="fas fa-star floating-element" style="font-size: 45px;"></i>
+    </div>
+
+    <div class="container-fluid">
+        <div class="main-container">
+            <!-- Header Section -->
+            <div class="header-section">
+                <div class="logo-container">
+                    <!-- Nagar Nigam Logo -->
+                    <img src="img/Nagar Nigam Logo.jpg" 
+                         alt="Nagar Nigam Indore Logo" 
+                         class="nagar-nigam-logo"
+                         id="nagarNigamLogo"
+                         onerror="showFallbackLogo()">
+                    
+                    <!-- Fallback Logo -->
+                    <div class="logo-fallback" id="fallbackLogo" style="display: none;">
+                        <i class="fas fa-city"></i>
+                    </div>
+                    
+                    <div class="nigam-setu-brand">
+                        <i class="fas fa-link"></i> Nigam Setu
+                    </div>
+                    <h1 class="main-title">शिकायत स्थिति ट्रैकिंग</h1>
+                    <p class="subtitle">Complaint Status & Feedback Tracking System</p>
+                    <p class="subtitle" style="font-size: 0.9rem; margin-top: 5px;">
+                        नगर निगम इंदौर | Nagar Nigam Indore
+                    </p>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="content-container">
+                <div class="row">
+                    <!-- Left Column - Complaint Status Checker -->
+                    <div class="col-lg-6 col-md-12">
+                        <div class="main-box">
+                            <h3 class="box-title">
+                                <i class="fas fa-search"></i>
+                                Track Your Complaint Status
+                                <br><small style="font-size: 0.8rem; color: #666;">अपनी शिकायत की स्थिति जांचें</small>
+                            </h3>
+                            
+                            <!-- Status Check Form -->
+                            <form id="statusCheckForm">
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Complaint ID <span class="required">*</span>
+                                        <br><small>शिकायत संख्या</small>
+                                    </label>
+                                    <div class="input-group">
+                                        <i class="fas fa-hashtag input-icon"></i>
+                                        <input type="text" class="form-control with-icon" id="complaintId" name="complaintId" placeholder="IND123456789" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Phone Number (Optional)
+                                        <br><small>फ़ोन नंबर (वैकल्पिक)</small>
+                                    </label>
+                                    <div class="input-group">
+                                        <i class="fas fa-phone input-icon"></i>
+                                        <input type="tel" class="form-control with-icon" id="phoneVerification" name="phoneVerification" placeholder="9876543210" pattern="[0-9]{10}">
+                                    </div>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-search me-2"></i>
+                                    Check Status / स्थिति जांचें
+                                </button>
+                            </form>
+
+                            <!-- Loading Spinner -->
+                            <div class="loading-spinner" id="loadingSpinner">
+                                <div class="spinner"></div>
+                                <p class="mt-2">Fetching complaint details...</p>
+                            </div>
+
+                            <!-- Complaint Details -->
+                            <div class="complaint-details" id="complaintDetails">
+                                <h4 style="color: var(--primary-color); margin-bottom: 20px;">
+                                    <i class="fas fa-file-alt me-2"></i>
+                                    Complaint Details / शिकायत विवरण
+                                </h4>
+                                
+                                <div id="complaintInfo">
+                                    <!-- Dynamic content will be inserted here -->
+                                </div>
+
+                                <!-- Feedback Section (Only for Resolved complaints) -->
+                                <div class="feedback-section" id="feedbackSection">
+                                    <h5 class="feedback-title">
+                                        <i class="fas fa-star me-2"></i>
+                                        Rate & Provide Feedback / रेटिंग और फीडबैक दें
+                                    </h5>
+                                    
+                                    <div class="rating-container">
+                                        <p><strong>How satisfied are you with the resolution?</strong></p>
+                                        <p><small>समाधान से आप कितने संतुष्ट हैं?</small></p>
+                                        <div class="star-rating" id="starRating">
+                                            <i class="fas fa-star star" data-rating="1"></i>
+                                            <i class="fas fa-star star" data-rating="2"></i>
+                                            <i class="fas fa-star star" data-rating="3"></i>
+                                            <i class="fas fa-star star" data-rating="4"></i>
+                                            <i class="fas fa-star star" data-rating="5"></i>
+                                        </div>
+                                        <p id="ratingText" style="margin-top: 10px; font-weight: 600;"></p>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            <i class="fas fa-comment me-2"></i>
+                                            Your Feedback / आपका फीडबैक
+                                        </label>
+                                        <textarea class="form-control" id="feedbackText" rows="4" placeholder="Please share your experience and suggestions..."></textarea>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            <i class="fas fa-camera me-2"></i>
+                                            Upload After Photo (Optional) / बाद की फोटो अपलोड करें
+                                        </label>
+                                        <div class="file-upload-area" onclick="document.getElementById('afterPhoto').click()">
+                                            <i class="fas fa-camera upload-icon"></i>
+                                            <p><strong>Choose After Photo</strong><br>फोटो चुनें</p>
+                                            <input type="file" id="afterPhoto" accept="image/*" style="display: none;">
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="button" class="btn btn-success w-100" onclick="submitFeedback()">
+                                        <i class="fas fa-paper-plane me-2"></i>
+                                        Submit Feedback / फीडबैक जमा करें
+                                    </button>
+                                </div>
+
+                                <!-- Success Message -->
+                                <div class="success-message" id="feedbackSuccess">
+                                    <i class="fas fa-check-circle success-icon"></i>
+                                    <h4>Thank You for Your Feedback!</h4>
+                                    <p>आपके फीडबैक के लिए धन्यवाद!</p>
+                                    <p>Your feedback helps us improve our services.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column - Complaint Resolution Summary -->
+                    <div class="col-lg-6 col-md-12">
+                        <div class="main-box">
+                            <h3 class="box-title">
+                                <i class="fas fa-chart-bar"></i>
+                                Complaint Resolution Summary
+                                <br><small style="font-size: 0.8rem; color: #666;">शिकायत समाधान सारांश</small>
+                            </h3>
+                            
+                            <!-- Chart Filters -->
+                            <div class="chart-filters">
+                                <div class="filter-group">
+                                    <label class="form-label">Time Period / समय अवधि</label>
+                                    <select class="form-select" id="timePeriod" onchange="updateChart()">
+                                        <option value="day">Daily / दैनिक</option>
+                                        <option value="week" selected>Weekly / साप्ताहिक</option>
+                                        <option value="month">Monthly / मासिक</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="filter-group">
+                                    <label class="form-label">Category / श्रेणी</label>
+                                    <select class="form-select" id="categoryFilter" onchange="updateChart()">
+                                        <option value="all">All Categories / सभी श्रेणियां</option>
+                                        <option value="प्रकाश विभाग">प्रकाश विभाग</option>
+                                        <option value="स्वास्थ्य विभाग">स्वास्थ्य विभाग</option>
+                                        <option value="सीवरेज और ड्रेनेज विभाग">सीवरेज विभाग</option>
+                                        <option value="जल विभाग">जल विभाग</option>
+                                        <option value="आवारा पशु">आवारा पशु</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="filter-group mb-3">
+                                <label class="form-label">Ward Number / वार्ड नंबर</label>
+                                <select class="form-select" id="wardFilter" onchange="updateChart()">
+                                    <option value="all">All Wards / सभी वार्ड</option>
+                                    <!-- Ward options will be populated by JavaScript -->
+                                </select>
+                            </div>
+                            
+                            <!-- Chart Container -->
+                            <div class="chart-container">
+                                <canvas id="resolutionChart"></canvas>
+                            </div>
+                            
+                            <!-- Chart Statistics -->
+                            <div class="row mt-4">
+                                <div class="col-4 text-center">
+                                    <div class="p-3 bg-success text-white rounded">
+                                        <h4 id="resolvedCount">0</h4>
+                                        <small>Resolved<br>हल किए गए</small>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-center">
+                                    <div class="p-3 bg-warning text-white rounded">
+                                        <h4 id="pendingCount">0</h4>
+                                        <small>Pending<br>लंबित</small>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-center">
+                                    <div class="p-3 bg-info text-white rounded">
+                                        <h4 id="totalCount">0</h4>
+                                        <small>Total<br>कुल</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Global Variables
+        let currentRating = 0;
+        let resolutionChart = null;
+
+        // Dummy Data for Complaints
+        const dummyComplaints = {
+            'IND123456789': {
+                id: 'IND123456789',
+                fullName: 'राजेश कुमार शर्मा',
+                phoneNumber: '7000819978',
+                email: 'rajesh.sharma@email.com',
+                vidhanSabha: 'Indore 3',
+                wardNumber: '15',
+                category: 'प्रकाश विभाग',
+                subcategory: 'स्ट्रीट लाइट नहीं जल रही',
+                description: 'मेरे मोहल्ले की स्ट्रीट लाइट पिछले 5 दिनों से नहीं जल रही है। रात में बहुत अंधेरा रहता है।',
+                images: ['https://via.placeholder.com/300x200?text=Before+Photo+1', 'https://via.placeholder.com/300x200?text=Before+Photo+2'],
+                dateOfComplaint: '15/11/2023',
+                status: 'Resolved',
+                resolvedDate: '20/11/2023',
+                assignedOfficer: 'श्री संजय कुमार',
+                estimatedResolution: '22/11/2023'
+            },
+            'IND987654321': {
+                id: 'IND987654321',
+                fullName: 'सुनीता देवी',
+                phoneNumber: '9123456789',
+                email: 'sunita.devi@email.com',
+                vidhanSabha: 'Indore 1',
+                wardNumber: '8',
+                category: 'स्वास्थ्य विभाग',
+                subcategory: 'कचरा नहीं उठाया गया',
+                description: 'हमारे घर के सामने कचरा पिछले 3 दिनों से नहीं उठाया गया है। बहुत दुर्गंध आ रही है।',
+                images: ['https://via.placeholder.com/300x200?text=Garbage+Problem'],
+                dateOfComplaint: '18/11/2023',
+                status: 'In Progress',
+                assignedOfficer: 'श्री अमित गुप्ता',
+                estimatedResolution: '25/11/2023'
+            },
+            'IND456789123': {
+                id: 'IND456789123',
+                fullName: 'विकास पटेल',
+                phoneNumber: '9988776655',
+                email: 'vikas.patel@email.com',
+                vidhanSabha: 'Indore 5',
+                wardNumber: '42',
+                category: 'जल विभाग',
+                subcategory: 'पानी का नहीं आना',
+                description: 'हमारे क्षेत्र में पिछले सप्ताह से पानी की सप्लाई नहीं आ रही है।',
+                images: ['https://via.placeholder.com/300x200?text=Water+Problem'],
+                dateOfComplaint: '12/11/2023',
+                status: 'Pending',
+                assignedOfficer: 'श्री प्रदीप सिंह',
+                estimatedResolution: '28/11/2023'
+            }
+        };
+
+        // Dummy Chart Data
+        const chartData = {
+            day: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                resolved: [12, 15, 8, 20, 18, 10, 5],
+                pending: [5, 8, 12, 6, 9, 15, 20],
+                total: [17, 23, 20, 26, 27, 25, 25]
+            },
+            week: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                resolved: [85, 92, 78, 95],
+                pending: [25, 18, 32, 15],
+                total: [110, 110, 110, 110]
+            },
+            month: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                resolved: [320, 285, 410, 375, 390, 425],
+                pending: [80, 95, 70, 85, 60, 45],
+                total: [400, 380, 480, 460, 450, 470]
+            }
+        };
+
+        // Initialize Application
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            populateWardFilter();
+            initializeChart();
+            updateStatistics();
+        });
+
+        // Logo fallback function
+        function showFallbackLogo() {
+            document.getElementById('nagarNigamLogo').style.display = 'none';
+            document.getElementById('fallbackLogo').style.display = 'inline-flex';
+        }
+
+        // Setup Event Listeners
+        function setupEventListeners() {
+            // Status check form submission
+            document.getElementById('statusCheckForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                checkComplaintStatus();
+            });
+
+            // Star rating functionality
+            const stars = document.querySelectorAll('.star');
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    setRating(rating);
+                });
+
+                star.addEventListener('mouseover', function() {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    highlightStars(rating);
+                });
+            });
+
+            // Reset star highlighting on mouse leave
+            document.getElementById('starRating').addEventListener('mouseleave', function() {
+                highlightStars(currentRating);
+            });
+
+            // Phone number validation
+            document.getElementById('phoneVerification').addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
+            });
+
+            // File upload handling
+            document.getElementById('afterPhoto').addEventListener('change', function() {
+                handleFileUpload(this);
+            });
+        }
+
+        // Populate Ward Filter
+        function populateWardFilter() {
+            const wardFilter = document.getElementById('wardFilter');
+            for (let i = 1; i <= 85; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `Ward ${i}`;
+                wardFilter.appendChild(option);
+            }
+        }
+
+        // Check Complaint Status
+        function checkComplaintStatus() {
+            const complaintId = document.getElementById('complaintId').value.trim();
+            const phoneNumber = document.getElementById('phoneVerification').value.trim();
+            
+            if (!complaintId) {
+                showNotification('Please enter Complaint ID', 'error');
+                return;
+            }
+
+            // Show loading spinner
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.getElementById('complaintDetails').style.display = 'none';
+
+            // Simulate API call delay
+            setTimeout(() => {
+                const complaint = dummyComplaints[complaintId];
+                
+                if (!complaint) {
+                    document.getElementById('loadingSpinner').style.display = 'none';
+                    showNotification('Complaint not found / शिकायत नहीं मिली', 'error');
+                    return;
+                }
+
+                // Verify phone number if provided
+                if (phoneNumber && complaint.phoneNumber !== phoneNumber) {
+                    document.getElementById('loadingSpinner').style.display = 'none';
+                    showNotification('Phone number does not match / फ़ोन नंबर मेल नहीं खाता', 'error');
+                    return;
+                }
+
+                displayComplaintDetails(complaint);
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('complaintDetails').style.display = 'block';
+                
+                // Scroll to results
+                document.getElementById('complaintDetails').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+
+            }, 1500);
+        }
+
+        // Display Complaint Details
+        function displayComplaintDetails(complaint) {
+            const complaintInfo = document.getElementById('complaintInfo');
+            const feedbackSection = document.getElementById('feedbackSection');
+            
+            let statusBadgeClass = '';
+            let statusText = '';
+            
+            switch(complaint.status) {
+                case 'Pending':
+                    statusBadgeClass = 'status-pending';
+                    statusText = 'Pending / लंबित';
+                    break;
+                case 'In Progress':
+                    statusBadgeClass = 'status-progress';
+                    statusText = 'In Progress / प्रगति में';
+                    break;
+                case 'Resolved':
+                    statusBadgeClass = 'status-resolved';
+                    statusText = 'Resolved / हल हो गया';
+                    break;
+            }
+
+            // Create image gallery
+            let imageGallery = '';
+            if (complaint.images && complaint.images.length > 0) {
+                imageGallery = '<div class="image-gallery">';
+                complaint.images.forEach(img => {
+                    imageGallery += `<img src="${img}" alt="Complaint Image" class="complaint-image" onclick="openImageModal('${img}')">`;
+                });
+                imageGallery += '</div>';
+            }
+
+            complaintInfo.innerHTML = `
+                <div class="detail-row">
+                    <span class="detail-label"><i class="fas fa-hashtag me-2"></i>Complaint ID:</span>
+                    <span class="detail-value"><strong>${complaint.id}</strong></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label"><i class="fas fa-user me-2"></i>Name / नाम:</span>
+                    <span class="detail-value">${complaint.fullName}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label"><i class="fas fa-phone me-2"></i>Phone / फ़ोन:</span>
+                    <span class="detail-value">${complaint.phoneNumber}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label"><i class="fas fa-envelope me-2"></i>Email:</span>
+                    <span class="detail-value">${complaint.email}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label"><i class="fas fa-map-marker-alt me-2"></i>Vidhan Sabha:</span>
+                    <span class="detail-value">${complaint.vidhanSabha}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label"><i class="fas fa-home me-2"></i>Ward Number:</span>
+                    <span class="detail-value">${complaint.wardNumber}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label"><i class="fas fa-tags me-2"></i>Category / श्रेणी:</span>
+                    <span class="detail-value">${complaint.category}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label"><i class="fas fa-tag me-2"></i>Subcategory:</span>
+                    <span class="detail-value">${complaint.subcategory}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label"><i class="fas fa-calendar me-2"></i>Date Submitted:</span>
+                    <span class="detail-value">${complaint.dateOfComplaint}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label"><i class="fas fa-user-tie me-2"></i>Assigned Officer:</span>
+                    <span class="detail-value">${complaint.assignedOfficer}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label"><i class="fas fa-clock me-2"></i>Est. Resolution:</span>
+                    <span class="detail-value">${complaint.estimatedResolution}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label"><i class="fas fa-info-circle me-2"></i>Status / स्थिति:</span>
+                    <span class="detail-value"><span class="status-badge ${statusBadgeClass}">${statusText}</span></span>
+                </div>
+                ${complaint.resolvedDate ? `
+                <div class="detail-row">
+                    <span class="detail-label"><i class="fas fa-check-circle me-2"></i>Resolved Date:</span>
+                    <span class="detail-value">${complaint.resolvedDate}</span>
+                </div>
+                ` : ''}
+                <div class="detail-row">
+                    <span class="detail-label"><i class="fas fa-comment me-2"></i>Description:</span>
+                    <span class="detail-value">${complaint.description}</span>
+                </div>
+                ${complaint.images && complaint.images.length > 0 ? `
+                <div class="detail-row">
+                    <span class="detail-label"><i class="fas fa-images me-2"></i>Uploaded Images:</span>
+                    <span class="detail-value">${imageGallery}</span>
+                </div>
+                ` : ''}
+            `;
+
+            // Show feedback section only for resolved complaints
+            if (complaint.status === 'Resolved') {
+                feedbackSection.style.display = 'block';
+                resetFeedbackForm();
+            } else {
+                feedbackSection.style.display = 'none';
+            }
+        }
+
+        // Star Rating Functions
+        function setRating(rating) {
+            currentRating = rating;
+            highlightStars(rating);
+            updateRatingText(rating);
+        }
+
+        function highlightStars(rating) {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function updateRatingText(rating) {
+            const ratingTexts = {
+                1: 'Very Dissatisfied / बहुत असंतुष्ट',
+                2: 'Dissatisfied / असंतुष्ट',
+                3: 'Neutral / सामान्य',
+                4: 'Satisfied / संतुष्ट',
+                5: 'Very Satisfied / बहुत संतुष्ट'
+            };
+            
+            document.getElementById('ratingText').textContent = ratingTexts[rating] || '';
+        }
+
+        // Handle File Upload
+        function handleFileUpload(input) {
+            const file = input.files[0];
+            if (file) {
+                const uploadArea = input.parentElement;
+                const fileName = file.name;
+                const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                
+                uploadArea.innerHTML = `
+                    <i class="fas fa-check-circle upload-icon" style="color: var(--accent-color);"></i>
+                    <p><strong>File Selected</strong><br>${fileName}<br>(${fileSize} MB)</p>
+                `;
+                uploadArea.style.borderColor = 'var(--accent-color)';
+                uploadArea.style.background = 'rgba(40, 167, 69, 0.1)';
+            }
+        }
+
+        // Submit Feedback
+        function submitFeedback() {
+            const feedbackText = document.getElementById('feedbackText').value.trim();
+            
+            if (currentRating === 0) {
+                showNotification('Please provide a rating / कृपया रेटिंग दें', 'error');
+                return;
+            }
+
+            if (!feedbackText) {
+                showNotification('Please provide feedback / कृपया फीडबैक दें', 'error');
+                return;
+            }
+
+            // Simulate feedback submission
+            const feedbackData = {
+                complaintId: document.getElementById('complaintId').value,
+                rating: currentRating,
+                feedback: feedbackText,
+                afterPhoto: document.getElementById('afterPhoto').files[0] || null,
+                submissionDate: new Date().toISOString()
+            };
+
+            // Store feedback locally (in real app, this would go to backend)
+            localStorage.setItem(`feedback_${feedbackData.complaintId}`, JSON.stringify(feedbackData));
+
+            // Show success message
+            document.getElementById('feedbackSection').style.display = 'none';
+            document.getElementById('feedbackSuccess').style.display = 'block';
+            
+            showNotification('Feedback submitted successfully! / फीडबैक सफलतापूर्वक जमा किया गया!', 'success');
+            
+            // Scroll to success message
+            document.getElementById('feedbackSuccess').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
+        }
+
+        // Reset Feedback Form
+        function resetFeedbackForm() {
+            currentRating = 0;
+            highlightStars(0);
+            document.getElementById('ratingText').textContent = '';
+            document.getElementById('feedbackText').value = '';
+            document.getElementById('afterPhoto').value = '';
+            document.getElementById('feedbackSuccess').style.display = 'none';
+            
+            // Reset file upload area
+            const uploadArea = document.querySelector('.file-upload-area');
+            uploadArea.innerHTML = `
+                <i class="fas fa-camera upload-icon"></i>
+                <p><strong>Choose After Photo</strong><br>फोटो चुनें</p>
+            `;
+            uploadArea.style.borderColor = 'var(--border-color)';
+            uploadArea.style.background = '#fafafa';
+        }
+
+        // Chart Functions
+        function initializeChart() {
+            const ctx = document.getElementById('resolutionChart').getContext('2d');
+            
+            resolutionChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: chartData.week.labels,
+                    datasets: [
+                        {
+                            label: 'Resolved / हल किए गए',
+                            data: chartData.week.resolved,
+                            backgroundColor: 'rgba(40, 167, 69, 0.8)',
+                            borderColor: 'rgba(40, 167, 69, 1)',
+                            borderWidth: 2,
+                            borderRadius: 8,
+                            borderSkipped: false,
+                        },
+                        {
+                            label: 'Pending / लंबित',
+                            data: chartData.week.pending,
+                            backgroundColor: 'rgba(255, 193, 7, 0.8)',
+                            borderColor: 'rgba(255, 193, 7, 1)',
+                            borderWidth: 2,
+                            borderRadius: 8,
+                            borderSkipped: false,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Complaint Resolution Trends',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            },
+                            color: '#2c5aa0'
+                        },
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20,
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            },
+                            ticks: {
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeInOutQuart'
+                    }
+                }
+            });
+        }
+
+        // Update Chart based on filters
+        function updateChart() {
+            const timePeriod = document.getElementById('timePeriod').value;
+            const category = document.getElementById('categoryFilter').value;
+            const ward = document.getElementById('wardFilter').value;
+            
+            // Get filtered data (in real app, this would be an API call)
+            const data = getFilteredChartData(timePeriod, category, ward);
+            
+            // Update chart
+            resolutionChart.data.labels = data.labels;
+            resolutionChart.data.datasets[0].data = data.resolved;
+            resolutionChart.data.datasets[1].data = data.pending;
+            
+            resolutionChart.update('active');
+            
+            // Update statistics
+            updateStatistics(data);
+        }
+
+        // Get Filtered Chart Data (Dummy implementation)
+        function getFilteredChartData(timePeriod, category, ward) {
+            let data = chartData[timePeriod];
+            
+            // Apply filters (simplified logic for demo)
+            if (category !== 'all' || ward !== 'all') {
+                // In real app, this would filter based on actual data
+                data = {
+                    ...data,
+                    resolved: data.resolved.map(val => Math.floor(val * 0.7)),
+                    pending: data.pending.map(val => Math.floor(val * 0.8))
+                };
+            }
+            
+            return data;
+        }
+
+        // Update Statistics
+        function updateStatistics(data = null) {
+            if (!data) {
+                data = chartData.week;
+            }
+            
+            const resolved = data.resolved.reduce((a, b) => a + b, 0);
+            const pending = data.pending.reduce((a, b) => a + b, 0);
+            const total = resolved + pending;
+            
+            // Animate counter updates
+            animateCounter('resolvedCount', resolved);
+            animateCounter('pendingCount', pending);
+            animateCounter('totalCount', total);
+        }
+
+        // Animate Counter
+        function animateCounter(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            const startValue = parseInt(element.textContent) || 0;
+            const duration = 1000;
+            const startTime = performance.now();
+            
+            function updateCounter(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                const currentValue = Math.floor(startValue + (targetValue - startValue) * progress);
+                element.textContent = currentValue;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                }
+            }
+            
+            requestAnimationFrame(updateCounter);
+        }
+
+        // Open Image Modal (placeholder function)
+        function openImageModal(imageSrc) {
+            // Create a simple modal to display the image
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+                cursor: pointer;
+            `;
+            
+            const img = document.createElement('img');
+            img.src = imageSrc;
+            img.style.cssText = `
+                max-width: 90%;
+                max-height: 90%;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            `;
+            
+            modal.appendChild(img);
+            document.body.appendChild(modal);
+            
+            modal.addEventListener('click', () => {
+                document.body.removeChild(modal);
+            });
+        }
+
+        // Show Notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type === 'error' ? 'danger' : type === 'success' ? 'success' : 'info'} position-fixed`;
+            notification.style.cssText = `
+                top: 20px;
+                right: 20px;
+                z-index: 9999;
+                min-width: 300px;
+                box-shadow: var(--shadow-lg);
+                border-radius: 10px;
+                animation: slideInRight 0.3s ease-out;
+            `;
+            
+            const icon = type === 'error' ? 'exclamation-triangle' : 
+                        type === 'success' ? 'check-circle' : 'info-circle';
+            
+            notification.innerHTML = `
+                <i class="fas fa-${icon} me-2"></i>
+                ${message}
+                <button type="button" class="btn-close float-end" onclick="this.parentElement.remove()"></button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        // Add slide-in animation for notifications
+        const notificationStyle = document.createElement('style');
+        notificationStyle.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+        `;
+        document.head.appendChild(notificationStyle);
+    </script>
+</body>
+</html>

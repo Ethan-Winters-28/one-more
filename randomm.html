@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Nigam Setu - Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- CSS -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f0f2f5;
+    }
+
+    header {
+      background: #2c3e50;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      padding: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      margin: 10px;
+      width: 45%;
+      min-width: 300px;
+    }
+
+    h3 {
+      margin-top: 0;
+    }
+
+    canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+
+    #map {
+      height: 300px;
+      width: 100%;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .status-box {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    .status {
+      background: #e3f2fd;
+      color: #333;
+      padding: 15px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    @media(max-width: 768px) {
+      .card {
+        width: 100%;
+      }
+    }
+  </style>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+</head>
+<body>
+
+  <header>
+    <h1>Nigam Setu - Admin Dashboard</h1>
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <h3>Active Grievances</h3>
+      <canvas id="barChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>Avg Time to Resolve</h3>
+      <canvas id="lineChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>Citizen Satisfaction</h3>
+      <canvas id="pieChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>Area-wise Heatmap (Mock)</h3>
+      <div id="map"></div>
+    </div>
+    <div class="card">
+      <h3>Field Staff Status</h3>
+      <div class="status-box">
+        <div class="status">Online: 12</div>
+        <div class="status">Active: 7</div>
+        <div class="status">Idle: 5</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    // Bar Chart - Active Grievances
+    new Chart(document.getElementById("barChart"), {
+      type: "bar",
+      data: {
+        labels: ["Ward 1", "Ward 2", "Ward 3", "Ward 4", "Ward 5"],
+        datasets: [{
+          label: "Active Grievances",
+          data: [12, 19, 8, 15, 10],
+          backgroundColor: "rgba(54, 162, 235, 0.6)"
+        }]
+      }
+    });
+
+    // Line Chart - Avg Time to Resolve
+    new Chart(document.getElementById("lineChart"), {
+      type: "line",
+      data: {
+        labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+        datasets: [{
+          label: "Avg Resolution Time (hrs)",
+          data: [48, 36, 30, 24],
+          fill: false,
+          borderColor: "rgba(255, 99, 132, 1)"
+        }]
+      }
+    });
+
+    // Pie Chart - Citizen Satisfaction
+    new Chart(document.getElementById("pieChart"), {
+      type: "pie",
+      data: {
+        labels: ["Satisfied", "Neutral", "Dissatisfied"],
+        datasets: [{
+          data: [65, 20, 15],
+          backgroundColor: ["#28a745", "#ffc107", "#dc3545"]
+        }]
+      }
+    });
+
+    // Leaflet Map
+    const map = L.map('map').setView([22.7196, 75.8577], 12); // Indore
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+    }).addTo(map);
+
+    // Dummy "heat" markers
+    const locations = [
+      [22.720, 75.857],
+      [22.725, 75.860],
+      [22.715, 75.852],
+      [22.718, 75.855],
+      [22.722, 75.861],
+      [22.717, 75.853]
+    ];
+
+    locations.forEach(coord => {
+      L.circle(coord, {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.5,
+        radius: 200
+      }).addTo(map);
+    });
+  </script>
+
+</body>
+</html>

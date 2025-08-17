@@ -1,0 +1,542 @@
+<!-- ==================== ANALYTICS & REPORTS SECTION ==================== -->
+<div class="content-section" id="analytics">
+
+    <!-- ===== Centered Heading & Subtitle ===== -->
+    <div class="page-header" style="text-align:center;">
+        <!-- CHANGE: Edit Heading & Subtitle Here -->
+        <h1 class="page-title">Analytics & Reports</h1>
+        <p class="page-subtitle">Detailed insights and performance metrics with advanced visualization</p>
+    </div>
+
+    <!-- ===== Department Filter ===== -->
+    <div class="analytics-filter-section">
+        <div class="filter-card">
+            <h3>🎯 Select Department for Analysis</h3>
+
+            <!-- CHANGE: Department List (exact 11 departments) -->
+            <select class="analytics-department-filter" id="analyticsDepartmentFilter">
+                <option value="all">📊 All Departments Overview / सभी विभागों का अवलोकन</option>
+                <option value="lighting">💡 Lighting Department / प्रकाश विभाग</option>
+                <option value="health">🏥 Health Department / स्वास्थ्य विभाग</option>
+                <option value="sewerage">🚰 Sewerage & Drainage / सीवरेज और ड्रेनेज विभाग</option>
+                <option value="stray-animals">🐕 Stray Animals / आवारा पशु</option>
+                <option value="horticulture">🌳 Horticulture Department / उद्यान विभाग</option>
+                <option value="water">💧 Water Department / जल विभाग</option>
+                <option value="consumer-charges">💰 Consumer Charges / उपभोक्ता प्रभार</option>
+                <option value="pan-gutka">🚫 Pan, Gutka, Spitting Related / पान, गुटखा, थूकने सम्बंधित</option>
+                <option value="pm-housing">🏠 PM Housing Scheme / प्रधान मंत्री आवास योजना</option>
+                <option value="paid-sanitization">🧽 Paid Sanitization / सशुल्क सेनेटाईज़ेशन हेतु</option>
+                <option value="public-works">🏗️ Public Works Department / जनकार्य विभाग</option>
+            </select>
+
+            <!-- 🔄 Reset Button (placed below select, like Complaints section) -->
+            <button class="reset-filters-btn" id="resetAnalyticsFiltersBtn" style="margin-top:12px;">
+                <i class="fas fa-undo"></i> 🔄 Reset Filters
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== Overview Statistics ===== -->
+    <div class="analytics-overview" id="analyticsOverview">
+        <div class="overview-grid">
+            <div class="overview-card total-complaints">
+                <div class="overview-icon">📊</div>
+                <div class="overview-content">
+                    <div class="overview-number" id="totalComplaintsNum">1,247</div>
+                    <div class="overview-label">Total Complaints</div>
+                    <div class="overview-trend positive">↗️ +12% from last month</div>
+                </div>
+            </div>
+            <div class="overview-card resolved-complaints">
+                <div class="overview-icon">✅</div>
+                <div class="overview-content">
+                    <div class="overview-number" id="resolvedComplaintsNum">892</div>
+                    <div class="overview-label">Resolved</div>
+                    <div class="overview-trend positive">↗️ +8% resolution rate</div>
+                </div>
+            </div>
+            <div class="overview-card pending-complaints">
+                <div class="overview-icon">⏳</div>
+                <div class="overview-content">
+                    <div class="overview-number" id="pendingComplaintsNum">298</div>
+                    <div class="overview-label">Pending</div>
+                    <div class="overview-trend negative">↘️ -5% from last month</div>
+                </div>
+            </div>
+            <div class="overview-card avg-resolution">
+                <div class="overview-icon">⚡</div>
+                <div class="overview-content">
+                    <div class="overview-number" id="avgResolutionNum">4.2</div>
+                    <div class="overview-label">Avg Days</div>
+                    <div class="overview-trend positive">↗️ 15% faster</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== Main Analytics Grid ===== -->
+    <div class="analytics-main-grid" id="analyticsMainGrid">
+
+        <!-- Department Distribution Chart (period controls updated to Week / Month / Year / Custom) -->
+        <div class="analytics-card large-card">
+            <div class="analytics-card-header">
+                <h3>🏢 Department-wise Complaint Distribution</h3>
+                <div class="chart-controls" id="deptDistributionControls">
+                    <button class="chart-control-btn active" data-period="week">Week</button>
+                    <button class="chart-control-btn" data-period="month">Month</button>
+                    <button class="chart-control-btn" data-period="year">Year</button>
+                    <button class="chart-control-btn" data-period="custom">Custom Dates</button>
+                </div>
+            </div>
+            <div class="analytics-chart-container">
+                <canvas id="departmentDistributionChart"></canvas>
+            </div>
+
+            <!-- Custom date inputs (hidden unless user clicks Custom Dates) -->
+            <div id="deptCustomDateWrapper" style="display:none; margin-top:12px; gap:10px; align-items:center;">
+                <input type="date" id="deptCustomFrom" style="padding:8px;border-radius:8px;border:1px solid var(--border-color);">
+                <input type="date" id="deptCustomTo" style="padding:8px;border-radius:8px;border:1px solid var(--border-color);">
+                <button class="chart-control-btn" id="applyDeptCustom">Apply</button>
+            </div>
+        </div>
+
+        <!-- Complaint Types Breakdown (All 11 departments) -->
+        <div class="analytics-card medium-card">
+            <div class="analytics-card-header">
+                <h3>📝 Complaint Types Breakdown (All Departments)</h3>
+            </div>
+            <div class="analytics-chart-container">
+                <canvas id="complaintTypesChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Resolution Trends & Performance (All 11 departments) -->
+        <div class="analytics-card large-card">
+            <div class="analytics-card-header">
+                <h3>📈 Resolution Trends & Performance (All Departments)</h3>
+            </div>
+            <div class="analytics-chart-container">
+                <canvas id="resolutionTrendsChart"></canvas>
+            </div>
+        </div>
+
+        <!-- SLA Performance (kept) -->
+        <div class="analytics-card medium-card">
+            <div class="analytics-card-header">
+                <h3>⏰ SLA Performance</h3>
+            </div>
+            <div class="analytics-chart-container">
+                <canvas id="slaPerformanceChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Priority Distribution (kept) -->
+        <div class="analytics-card small-card">
+            <div class="analytics-card-header">
+                <h3>🎯 Priority Levels</h3>
+            </div>
+            <div class="analytics-chart-container">
+                <canvas id="priorityDistributionChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Geographic Heatmap (kept as canvas — shown as bubble/scatter visualization) -->
+        <div class="analytics-card large-card">
+            <div class="analytics-card-header">
+                <h3>🗺️ Geographic Distribution Heatmap</h3>
+            </div>
+            <div class="analytics-chart-container">
+                <canvas id="geographicHeatmapChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Officer Performance (KEPT) -->
+        <div class="analytics-card medium-card">
+            <div class="analytics-card-header">
+                <h3>👨‍💼 Officer Performance</h3>
+            </div>
+            <div class="analytics-chart-container">
+                <canvas id="officerPerformanceChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Citizen Satisfaction (KEPT) -->
+        <div class="analytics-card small-card">
+            <div class="analytics-card-header">
+                <h3>😊 Satisfaction Score</h3>
+            </div>
+            <div class="analytics-chart-container">
+                <canvas id="satisfactionChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Department-Specific Analytics (kept as-is; you already had many dept blocks below) -->
+    <!-- (I didn't remove or modify those blocks — they remain in your file as-is) -->
+
+    <!-- ===== Advanced Analytics Section ===== -->
+    <div class="advanced-analytics-section">
+        <h2>🚀 Advanced Analytics & Insights</h2>
+        <div class="advanced-grid">
+
+            <!-- Predictive Analytics (kept) -->
+            <div class="advanced-card">
+                <div class="advanced-header">
+                    <h3>🔮 Predictive Analytics</h3>
+                    <div class="advanced-badge">AI Powered</div>
+                </div>
+                <div class="prediction-content">
+                    <div class="prediction-item">
+                        <div class="prediction-icon">📈</div>
+                        <div class="prediction-text">
+                            <strong>Next Month Forecast:</strong><br>
+                            Expected 15% increase in water complaints due to summer season
+                        </div>
+                    </div>
+                    <div class="prediction-item">
+                        <div class="prediction-icon">⚠️</div>
+                        <div class="prediction-text">
+                            <strong>Alert:</strong><br>
+                            Sewerage complaints likely to spike in Ward 12-15
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seasonal Road Alerts (NEW, non-destructive) -->
+            <div class="advanced-card">
+                <div class="advanced-header">
+                    <h3>🚧 Seasonal Road Maintenance Alerts</h3>
+                    <div class="advanced-badge live">LIVE</div>
+                </div>
+                <p>Before rainy season: automatic alert shows roads that had repeated complaints same period last year (example: Road X — 17 complaints on Aug–Sep last year).</p>
+            </div>
+
+            <!-- Sewerage Flood Risk Alerts (NEW) -->
+            <div class="advanced-card">
+                <div class="advanced-header">
+                    <h3>🚰 Sewerage Flood Risk Alerts</h3>
+                    <div class="advanced-badge live">LIVE</div>
+                </div>
+                <p>Auto-notify Nagar Nigam for sewerage points that repeatedly overflowed during the monsoon last year.</p>
+            </div>
+
+            <!-- Top Recurring Issues (NEW) -->
+            <div class="advanced-card">
+                <div class="advanced-header">
+                    <h3>📌 Top Recurring Issues</h3>
+                </div>
+                <ul>
+                    <li>Street light failures in Sector 5 (12 times last year)</li>
+                    <li>Sewer blockage in Ward 18 (9 times last monsoon)</li>
+                    <li>Water supply disruption in Colony B (7 times in 6 months)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- ==================== END ANALYTICS & REPORTS SECTION ==================== -->
+
+<!-- ========== Analytics JS: initializes charts & controls (add below the analytics section) ========== -->
+<script>
+(function(){
+    // Helper to load a script only if needed
+    function loadScriptOnce(src, callback) {
+        if (window._loadedScripts && window._loadedScripts[src]) {
+            callback && callback();
+            return;
+        }
+        window._loadedScripts = window._loadedScripts || {};
+        var s = document.createElement('script');
+        s.src = src;
+        s.onload = function(){ window._loadedScripts[src] = true; callback && callback(); };
+        document.head.appendChild(s);
+    }
+
+    // ensure Chart.js is available, then init charts
+    loadScriptOnce('https://cdn.jsdelivr.net/npm/chart.js', initAnalytics);
+
+    function initAnalytics(){
+        // labels for the exact 11 departments (easy to edit)
+        const deptLabels = [
+            "Lighting Dept / प्रकाश विभाग",
+            "Health Dept / स्वास्थ्य विभाग",
+            "Sewerage & Drainage / सीवरेज और ड्रेनेज विभाग",
+            "Stray Animals / आवारा पशु",
+            "Horticulture Dept / उद्यान विभाग",
+            "Water Dept / जल विभाग",
+            "Consumer Charges / उपभोक्ता प्रभार",
+            "Pan/Gutka/Spitting / पान, गुटखा, थूकने सम्बंधित",
+            "PM Housing / प्रधान मंत्री आवास योजना",
+            "Paid Sanitization / सशुल्क सेनेटाईज़ेशन हेतु",
+            "Public Works / जनकार्य विभाग"
+        ];
+
+        // sample (placeholder) data by period (Week / Month / Year)
+        const sampleCounts = {
+            week:   [12, 20, 18, 5, 8, 25, 6, 3, 2, 4, 10],
+            month:  [50, 80, 70, 25, 30, 120, 40, 12, 8, 10, 60],
+            year:   [600,920,780,200,300,1450,480,120,90,110,720],
+            custom: [45,70,60,20,25,110,35,10,7,9,50]
+        };
+
+        // Keep chart instances to destroy on re-draw
+        window._analyticsCharts = window._analyticsCharts || {};
+
+        // Utility: create or update a Chart instance
+        function createOrUpdateChart(id, config){
+            const el = document.getElementById(id);
+            if(!el) return null;
+            if(window._analyticsCharts[id]) {
+                try { window._analyticsCharts[id].destroy(); } catch(e){}
+            }
+            window._analyticsCharts[id] = new Chart(el.getContext('2d'), config);
+            return window._analyticsCharts[id];
+        }
+
+        /* ---------- Department Distribution (bar) ---------- */
+        function drawDeptDistribution(period){
+            const data = sampleCounts[period] || sampleCounts.month;
+            createOrUpdateChart('departmentDistributionChart', {
+                type: 'bar',
+                data: {
+                    labels: deptLabels,
+                    datasets: [{
+                        label: 'Complaints',
+                        data: data,
+                        backgroundColor: deptLabels.map((_,i)=> `rgba(${40 + i*15 % 200}, ${120 + i*10 % 120}, ${180 - i*8 % 120}, 0.9)`),
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { ticks: { maxRotation: 90, minRotation: 30 }, beginAtZero: true },
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        /* ---------- Complaint Types Breakdown (doughnut) ---------- */
+        function drawComplaintTypes(){
+            // placeholder breakdown; replace with real type counts per department
+            const values = [120, 200, 160, 40, 80, 300, 90, 30, 20, 35, 160];
+            createOrUpdateChart('complaintTypesChart', {
+                type: 'doughnut',
+                data: { labels: deptLabels, datasets: [{ data: values, backgroundColor: deptLabels.map((_,i)=> `rgba(${200 - i*10 %120}, ${90 + i*12 %160}, ${140 + i*8 %110}, 0.9)`) }] },
+                options: { maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+            });
+        }
+
+        /* ---------- Resolution Trends (multi-line) ---------- */
+        function drawResolutionTrends(){
+            const months = ['M-5','M-4','M-3','M-2','M-1','This'];
+            const datasets = deptLabels.map((label, idx) => {
+                // simple synthetic trend per department
+                const base = 10 + (idx*5);
+                const data = months.map((m,i) => Math.max(0, Math.round(base + (Math.sin((idx+1)*(i+1)/2)*20) + (i*3))));
+                return {
+                    label: label,
+                    data: data,
+                    borderWidth: 2,
+                    fill: false,
+                    pointRadius: 2,
+                    tension: 0.35,
+                    borderColor: `rgba(${50 + idx*15 %200}, ${160 - idx*8 %140}, ${120 + idx*6 %120}, 0.9)`
+                };
+            });
+
+            createOrUpdateChart('resolutionTrendsChart', {
+                type: 'line',
+                data: { labels: months, datasets: datasets },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+
+        /* ---------- Simple SLA Performance (pie) ---------- */
+        function drawSlaPerformance(){
+            const values = [75, 18, 7]; // good / warning / overdue
+            createOrUpdateChart('slaPerformanceChart', {
+                type: 'pie',
+                data: { labels: ['SLA Good','SLA Warning','SLA Overdue'], datasets: [{ data: values, backgroundColor: ['rgba(0,200,120,0.9)','rgba(250,180,30,0.9)','rgba(240,80,80,0.9)'] }] },
+                options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            });
+        }
+
+        /* ---------- Priority Distribution (pie) ---------- */
+        function drawPriorityDistribution(){
+            createOrUpdateChart('priorityDistributionChart', {
+                type: 'doughnut',
+                data: { labels: ['High','Medium','Low'], datasets: [{ data: [25,45,30], backgroundColor: ['rgba(220,50,50,0.9)','rgba(250,180,30,0.9)','rgba(80,160,240,0.9)'] }] },
+                options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            });
+        }
+
+        /* ---------- Geographic Heatmap (bubble-like scatter) ---------- */
+        function drawGeographicHeatmap(){
+            // synthetic bubble points (x,y,value) - these represent clustered zones; replace with geocoded data later
+            const points = [
+                { x: 78.4, y: 22.7, r: 30 }, { x: 78.5, y:22.75, r: 18 }, { x:78.35, y:22.68, r:22 },
+                { x:78.55, y:22.8, r:12 }, { x:78.45, y:22.7, r:25 }
+            ];
+            createOrUpdateChart('geographicHeatmapChart', {
+                type: 'bubble',
+                data: { datasets: points.map((p,i)=>({ label: 'Cluster '+(i+1), data:[{x:p.x,y:p.y,r:p.r},], backgroundColor:`rgba(${80+i*20}, ${120+i*15}, ${200-i*10},0.8)` })) },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { title: { display:true, text:'Longitude'}, ticks:{ maxRotation:0 } },
+                        y: { title: { display:true, text:'Latitude' } }
+                    },
+                    plugins: { legend: { display:false } }
+                }
+            });
+        }
+
+        /* ---------- Officer Performance (bar) ---------- */
+        function drawOfficerPerformance(){
+            const officerNames = ['Amit K','Sunita P','Ravi S','Neha M','Kamal T'];
+            const scores = [88, 82, 78, 74, 70];
+            createOrUpdateChart('officerPerformanceChart', {
+                type: 'bar',
+                data: { labels: officerNames, datasets: [{ data: scores, backgroundColor: officerNames.map((_,i)=>`rgba(${100+i*20}, ${160-i*10}, ${80+i*15},0.9)`) }] },
+                options: { maintainAspectRatio: false, scales:{ y:{ beginAtZero:true, max:100 } }, plugins:{ legend:{ display:false } } }
+            });
+        }
+
+        /* ---------- Satisfaction Score (doughnut) ---------- */
+        function drawSatisfactionChart(){
+            createOrUpdateChart('satisfactionChart', {
+                type: 'doughnut',
+                data: { labels:['Satisfied','Neutral','Dissatisfied'], datasets:[{ data:[68,18,14], backgroundColor:['rgba(20,180,80,0.9)','rgba(200,200,80,0.9)','rgba(220,80,80,0.9)'] }] },
+                options: { maintainAspectRatio:false, plugins:{ legend:{ position:'bottom' } } }
+            });
+        }
+
+        /* ---------- Year-over-Year Comparison (optional if canvas exists) ---------- */
+        function drawYearComparisonIfExists(){
+            const el = document.getElementById('yearComparisonChart');
+            if(!el) return;
+            const lastYear = [520,880,740,160,220,1300,420,110,85,95,640];
+            const thisYear = [600,920,780,200,300,1450,480,120,90,110,720];
+            createOrUpdateChart('yearComparisonChart', {
+                type:'bar',
+                data:{ labels: deptLabels, datasets:[
+                    { label:'Last Year', data:lastYear, backgroundColor:'rgba(120,140,200,0.6)' },
+                    { label:'This Year', data:thisYear, backgroundColor:'rgba(20,200,120,0.7)' }
+                ]},
+                options:{ maintainAspectRatio:false, plugins:{ legend:{ position:'bottom'} }, scales:{ y:{ beginAtZero:true } } }
+            });
+        }
+
+        /* === draw everything once with default period = month === */
+        function drawAll(period='month'){
+            drawDeptDistribution(period);
+            drawComplaintTypes();
+            drawResolutionTrends();
+            drawSlaPerformance();
+            drawPriorityDistribution();
+            drawGeographicHeatmap();
+            drawOfficerPerformance();
+            drawSatisfactionChart();
+            drawYearComparisonIfExists();
+        }
+
+        // initial draw
+        drawAll('month');
+
+        /* ---------- Controls: period buttons ---------- */
+        const periodButtons = document.querySelectorAll('#deptDistributionControls .chart-control-btn');
+        periodButtons.forEach(btn=>{
+            btn.addEventListener('click', function(){
+                periodButtons.forEach(b=>b.classList.remove('active'));
+                this.classList.add('active');
+                const p = this.getAttribute('data-period');
+                // show/hide custom date inputs
+                document.getElementById('deptCustomDateWrapper').style.display = (p==='custom')? 'flex' : 'none';
+                if(p !== 'custom') drawDeptDistribution(p);
+            });
+        });
+
+        // custom date apply
+        const applyCustom = document.getElementById('applyDeptCustom');
+        if(applyCustom){
+            applyCustom.addEventListener('click', function(){
+                // grab dates (you'll replace this with server-side filtered data)
+                const from = document.getElementById('deptCustomFrom').value;
+                const to = document.getElementById('deptCustomTo').value;
+                // simple fallback to custom sample data
+                drawDeptDistribution('custom');
+                // in production: call API with from/to and update charts
+            });
+        }
+
+        /* ---------- Reset filters ---------- */
+        const resetBtn = document.getElementById('resetAnalyticsFiltersBtn');
+        if(resetBtn){
+            resetBtn.addEventListener('click', function(){
+                const sel = document.getElementById('analyticsDepartmentFilter');
+                if(sel) sel.value = 'all';
+                // reset period buttons to month
+                periodButtons.forEach(b=>b.classList.remove('active'));
+                const defaultBtn = document.querySelector('#deptDistributionControls .chart-control-btn[data-period="month"]');
+                if(defaultBtn) defaultBtn.classList.add('active');
+                document.getElementById('deptCustomDateWrapper').style.display = 'none';
+                // redraw defaults
+                drawAll('month');
+            });
+        }
+
+        /* ---------- Department filter change: show/hide department-specific analytics ---------- */
+        const analyticsDeptFilter = document.getElementById('analyticsDepartmentFilter');
+        if(analyticsDeptFilter){
+            analyticsDeptFilter.addEventListener('change', function(){
+                const v = this.value;
+                // if 'all' -> show overview (we keep department-specific blocks you already have)
+                // else -> show the corresponding #xxxAnalytics div if present (you had lightingAnalytics, healthAnalytics etc.)
+                // first hide all dept-specific (if they exist)
+                const deptBlocks = document.querySelectorAll('.dept-analytics');
+                deptBlocks && deptBlocks.forEach(b => b.style.display = 'none');
+
+                if(v === 'all' || v === '') {
+                    // show main overview grid
+                    document.getElementById('analyticsMainGrid').style.display = 'grid';
+                } else {
+                    // hide main overview and show matching block if exists
+                    document.getElementById('analyticsMainGrid').style.display = 'none';
+                    const map = {
+                        'lighting': 'lightingAnalytics',
+                        'health': 'healthAnalytics',
+                        'water': 'waterAnalytics',
+                        'sewerage': 'sewerageAnalytics',
+                        'public-works': 'publicWorksAnalytics',
+                        // add map entries for stray-animals, horticulture, consumer-charges, pan-gutka, pm-housing, paid-sanitization if you made blocks
+                        'stray-animals': 'strayAnimalsAnalytics',
+                        'horticulture': 'horticultureAnalytics',
+                        'consumer-charges': 'consumerChargesAnalytics',
+                        'pan-gutka': 'panGutkaAnalytics',
+                        'pm-housing': 'pmHousingAnalytics',
+                        'paid-sanitization': 'paidSanitizationAnalytics'
+                    };
+                    const id = map[v];
+                    if(id){
+                        const el = document.getElementById(id);
+                        if(el) el.style.display = 'block';
+                    } else {
+                        // fallback: if department-specific block not present, show main grid
+                        document.getElementById('analyticsMainGrid').style.display = 'grid';
+                    }
+                }
+            });
+        }
+
+    } // end initAnalytics
+})();
+</script>

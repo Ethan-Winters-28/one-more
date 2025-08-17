@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nigam Setu - User Profile Dashboard</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --primary-blue: #2563eb;
+            --primary-green: #16a34a;
+            --light-bg: #f8fafc;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--light-bg);
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            padding: 15px 0;
+            box-shadow: var(--card-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            height: 60px;
+            margin: 10px;
+            float: left;
+            border-radius: 8px;
+        }
+
+        .user-image {
+            height: 80px;
+            width: 80px;
+            border-radius: 50%;
+            margin: 10px;
+            float: right;
+            border: 3px solid white;
+            object-fit: cover;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-title {
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .quick-access-btn {
+            background: white;
+            border: 2px solid var(--primary-blue);
+            color: var(--primary-blue);
+            padding: 15px;
+            border-radius: 10px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .quick-access-btn:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .parshad-message {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-left: 4px solid var(--primary-green);
+            padding: 20px;
+            border-radius: 8px;
+            font-style: italic;
+            position: relative;
+        }
+
+        .parshad-message::before {
+            content: '"';
+            font-size: 4rem;
+            color: var(--primary-green);
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            opacity: 0.3;
+        }
+
+        .timeline-item {
+            border-left: 3px solid var(--primary-blue);
+            padding-left: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            width: 12px;
+            height: 12px;
+            background: var(--primary-green);
+            border-radius: 50%;
+            position: absolute;
+            left: -7.5px;
+            top: 5px;
+        }
+
+        .whatsapp-btn {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .whatsapp-btn:hover {
+            background: #128c7e;
+            color: white;
+        }
+
+        .badge-custom {
+            background: var(--primary-green);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .logo, .user-image {
+                float: none;
+                display: block;
+                margin: 10px auto;
+            }
+            
+            .header {
+                text-align: center;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="container-fluid">
+            <img src="img/Nagar Nigam Logo.jpg" alt="Nagar Nigam Logo" class="logo">
+            <img src="img/user iamge.jpeg" alt="User Profile" class="user-image">
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <!-- Left Column -->
+            <div class="col-lg-8">
+                <!-- User Information -->
+                <div class="dashboard-card">
+                    <h4 class="card-title">
+                        <i class="fas fa-user"></i>
+                        उपयोगकर्ता जानकारी / User Information
+                    </h4>
+                    <div class="row">
+                        <div class="col-md-3 text-center">
+                            <img src="img/user iamge.jpeg" alt="Profile" class="rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+                        </div>
+                        <div class="col-md-9">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>नाम / Name:</strong></td>
+                                    <td>राजेश कुमार शर्मा / Rajesh Kumar Sharma</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>वार्ड संख्या / Ward Number:</strong></td>
+                                    <td><span class="badge-custom">Ward 15</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>जोन संख्या / Zone Number:</strong></td>
+                                    <td><span class="badge-custom">Zone 3</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>पंजीकरण दिनांक / Registration Date:</strong></td>
+                                    <td>15 जनवरी 2023 / 15 January 2023</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ward Details -->
+                <div class="dashboard-card">
+                    <h4 class="card-title">
+                        <i class="fas fa-map-marker-alt"></i>
+                        वार्ड विवरण / Ward Details
+                    </h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-user-tie"></i> पार्षद / Parshad</h6>
+                            <p><strong>श्रीमती सुनीता देवी / Mrs. Sunita Devi</strong></p>
+                            <a href="#" class="whatsapp-btn">
+                                <i class="fab fa-whatsapp"></i> WhatsApp Channel
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-users"></i> वार्ड अधिकारी / Ward Officials</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-circle text-success" style="font-size: 8px;"></i> श्री अमित गुप्ता (सफाई निरीक्षक)</li>
+                                <li><i class="fas fa-circle text-success" style="font-size: 8px;"></i> श्री विकास यादव (जल निरीक्षक)</li>
+                            </ul>
+                            
+                            <h6><i class="fas fa-building"></i> जोन अधिकारी / Zone Officials</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-circle text-primary" style="font-size: 8px;"></i> श्री राम प्रसाद (जोन अधिकारी)</li>
+                                <li><i class="fas fa-circle text-primary" style="font-size: 8px;"></i> श्रीमती प्रिया सिंह (सहायक अधिकारी)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Complaint Summary -->
+                <div class="dashboard-card">
+                    <h4 class="card-title">
+                        <i class="fas fa-chart-bar"></i>
+                        शिकायत सारांश / Complaint Summary
+                    </h4>
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <div class="stat-number">12</div>
+                                <div class="stat-label">कुल शिकायतें<br>Total Complaints</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                                <div class="stat-number">8</div>
+                                <div class="stat-label">हल की गई<br>Resolved</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                                <div class="stat-number">4</div>
+                                <div class="stat-label">लंबित<br>Pending</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <canvas id="complaintChart" width="400" height="200"></canvas>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>शिकायत श्रेणी / Complaint Categories</h6>
+                            <div class="mb-2">
+                                <small>सफाई / Sanitation</small>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-success" style="width: 60%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <small>जल आपूर्ति / Water Supply</small>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-info" style="width: 30%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <small>सड़क / Roads</small>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-warning" style="width: 10%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ward Insights -->
+                <div class="dashboard-card">
+                    <h4 class="card-title">
+                        <i class="fas fa-chart-line"></i>
+                        वार्ड अंतर्दृष्टि / Ward Insights
+                    </h4>
+                    <p class="text-muted">आपके वार्ड में समस्याओं का समाधान ट्रेंड / Problem Resolution Trend in Your Ward</p>
+                    <canvas id="wardChart" width="400" height="200"></canvas>
+                </div>
+
+                <!-- User Activity Timeline -->
+                <div class="dashboard-card">
+                    <h4 class="card-title">
+                        <i class="fas fa-history"></i>
+                        गतिविधि समयरेखा / Activity Timeline
+                    </h4>
+                    <div class="timeline-item">
+                        <h6>नई शिकायत दर्ज की / New Complaint Registered</h6>
+                        <small class="text-muted">2 दिन पहले / 2 days ago</small>
+                        <p class="mb-0">सड़क पर गड्ढे की शिकायत दर्ज की गई</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h6>शिकायत अपडेट / Complaint Updated</h6>
+                        <small class="text-muted">5 दिन पहले / 5 days ago</small>
+                        <p class="mb-0">सफाई की शिकायत का समाधान हो गया</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h6>प्रोफाइल अपडेट / Profile Updated</h6>
+                        <small class="text-muted">1 सप्ताह पहले / 1 week ago</small>
+                        <p class="mb-0">संपर्क जानकारी अपडेट की गई</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-lg-4">
+                <!-- Message from Parshad -->
+                <div class="dashboard-card">
+                    <h4 class="card-title">
+                        <i class="fas fa-envelope"></i>
+                        पार्षद का संदेश / Message from Parshad
+                    </h4>
+                    <div class="parshad-message">
+                        <p>प्रिय नागरिकों, हमारे वार्ड में स्वच्छता अभियान के तहत नई पहल शुरू की गई है। कृपया अपना सहयोग दें।</p>
+                        <p><em>Dear Citizens, new initiatives have been launched under the cleanliness drive in our ward. Please extend your cooperation.</em></p>
+                        <div class="text-end mt-3">
+                            <strong>- श्रीमती सुनीता देवी<br>Mrs. Sunita Devi</strong><br>
+                            <small class="text-muted">वार्ड 15 पार्षद / Ward 15 Parshad</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Access Panel -->
+                <div class="dashboard-card">
+                    <h4 class="card-title">
+                        <i class="fas fa-tachometer-alt"></i>
+                        त्वरित पहुंच / Quick Access
+                    </h4>
+                    <div class="d-grid gap-2">
+                        <a href="#" class="quick-access-btn">
+                            <i class="fas fa-plus-circle"></i>
+                            नई शिकायत दर्ज करें<br>
+                            <small>Register New Complaint</small>
+                        </a>
+                        <a href="#" class="quick-access-btn">
+                            <i class="fas fa-download"></i>
+                            प्रमाण पत्र डाउनलोड करें<br>
+                            <small>Download Certificates</small>
+                        </a>
+                        <a href="#" class="quick-access-btn">
+                            <i class="fas fa-map"></i>
+                            अपना वार्ड जानें<br>
+                            <small>Know Your Ward</small>
+                        </a>
+                        <a href="#" class="quick-access-btn">
+                            <i class="fab fa-whatsapp"></i>
+                            WhatsApp ग्रुप जॉइन करें<br>
+                            <small>Join WhatsApp Group</small>
+                        </a>
+                        <a href="#" class="quick-access-btn">
+                            <i class="fas fa-search"></i>
+                            शिकायत ट्रैक करें<br>
+                            <small>Track Complaint</small>
+                        </a>
+                        <a href="#" class="quick-access-btn">
+                            <i class="fas fa-leaf"></i>
+                            हरित कचरा पिकअप<br>
+                            <small>Apply for Green Waste Pickup</small>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Ward Statistics -->
+                <div class="dashboard-card">
+                    <h4 class="card-title">
+                        <i class="fas fa-chart-pie"></i>
+                        वार्ड आंकड़े / Ward Statistics
+                    </h4>
+                    <div class="row text-center">
+                        <div class="col-6 mb-3">
+                            <div class="border rounded p-3">
+                                <h5 class="text-primary">1,247</h5>
+                                <small>कुल निवासी<br>Total Residents</small>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="border rounded p-3">
+                                <h5 class="text-success">89%</h5>
+                                <small>समाधान दर<br>Resolution Rate</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-3">
+                                <h5 class="text-info">156</h5>
+                                <small>इस माह शिकायतें<br>This Month</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-3">
+                                <h5 class="text-warning">3.2</h5>
+                                <small>औसत रेटिंग<br>Average Rating</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Complaint Status Chart
+        const complaintCtx = document.getElementById('complaintChart').getContext('2d');
+        const complaintChart = new Chart(complaintCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Resolved / हल की गई', 'Pending / लंबित', 'In Progress / प्रगति में'],
+                datasets: [{
+                    data: [8, 4, 0],
+                    backgroundColor: [
+                        '#16a34a',
+                        '#dc2626',
+                        '#f59e0b'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true
+                        }
+                    }
+                }
+            }
+        });
+
+        // Ward Insights Chart
+        const wardCtx = document.getElementById('wardChart').getContext('2d');
+        const wardChart = new Chart(wardCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Problems Solved / समस्याएं हल',
+                    data: [12, 19, 15, 25, 22, 30],
+                    borderColor: '#2563eb',
+                    backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'New Complaints / नई शिकायतें',
+                    data: [15, 23, 18, 28, 25, 32],
+                    borderColor: '#16a34a',
+                    backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Add some interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate stat cards on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all dashboard cards
+            document.querySelectorAll('.dashboard-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+
+            // Add click handlers for quick access buttons
+            document.querySelectorAll('.quick-access-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Add ripple effect
+                    const ripple = document.createElement('span');
+                    ripple.style.position = 'absolute';
+                    ripple.style.borderRadius = '50%';
+                    ripple.style.background = 'rgba(255,255,255,0.6)';
+                    ripple.style.transform = 'scale(0)';
+                    ripple.style.animation = 'ripple 0.6s linear';
+                    ripple.style.left = (e.clientX - e.target.offsetLeft) + 'px';
+                    ripple.style.top = (e.clientY - e.target.offsetTop) + 'px';
+                    
+                    this.style.position = 'relative';
+                    this.style.overflow = 'hidden';
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+        });
+
+        // Add CSS for ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

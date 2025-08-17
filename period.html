@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>अन्य सर्विस मॉड्यूल | Other Civic Services - Indore Nagar Nigam</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2E8B57;
+            --secondary-color: #4682B4;
+            --accent-color: #FF6B35;
+            --light-bg: #F8F9FA;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+        
+        .main-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+        
+        .service-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .service-header {
+            background: linear-gradient(135deg, var(--light-bg), #e9ecef);
+            padding: 20px;
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        .service-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 12px 15px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(46, 139, 87, 0.25);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #236B47, #3A6B94);
+        }
+        
+        .success-card {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border: 2px solid #28a745;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .file-preview {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        
+        .badge-status {
+            font-size: 0.9rem;
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+        
+        .bilingual-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-container">
+            <!-- Header Section -->
+            <div class="header-section">
+                <div class="logo">
+                    <i class="fas fa-city"></i>
+                </div>
+                <h1 class="mb-3">🛠️ अन्य सर्विस मॉड्यूल | Other Civic Services</h1>
+                <p class="mb-0 fs-5">Apply for essential civic tasks beyond daily complaints – e-challan payment, boring permissions, parking, restoration and more through one smart portal.</p>
+            </div>
+            
+            <!-- Services Section -->
+            <div class="p-4">
+                <div class="accordion" id="servicesAccordion">
+                    
+                    <!-- Service 1: Traffic E-Challan -->
+                    <div class="service-card">
+                        <div class="service-header d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#service1" style="cursor: pointer;">
+                            <div class="service-icon">🚗</div>
+                            <div>
+                                <h5 class="mb-1">Pay Traffic E-Challan</h5>
+                                <small class="text-muted">ट्रैफ़िक ई-चालान का भुगतान करें</small>
+                            </div>
+                            <i class="fas fa-chevron-down ms-auto"></i>
+                        </div>
+                        <div id="service1" class="collapse" data-bs-parent="#servicesAccordion">
+                            <div class="card-body p-4">
+                                <form id="challanForm">
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Vehicle Number | वाहन नंबर</label>
+                                        <input type="text" class="form-control" id="vehicleNumber" placeholder="MP 09 AB 1234" required>
+                                        <small class="text-muted">Enter complete vehicle registration number | पूरा वाहन पंजीकरण नंबर दर्ज करें</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Vehicle Type | वाहन का प्रकार</label>
+                                        <select class="form-select" id="vehicleType" required>
+                                            <option value="">Select Vehicle Type | वाहन प्रकार चुनें</option>
+                                            <option value="two-wheeler">Two Wheeler | दोपहिया</option>
+                                            <option value="car">Car | कार</option>
+                                            <option value="auto">Auto Rickshaw | ऑटो रिक्शा</option>
+                                            <option value="truck">Truck | ट्रक</option>
+                                            <option value="bus">Bus | बस</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Owner's Mobile Number | मालिक का मोबाइल नंबर</label>
+                                        <input type="tel" class="form-control" id="ownerMobile" placeholder="9876543210" required>
+                                        <small class="text-muted">For SMS notifications | SMS सूचना के लिए</small>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-search me-2"></i>Fetch Challan Details | चालान विवरण प्राप्त करें
+                                    </button>
+                                </form>
+                                <div id="challanResult" class="d-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Service 2: Restoration Work Complaint -->
+                    <div class="service-card">
+                        <div class="service-header d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#service2" style="cursor: pointer;">
+                            <div class="service-icon">🔧</div>
+                            <div>
+                                <h5 class="mb-1">Restoration Work Complaint</h5>
+                                <small class="text-muted">पुनर्स्थापन कार्य से संबंधित शिकायत</small>
+                            </div>
+                            <i class="fas fa-chevron-down ms-auto"></i>
+                        </div>
+                        <div id="service2" class="collapse" data-bs-parent="#servicesAccordion">
+                            <div class="card-body p-4">
+                                <form id="restorationForm">
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Complainant Name | शिकायतकर्ता का नाम</label>
+                                        <input type="text" class="form-control" placeholder="Enter your full name | अपना पूरा नाम दर्ज करें" required>
+                                        <small class="text-muted">As per government ID | सरकारी पहचान के अनुसार</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Mobile Number | मोबाइल नंबर</label>
+                                        <input type="tel" class="form-control" placeholder="9876543210" required>
+                                        <small class="text-muted">For updates and follow-up | अपडेट और फॉलो-अप के लिए</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Area/Location | क्षेत्र/स्थान</label>
+                                        <input type="text" class="form-control" placeholder="Enter specific area/landmark | विशिष्ट क्षेत्र/लैंडमार्क दर्ज करें" required>
+                                        <small class="text-muted">Include nearby landmarks for easy identification | आसान पहचान के लिए नजदीकी लैंडमार्क शामिल करें</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Ward Number | वार्ड नंबर</label>
+                                        <select class="form-select" required>
+                                            <option value="">Select Ward | वार्ड चुनें</option>
+                                            <option value="1">Ward 1 - Rajwada Area</option>
+                                            <option value="2">Ward 2 - Sarafa Bazaar</option>
+                                            <option value="3">Ward 3 - Palasia Square</option>
+                                            <option value="4">Ward 4 - Vijay Nagar</option>
+                                            <option value="5">Ward 5 - Bhawarkua</option>
+                                            <option value="other">Other | अन्य</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Type of Work Pending | लंबित कार्य का प्रकार</label>
+                                        <select class="form-select" required>
+                                            <option value="">Select | चुनें</option>
+                                            <option value="road">Road Patch Work | सड़क पैच कार्य</option>
+                                            <option value="footpath">Footpath Tiles Restoration | फुटपाथ टाइल्स बहाली</option>
+                                            <option value="waterline">Water Line Restoration | जल लाइन बहाली</option>
+                                            <option value="drainage">Drainage System | जल निकासी प्रणाली</option>
+                                            <option value="electricity">Electricity Line Work | बिजली लाइन कार्य</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Problem Description | समस्या का विवरण</label>
+                                        <textarea class="form-control" rows="4" placeholder="Describe the restoration issue in detail | बहाली की समस्या का विस्तार से वर्णन करें" required></textarea>
+                                        <small class="text-muted">Include when the work was done and what needs restoration | कार्य कब किया गया था और क्या बहाली की आवश्यकता है</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Urgency Level | तात्कालिकता का स्तर</label>
+                                        <select class="form-select" required>
+                                            <option value="">Select Priority | प्राथमिकता चुनें</option>
+                                            <option value="high">High - Safety Risk | उच्च - सुरक्षा जोखिम</option>
+                                            <option value="medium">Medium - Public Inconvenience | मध्यम - सार्वजनिक असुविधा</option>
+                                            <option value="low">Low - Minor Issue | कम - मामूली समस्या</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Upload Photos | फोटो अपलोड करें</label>
+                                        <input type="file" class="form-control" accept="image/*" multiple onchange="previewFile(this, 'restorationPreview')">
+                                        <small class="text-muted">Upload multiple photos showing the problem area | समस्या क्षेत्र दिखाने वाली कई तस्वीरें अपलोड करें</small>
+                                        <div id="restorationPreview"></div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Previous Complaint Reference (if any) | पिछली शिकायत संदर्भ (यदि कोई हो)</label>
+                                        <input type="text" class="form-control" placeholder="Enter previous complaint ID | पिछली शिकायत ID दर्ज करें">
+                                        <small class="text-muted">If you have complained about this issue before | यदि आपने इस मुद्दे के बारे में पहले शिकायत की है</small>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-paper-plane me-2"></i>Submit Complaint | शिकायत दर्ज करें
+                                    </button>
+                                </form>
+                                <div id="restorationResult" class="d-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Service 3: Parking Complaint -->
+                    <div class="service-card">
+                        <div class="service-header d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#service3" style="cursor: pointer;">
+                            <div class="service-icon">🅿️</div>
+                            <div>
+                                <h5 class="mb-1">Parking Complaint / Request</h5>
+                                <small class="text-muted">पार्किंग सुविधा की शिकायत/अनुरोध</small>
+                            </div>
+                            <i class="fas fa-chevron-down ms-auto"></i>
+                        </div>
+                        <div id="service3" class="collapse" data-bs-parent="#servicesAccordion">
+                            <div class="card-body p-4">
+                                <form id="parkingForm">
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Complainant Name | शिकायतकर्ता का नाम</label>
+                                        <input type="text" class="form-control" placeholder="Enter your full name | अपना पूरा नाम दर्ज करें" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Contact Number | संपर्क नंबर</label>
+                                        <input type="tel" class="form-control" placeholder="9876543210" required>
+                                        <small class="text-muted">For follow-up communication | फॉलो-अप संपर्क के लिए</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Email Address | ईमेल पता</label>
+                                        <input type="email" class="form-control" placeholder="example@email.com">
+                                        <small class="text-muted">Optional - for email updates | वैकल्पिक - ईमेल अपडेट के लिए</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Exact Location | सटीक स्थान</label>
+                                        <input type="text" class="form-control" placeholder="Enter specific location with landmarks | लैंडमार्क के साथ विशिष्ट स्थान दर्ज करें" required>
+                                        <small class="text-muted">Include street name, nearby shops/buildings | सड़क का नाम, नजदीकी दुकानें/इमारतें शामिल करें</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Issue Type | समस्या का प्रकार</label>
+                                        <select class="form-select" required>
+                                            <option value="">Select Issue Type | समस्या का प्रकार चुनें</option>
+                                            <option value="illegal">Illegal Parking | अवैध पार्किंग</option>
+                                            <option value="space">Need More Parking Space | अधिक पार्किंग स्थान चाहिए</option>
+                                            <option value="blocking">Blocking Road/Access | सड़क/रास्ता अवरुद्ध</option>
+                                            <option value="unauthorized">Unauthorized Parking Zone | अनधिकृत पार्किंग क्षेत्र</option>
+                                            <option value="damaged">Damaged Parking Area | क्षतिग्रस्त पार्किंग क्षेत्र</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Time of Issue | समस्या का समय</label>
+                                        <select class="form-select" required>
+                                            <option value="">Select Time | समय चुनें</option>
+                                            <option value="morning">Morning (6 AM - 12 PM) | सुबह (6 बजे - 12 बजे)</option>
+                                            <option value="afternoon">Afternoon (12 PM - 6 PM) | दोपहर (12 बजे - 6 बजे)</option>
+                                            <option value="evening">Evening (6 PM - 10 PM) | शाम (6 बजे - 10 बजे)</option>
+                                            <option value="night">Night (10 PM - 6 AM) | रात (10 बजे - 6 बजे)</option>
+                                            <option value="always">All Day | पूरे दिन</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Zone/Ward | जोन/वार्ड</label>
+                                        <select class="form-select" required>
+                                            <option value="">Select Zone/Ward | जोन/वार्ड चुनें</option>
+                                            <option value="zone1">Zone 1 - Rajwada, Sarafa</option>
+                                            <option value="zone2">Zone 2 - Vijay Nagar, Scheme 54</option>
+                                            <option value="zone3">Zone 3 - Palasia, AB Road</option>
+                                            <option value="zone4">Zone 4 - Bhawarkua, Ring Road</option>
+                                            <option value="zone5">Zone 5 - Indore GPO, Collectorate</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Vehicle Type Involved | शामिल वाहन का प्रकार</label>
+                                        <select class="form-select">
+                                            <option value="">Select if applicable | यदि लागू हो तो चुनें</option>
+                                            <option value="two-wheeler">Two Wheeler | दोपहिया</option>
+                                            <option value="car">Car | कार</option>
+                                            <option value="auto">Auto Rickshaw | ऑटो रिक्शा</option>
+                                            <option value="truck">Truck/Tempo | ट्रक/टेम्पो</option>
+                                            <option value="bus">Bus | बस</option>
+                                            <option value="multiple">Multiple Vehicles | कई वाहन</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Problem Description | समस्या का विवरण</label>
+                                        <textarea class="form-control" rows="4" placeholder="Describe the parking issue in detail | पार्किंग समस्या का विस्तार से वर्णन करें" required></textarea>
+                                        <small class="text-muted">Include how it affects you and others | यह आपको और दूसरों को कैसे प्रभावित करता है</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Upload Images | छवियां अपलोड करें</label>
+                                        <input type="file" class="form-control" accept="image/*" multiple onchange="previewFile(this, 'parkingPreview')">
+                                        <small class="text-muted">Upload photos showing the parking issue | पार्किंग समस्या दिखाने वाली तस्वीरें अपलोड करें</small>
+                                        <div id="parkingPreview"></div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Suggested Solution | सुझाया गया समाधान</label>
+                                        <textarea class="form-control" rows="2" placeholder="Your suggestion to solve this issue | इस समस्या को हल करने के लिए आपका सुझाव"></textarea>
+                                        <small class="text-muted">Optional - your ideas for improvement | वैकल्पिक - सुधार के लिए आपके विचार</small>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-paper-plane me-2"></i>Submit Request | अनुरोध दर्ज करें
+                                    </button>
+                                </form>
+                                <div id="parkingResult" class="d-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Service 4: New Boring Request -->
+                    <div class="service-card">
+                        <div class="service-header d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#service4" style="cursor: pointer;">
+                            <div class="service-icon">💧</div>
+                            <div>
+                                <h5 class="mb-1">Request for New Boring</h5>
+                                <small class="text-muted">बोरिंग करवाने हेतु आवेदन</small>
+                            </div>
+                            <i class="fas fa-chevron-down ms-auto"></i>
+                        </div>
+                        <div id="service4" class="collapse" data-bs-parent="#servicesAccordion">
+                            <div class="card-body p-4">
+                                <form id="boringForm">
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Applicant Name | आवेदक का नाम</label>
+                                        <input type="text" class="form-control" placeholder="Enter full name as per Aadhaar | आधार के अनुसार पूरा नाम दर्ज करें" required>
+                                        <small class="text-muted">Name should match with Aadhaar card | नाम आधार कार्ड से मेल खाना चाहिए</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Father's/Husband's Name | पिता/पति का नाम</label>
+                                        <input type="text" class="form-control" placeholder="Enter father's or husband's name | पिता या पति का नाम दर्ज करें" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Mobile Number | मोबाइल नंबर</label>
+                                        <input type="tel" class="form-control" placeholder="9876543210" required>
+                                        <small class="text-muted">For application status updates | आवेदन स्थिति अपडेट के लिए</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Email Address | ईमेल पता</label>
+                                        <input type="email" class="form-control" placeholder="example@email.com">
+                                        <small class="text-muted">Optional - for email notifications | वैकल्पिक - ईमेल सूचना के लिए</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Complete Address | पूरा पता</label>
+                                        <textarea class="form-control" rows="3" placeholder="House No., Street, Area, City, PIN Code | मकान नं., गली, क्षेत्र, शहर, पिन कोड" required></textarea>
+                                        <small class="text-muted">Address where boring is required | जहां बोरिंग की आवश्यकता है वहां का पता</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Ward Number | वार्ड नंबर</label>
+                                        <select class="form-select" required>
+                                            <option value="">Select Ward | वार्ड चुनें</option>
+                                            <option value="1">Ward 1 - Rajwada Area</option>
+                                            <option value="2">Ward 2 - Sarafa Bazaar</option>
+                                            <option value="3">Ward 3 - Palasia Square</option>
+                                            <option value="4">Ward 4 - Vijay Nagar</option>
+                                            <option value="5">Ward 5 - Bhawarkua</option>
+                                            <option value="other">Other Ward | अन्य वार्ड</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Purpose | उद्देश्य</label>
+                                        <select class="form-select" required>
+                                            <option value="">Select Purpose | उद्देश्य चुनें</option>
+                                            <option value="household">Household Use | घरेलू उपयोग</option>
+                                            <option value="public">Public Facility | सार्वजनिक सुविधा</option>
+                                            <option value="commercial">Commercial Use | व्यावसायिक उपयोग</option>
+                                            <option value="industrial">Industrial Use | औद्योगिक उपयोग</option>
+                                            <option value="agricultural">Agricultural Use | कृषि उपयोग</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Property Type | संपत्ति का प्रकार</label>
+                                        <select class="form-select" required>
+                                            <option value="">Select Property Type | संपत्ति प्रकार चुनें</option>
+                                            <option value="residential">Residential | आवासीय</option>
+                                            <option value="commercial">Commercial | व्यावसायिक</option>
+                                            <option value="institutional">Institutional | संस्थागत</option>
+                                            <option value="industrial">Industrial | औद्योगिक</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Estimated Water Requirement (Liters/Day) | अनुमानित जल आवश्यकता (लीटर/दिन)</label>
+                                        <input type="number" class="form-control" placeholder="Enter daily water requirement | दैनिक जल आवश्यकता दर्ज करें" required>
+                                        <small class="text-muted">Average daily consumption expected | अपेक्षित औसत दैनिक खपत</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Number of Family Members | परिवार के सदस्यों की संख्या</label>
+                                        <input type="number" class="form-control" placeholder="Enter number of members | सदस्यों की संख्या दर्ज करें">
+                                        <small class="text-muted">For household applications only | केवल घरेलू आवेदन के लिए</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Preferred Boring Depth | पसंदीदा बोरिंग गहराई</label>
+                                        <select class="form-select" required>
+                                            <option value="">Select Depth | गहराई चुनें</option>
+                                            <option value="shallow">Shallow (Up to 50 feet) | उथला (50 फीट तक)</option>
+                                            <option value="medium">Medium (50-100 feet) | मध्यम (50-100 फीट)</option>
+                                            <option value="deep">Deep (100+ feet) | गहरा (100+ फीट)</option>
+                                            <option value="expert">Let Expert Decide | विशेषज्ञ तय करें</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Existing Water Source | मौजूदा जल स्रोत</label>
+                                        <select class="form-select">
+                                            <option value="">Select if any | यदि कोई हो तो चुनें</option>
+                                            <option value="municipal">Municipal Water Supply | नगरपालिका जल आपूर्ति</option>
+                                            <option value="borewell">Existing Borewell | मौजूदा बोरवेल</option>
+                                            <option value="well">Traditional Well | पारंपरिक कुआं</option>
+                                            <option value="none">No Water Source | कोई जल स्रोत नहीं</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Reason for New Boring | नई बोरिंग का कारण</label>
+                                        <textarea class="form-control" rows="3" placeholder="Explain why new boring is needed | नई बोरिंग की आवश्यकता क्यों है, समझाएं" required></textarea>
+                                        <small class="text-muted">Provide detailed justification | विस्तृत औचित्य प्रदान करें</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Upload Aadhaar Card | आधार कार्ड अपलोड करें</label>
+                                        <input type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" onchange="previewFile(this, 'aadhaarPreview')" required>
+                                        <small class="text-muted">Clear copy of Aadhaar card (front & back) | आधार कार्ड की स्पष्ट प्रति (आगे और पीछे)</small>
+                                        <div id="aadhaarPreview"></div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Property Documents | संपत्ति दस्तावेज</label>
+                                        <input type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" onchange="previewFile(this, 'propertyPreview')" required>
+                                        <small class="text-muted">Property ownership proof (Registry/Lease deed) | संपत्ति स्वामित्व प्रमाण (रजिस्ट्री/लीज डीड)</small>
+                                        <div id="propertyPreview"></div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Site Layout/Map | साइट लेआउट/मानचित्र</label>
+                                        <input type="file" class="form-control" accept="image/*,.pdf" onchange="previewFile(this, 'siteMapPreview')">
+                                        <small class="text-muted">Optional - Site plan showing boring location | वैकल्पिक - बोरिंग स्थान दिखाने वाला साइट प्लान</small>
+                                        <div id="siteMapPreview"></div>
+                                    </div>
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        <strong>Note:</strong> Application fee of ₹500 will be collected during site inspection. | 
+                                        <strong>नोट:</strong> साइट निरीक्षण के दौरान ₹500 का आवेदन शुल्क लिया जाएगा।
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-paper-plane me-2"></i>Submit Application | आवेदन दर्ज करें
+                                    </button>
+                                </form>
+                                <div id="boringResult" class="d-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Service 5: Boring Machine Registration -->
+                    <div class="service-card">
+                        <div class="service-header d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#service5" style="cursor: pointer;">
+                            <div class="service-icon">🏗️</div>
+                            <div>
+                                <h5 class="mb-1">Boring Machine Registration</h5>
+                                <small class="text-muted">बोरिंग ड्रिलिंग मशीन पंजीकरण</small>
+                            </div>
+                            <i class="fas fa-chevron-down ms-auto"></i>
+                        </div>
+                        <div id="service5" class="collapse" data-bs-parent="#servicesAccordion">
+                            <div class="card-body p-4">
+                                <form id="machineForm">
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Owner Name | मालिक का नाम</label>
+                                        <input type="text" class="form-control" placeholder="Enter owner name | मालिक का नाम दर्ज करें" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Machine Type | मशीन का प्रकार</label>
+                                        <select class="form-select" required>
+                                            <option value="">Select | चुनें</option>
+                                            <option value="hydraulic">Hydraulic Drilling | हाइड्रोलिक ड्रिलिंग</option>
+                                            <option value="rotary">Rotary Drilling | रोटरी ड्रिलिंग</option>
+                                            <option value="percussion">Percussion Drilling | पर्कशन ड्रिलिंग</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Owner's Aadhaar | मालिक का आधार</label>
+                                        <input type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" onchange="previewFile(this, 'ownerAadhaarPreview')">
+                                        <div id="ownerAadhaarPreview"></div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Machine Photos | मशीन की फोटो</label>
+                                        <input type="file" class="form-control" accept="image/*" multiple onchange="previewFile(this, 'machinePhotosPreview')">
+                                        <div id="machinePhotosPreview"></div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Pollution Certificate | प्रदूषण प्रमाणपत्र</label>
+                                        <input type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" onchange="previewFile(this, 'pollutionCertPreview')">
+                                        <div id="pollutionCertPreview"></div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-registered me-2"></i>Register Machine | मशीन पंजीकृत करें
+                                    </button>
+                                </form>
+                                <div id="machineResult" class="d-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Service 6: Noise Pollution Complaint -->
+                    <div class="service-card">
+                        <div class="service-header d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#service6" style="cursor: pointer;">
+                            <div class="service-icon">📢</div>
+                            <div>
+                                <h5 class="mb-1">Noise Pollution Complaint</h5>
+                                <small class="text-muted">ध्वनि प्रदूषण की शिकायत</small>
+                            </div>
+                            <i class="fas fa-chevron-down ms-auto"></i>
+                        </div>
+                        <div id="service6" class="collapse" data-bs-parent="#servicesAccordion">
+                            <div class="card-body p-4">
+                                <form id="noiseForm">
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Area of Noise | शोर का क्षेत्र</label>
+                                        <input type="text" class="form-control" placeholder="Enter area | क्षेत्र दर्ज करें" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Source | स्रोत</label>
+                                        <select class="form-select" required>
+                                            <option value="">Select | चुनें</option>
+                                            <option value="marriage">Marriage/Function | विवाह/समारोह</option>
+                                            <option value="dj">DJ/Music System | डीजे/संगीत प्रणाली</option>
+                                            <option value="vehicle">Vehicle | वाहन</option>
+                                            <option value="construction">Construction | निर्माण</option>
+                                            <option value="other">Other | अन्य</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Time of Noise | शोर का समय</label>
+                                        <input type="datetime-local" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Upload Audio Clip (Optional) | ऑडियो क्लिप अपलोड करें (वैकल्पिक)</label>
+                                        <input type="file" class="form-control" accept="audio/*" onchange="previewFile(this, 'audioPreview')">
+                                        <div id="audioPreview"></div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-paper-plane me-2"></i>Submit Complaint | शिकायत दर्ज करें
+                                    </button>
+                                </form>
+                                <div id="noiseResult" class="d-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Service 7: C&D Waste Management -->
+                    <div class="service-card">
+                        <div class="service-header d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#service7" style="cursor: pointer;">
+                            <div class="service-icon">🏗️</div>
+                            <div>
+                                <h5 class="mb-1">C&D Waste Management</h5>
+                                <small class="text-muted">C&D मटेरियल निस्तारण हेतु आवेदन</small>
+                            </div>
+                            <i class="fas fa-chevron-down ms-auto"></i>
+                        </div>
+                        <div id="service7" class="collapse" data-bs-parent="#servicesAccordion">
+                            <div class="card-body p-4">
+                                <form id="wasteForm">
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Construction Type | निर्माण का प्रकार</label>
+                                        <select class="form-select" required>
+                                            <option value="">Select | चुनें</option>
+                                            <option value="small">Small Scale (Home) | छोटे पैमाने पर (घर)</option>
+                                            <option value="large">Large Building | बड़ी इमारत</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Estimated Waste (in tons) | अनुमानित कचरा (टन में)</label>
+                                        <input type="number" class="form-control" placeholder="Enter estimated waste | अनुमानित कचरा दर्ज करें" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Requested Pickup Date | पिकअप की अनुरोधित तारीख</label>
+                                        <input type="date" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Pickup Address | पिकअप का पता</label>
+                                        <textarea class="form-control" rows="3" placeholder="Enter complete pickup address | पूरा पिकअप पता दर्ज करें" required></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="bilingual-label">Upload Site Image | साइट की छवि अपलोड करें</label>
+                                        <input type="file" class="form-control" accept="image/*" onchange="previewFile(this, 'siteImagePreview')">
+                                        <div id="siteImagePreview"></div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-paper-plane me-2"></i>Submit Application | आवेदन दर्ज करें
+                                    </button>
+                                </form>
+                                <div id="wasteResult" class="d-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // File preview function
+        function previewFile(input, previewId) {
+            const preview = document.getElementById(previewId);
+            preview.innerHTML = '';
+            
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const fileName = file.name;
+                const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                
+                const fileInfo = document.createElement('div');
+                fileInfo.className = 'alert alert-info mt-2';
+                fileInfo.innerHTML = `
+                    <i class="fas fa-file me-2"></i>
+                    <strong>File:</strong> ${fileName} (${fileSize} MB)
+                `;
+                
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'file-preview';
+                        preview.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                }
+                
+                preview.appendChild(fileInfo);
+            }
+        }
+        
+        // Generate random ID
+        function generateId() {
+            return 'INN' + Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+        }
+        
+        // Traffic E-Challan Form
+        document.getElementById('challanForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const vehicleNumber = document.getElementById('vehicleNumber').value;
+            const vehicleType = document.getElementById('vehicleType').value;
+            const ownerMobile = document.getElementById('ownerMobile').value;
+            
+            // Simulate API call
+            setTimeout(() => {
+                const challanData = {
+                    amount: Math.floor(Math.random() * 2000) + 500,
+                    violation: ['Over Speeding', 'No Helmet', 'Signal Jump', 'Wrong Parking', 'No Seat Belt', 'Mobile Usage'][Math.floor(Math.random() * 6)],
+                    date: '2024-01-15',
+                    location: 'MG Road, Indore',
+                    officerName: 'Traffic Inspector Sharma',
+                    challanNo: 'IND' + Math.floor(Math.random() * 100000)
+                };
+                
+                document.getElementById('challanResult').innerHTML = `
+                    <div class="success-card">
+                        <h6><i class="fas fa-receipt me-2"></i>Challan Details Found | चालान विवरण मिला</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Vehicle Number:</strong> ${vehicleNumber}</p>
+                                <p><strong>Vehicle Type:</strong> ${vehicleType}</p>
+                                <p><strong>Amount:</strong> ₹${challanData.amount}</p>
+                                <p><strong>Challan No:</strong> ${challanData.challanNo}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Violation:</strong> ${challanData.violation}</p>
+                                <p><strong>Date:</strong> ${challanData.date}</p>
+                                <p><strong>Location:</strong> ${challanData.location}</p>
+                                <p><strong>Officer:</strong> ${challanData.officerName}</p>
+                            </div>
+                        </div>
+                        <div class="alert alert-warning mt-3">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Note:</strong> Pay within 15 days to avoid additional penalty | 
+                            अतिरिक्त जुर्माने से बचने के लिए 15 दिनों के भीतर भुगतान करें
+                        </div>
+                        <button class="btn btn-success" onclick="payChallan('${vehicleNumber}', ${challanData.amount}, '${ownerMobile}')">
+                            <i class="fas fa-credit-card me-2"></i>Pay Now | अभी भुगतान करें
+                        </button>
+                    </div>
+                `;
+                document.getElementById('challanResult').classList.remove('d-none');
+            }, 1500);
+        });
+        
+        function payChallan(vehicle, amount, mobile) {
+            document.getElementById('challanResult').innerHTML = `
+                <div class="success-card">
+                    <div class="text-center">
+                        <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
+                        <h5 class="mt-3">Payment Successful! | भुगतान सफल!</h5>
+                        <p class="text-success">आपका चालान सफलतापूर्वक भुगतान हो गया है।</p>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <p><strong>Transaction ID:</strong> ${generateId()}</p>
+                                <p><strong>Amount Paid:</strong> ₹${amount}</p>
+                                <p><strong>Vehicle:</strong> ${vehicle}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Payment Date:</strong> ${new Date().toLocaleDateString()}</p>
+                                <p><strong>SMS sent to:</strong> ${mobile}</p>
+                                <p><strong>Status:</strong> <span class="badge bg-success">Paid</span></p>
+                            </div>
+                        </div>
+                        <div class="alert alert-info mt-3">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Receipt has been sent to your mobile number. Drive safely! | 
+                            रसीद आपके मोबाइल नंबर पर भेज दी गई है। सुरक्षित ड्राइविंग करें!
+                        </div>
+                        <div class="mt-3">
+                            <a href="#" class="btn btn-outline-primary btn-sm me-2">
+                                <i class="fas fa-download me-1"></i>Download Receipt
+                            </a>
+                            <a href="#" class="btn btn-outline-info btn-sm">
+                                <i class="fas fa-external-link-alt me-1"></i>Traffic Mitra Initiative
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Restoration Work Complaint Form
+        document.getElementById('restorationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const trackId = generateId();
+            
+            document.getElementById('restorationResult').innerHTML = `
+                <div class="success-card">
+                    <div class="text-center">
+                        <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
+                        <h5 class="mt-3">Complaint Registered! | शिकायत दर्ज!</h5>
+                        <p>Your restoration work complaint has been successfully submitted.</p>
+                        <p>आपकी पुनर्स्थापन कार्य शिकायत सफलतापूर्वक दर्ज की गई है।</p>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <p><strong>Track ID:</strong> ${trackId}</p>
+                                <span class="badge badge-status bg-warning">Pending | लंबित</span>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Expected Resolution:</strong> 7-10 days</p>
+                                <p><strong>Department:</strong> PWD</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('restorationResult').classList.remove('d-none');
+        });
+        
+        // Parking Complaint Form
+        document.getElementById('parkingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const trackId = generateId();
+            
+            document.getElementById('parkingResult').innerHTML = `
+                <div class="success-card">
+                    <div class="text-center">
+                        <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
+                        <h5 class="mt-3">Request Submitted! | अनुरोध दर्ज!</h5>
+                        <p>Your parking complaint/request has been forwarded to the Traffic Department.</p>
+                        <p>आपकी पार्किंग शिकायत/अनुरोध ट्रैफिक विभाग को भेज दी गई है।</p>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <p><strong>Track ID:</strong> ${trackId}</p>
+                                <span class="badge badge-status bg-info">Submitted | दर्ज</span>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Response Time:</strong> 3-5 days</p>
+                                <p><strong>Department:</strong> Traffic Police</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('parkingResult').classList.remove('d-none');
+        });
+        
+        // New Boring Request Form
+        document.getElementById('boringForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const applicationId = generateId();
+            
+            document.getElementById('boringResult').innerHTML = `
+                <div class="success-card">
+                    <div class="text-center">
+                        <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
+                        <h5 class="mt-3">Application Submitted! | आवेदन दर्ज!</h5>
+                        <p>Your boring application has been successfully submitted for review.</p>
+                        <p>आपका बोरिंग आवेदन समीक्षा के लिए सफलतापूर्वक दर्ज किया गया है।</p>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <p><strong>Application ID:</strong> ${applicationId}</p>
+                                <span class="badge badge-status bg-primary">Under Review | समीक्षाधीन</span>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Processing Time:</strong> 15-20 days</p>
+                                <p><strong>Department:</strong> Water Supply</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('boringResult').classList.remove('d-none');
+        });
+        
+        // Boring Machine Registration Form
+        document.getElementById('machineForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const registrationId = generateId();
+            
+            document.getElementById('machineResult').innerHTML = `
+                <div class="success-card">
+                    <div class="text-center">
+                        <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
+                        <h5 class="mt-3">Registration Submitted! | पंजीकरण दर्ज!</h5>
+                        <p>Your boring machine registration has been submitted for verification.</p>
+                        <p>आपका बोरिंग मशीन पंजीकरण सत्यापन के लिए दर्ज किया गया है।</p>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <p><strong>Registration ID:</strong> ${registrationId}</p>
+                                <span class="badge badge-status bg-warning">Verification Pending | सत्यापन लंबित</span>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Verification Time:</strong> 10-15 days</p>
+                                <p><strong>Department:</strong> Licensing Authority</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('machineResult').classList.remove('d-none');
+        });
+        
+        // Noise Pollution Complaint Form
+        document.getElementById('noiseForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const complaintId = generateId();
+            
+            document.getElementById('noiseResult').innerHTML = `
+                <div class="success-card">
+                    <div class="text-center">
+                        <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
+                        <h5 class="mt-3">Complaint Forwarded! | शिकायत भेजी गई!</h5>
+                        <p>Your noise pollution complaint has been forwarded to Pollution Control Department.</p>
+                        <p>आपकी ध्वनि प्रदूषण शिकायत प्रदूषण नियंत्रण विभाग को भेज दी गई है।</p>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <p><strong>Complaint ID:</strong> ${complaintId}</p>
+                                <span class="badge badge-status bg-danger">Urgent | तत्काल</span>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Response Time:</strong> 24-48 hours</p>
+                                <p><strong>Department:</strong> Pollution Control Board</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('noiseResult').classList.remove('d-none');
+        });
+        
+        // C&D Waste Management Form
+        document.getElementById('wasteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const applicationId = generateId();
+            const wasteAmount = e.target.querySelector('input[type="number"]').value;
+            const estimatedCost = wasteAmount * 150; // ₹150 per ton
+            
+            document.getElementById('wasteResult').innerHTML = `
+                <div class="success-card">
+                    <div class="text-center">
+                        <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
+                        <h5 class="mt-3">Application Submitted! | आवेदन दर्ज!</h5>
+                        <p>Your C&D waste management application has been submitted.</p>
+                        <p>आपका C&D अपशिष्ट प्रबंधन आवेदन दर्ज किया गया है।</p>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <p><strong>Application ID:</strong> ${applicationId}</p>
+                                <p><strong>Waste Amount:</strong> ${wasteAmount} tons</p>
+                                <span class="badge badge-status bg-info">Processing | प्रसंस्करण</span>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Estimated Cost:</strong> ₹${estimatedCost}</p>
+                                <p><strong>Pickup Schedule:</strong> Will be confirmed</p>
+                            </div>
+                        </div>
+                        <div class="alert alert-info mt-3">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Note:</strong> Final cost estimation will be provided after site inspection.
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('wasteResult').classList.remove('d-none');
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97071955978617ac',t:'MTc1NTQxMTk3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

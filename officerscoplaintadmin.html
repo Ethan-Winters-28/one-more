@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nigam Setu - Officer Accountability Portal | Indore Smart City</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #0f172a;
+            --cyan: #00ffc6;
+            --green: #00ff94;
+            --teal: #00d1ff;
+            --yellow: #ffcc00;
+            --glass-bg: rgba(15, 23, 42, 0.7);
+            --glass-border: rgba(0, 255, 198, 0.2);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            background-attachment: fixed;
+            color: #e2e8f0;
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0, 255, 198, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 209, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(0, 255, 148, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        /* Enhanced Header */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px;
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 198, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--cyan), var(--teal), var(--green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            text-shadow: 0 0 30px rgba(0, 255, 198, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            color: #94a3b8;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Premium KPI Cards */
+        .kpi-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .kpi-card {
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--cyan), var(--teal));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 
+                0 30px 60px rgba(0, 255, 198, 0.2),
+                0 0 50px rgba(0, 255, 198, 0.1);
+            border-color: var(--cyan);
+        }
+
+        .kpi-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .kpi-card.warning {
+            border-color: rgba(255, 204, 0, 0.3);
+        }
+
+        .kpi-card.warning:hover {
+            border-color: var(--yellow);
+            box-shadow: 
+                0 30px 60px rgba(255, 204, 0, 0.2),
+                0 0 50px rgba(255, 204, 0, 0.1);
+        }
+
+        .kpi-card.success {
+            border-color: rgba(0, 255, 148, 0.3);
+        }
+
+        .kpi-card.success:hover {
+            border-color: var(--green);
+            box-shadow: 
+                0 30px 60px rgba(0, 255, 148, 0.2),
+                0 0 50px rgba(0, 255, 148, 0.1);
+        }
+
+        .kpi-number {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px currentColor;
+        }
+
+        .kpi-card .kpi-number { color: var(--cyan); }
+        .kpi-card.warning .kpi-number { color: var(--yellow); }
+        .kpi-card.success .kpi-number { color: var(--green); }
+
+        .kpi-label {
+            font-size: 1.3rem;
+            color: #cbd5e1;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .kpi-sublabel {
+            font-size: 1rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Enhanced Department Filter */
+        .filter-section {
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 50px;
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .filter-label {
+            font-weight: 700;
+            color: var(--cyan);
+            font-size: 1.2rem;
+            text-shadow: 0 0 10px var(--cyan);
+        }
+
+        select {
+            background: rgba(15, 23, 42, 0.9);
+            border: 2px solid rgba(0, 255, 198, 0.3);
+            border-radius: 12px;
+            padding: 15px 20px;
+            color: #e2e8f0;
+            font-size: 1.1rem;
+            min-width: 300px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-weight: 500;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--cyan);
+            box-shadow: 0 0 30px rgba(0, 255, 198, 0.3);
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border: 2px solid #ef4444;
+            border-radius: 12px;
+            padding: 15px 30px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(239, 68, 68, 0.4);
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+        }
+
+        .department-data {
+            display: none;
+            margin-top: 30px;
+            padding: 30px;
+            background: rgba(0, 255, 198, 0.05);
+            border: 1px solid rgba(0, 255, 198, 0.2);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .department-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 255, 198, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 255, 198, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--cyan);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        /* Premium Podium */
+        .podium-section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--cyan), var(--green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 40px;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(0, 255, 198, 0.3);
+        }
+
+        .podium-container {
+            display: flex;
+            justify-content: center;
+            align-items: end;
+            gap: 30px;
+            margin: 50px 0;
+            perspective: 1000px;
+        }
+
+        .podium-place {
+            background: var(--glass-bg);
+            border-radius: 20px 20px 0 0;
+            padding: 30px 25px;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 220px;
+            position: relative;
+            overflow: hidden;
+            animation: podiumRise 1s ease-out forwards;
+            transform: translateY(100px);
+            opacity: 0;
+        }
+
+        @keyframes podiumRise {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .podium-place.first {
+            height: 300px;
+            border: 3px solid var(--yellow);
+            box-shadow: 
+                0 0 50px rgba(255, 204, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            animation-delay: 0.2s;
+        }
+
+        .podium-place.second {
+            height: 250px;
+            border: 3px solid #94a3b8;
+            box-shadow: 
+                0 0 40px rgba(148, 163, 184, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            animation-delay: 0.4s;
+        }
+
+        .podium-place.third {
+            height: 200px;
+            border: 3px solid #cd7f32;
+            box-shadow: 
+                0 0 30px rgba(205, 127, 50, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            animation-delay: 0.6s;
+        }
+
+        .podium-place:hover {
+            transform: translateY(-10px) rotateY(5deg);
+            box-shadow: 
+                0 30px 60px rgba(0, 255, 198, 0.2),
+                0 0 50px currentColor;
+        }
+
+        .podium-rank {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px currentColor;
+        }
+
+        .first .podium-rank { color: var(--yellow); }
+        .second .podium-rank { color: #94a3b8; }
+        .third .podium-rank { color: #cd7f32; }
+
+        .podium-dept {
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #e2e8f0;
+            font-size: 1.2rem;
+        }
+
+        .podium-rate {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--green);
+            text-shadow: 0 0 15px var(--green);
+        }
+
+        /* Premium Table */
+        .table-section {
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 50px;
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 255, 198, 0.2);
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        th, td {
+            padding: 18px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 255, 198, 0.1);
+            font-weight: 500;
+        }
+
+        th {
+            background: linear-gradient(135deg, rgba(0, 255, 198, 0.2), rgba(0, 209, 255, 0.2));
+            color: var(--cyan);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        th:hover {
+            background: linear-gradient(135deg, rgba(0, 255, 198, 0.3), rgba(0, 209, 255, 0.3));
+            text-shadow: 0 0 10px var(--cyan);
+        }
+
+        tr:hover {
+            background: rgba(0, 255, 198, 0.08);
+            box-shadow: 0 0 30px rgba(0, 255, 198, 0.1);
+            transform: scale(1.01);
+        }
+
+        .status {
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+            min-width: 100px;
+            display: inline-block;
+        }
+
+        .status.resolved {
+            background: linear-gradient(135deg, rgba(0, 255, 148, 0.2), rgba(0, 255, 148, 0.1));
+            color: var(--green);
+            border: 2px solid var(--green);
+            box-shadow: 0 0 15px rgba(0, 255, 148, 0.3);
+        }
+
+        .status.pending {
+            background: linear-gradient(135deg, rgba(255, 204, 0, 0.2), rgba(255, 204, 0, 0.1));
+            color: var(--yellow);
+            border: 2px solid var(--yellow);
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+        }
+
+        .status.in-progress {
+            background: linear-gradient(135deg, rgba(0, 209, 255, 0.2), rgba(0, 209, 255, 0.1));
+            color: var(--teal);
+            border: 2px solid var(--teal);
+            box-shadow: 0 0 15px rgba(0, 209, 255, 0.3);
+        }
+
+        /* Enhanced AI Insights */
+        .insights-section {
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 50px;
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .insight-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: rgba(0, 255, 198, 0.05);
+            border-radius: 16px;
+            border-left: 4px solid var(--cyan);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .insight-item:hover {
+            background: rgba(0, 255, 198, 0.1);
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0, 255, 198, 0.2);
+        }
+
+        .insight-icon {
+            font-size: 2rem;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .insight-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        /* Enhanced Ward Heatmap */
+        .heatmap-section {
+            margin-bottom: 60px;
+        }
+
+        .ward-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .ward-cell {
+            aspect-ratio: 1;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            backdrop-filter: blur(10px);
+            border: 2px solid transparent;
+            font-size: 1.1rem;
+        }
+
+        .ward-cell.high {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border-color: #ef4444;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .ward-cell.medium {
+            background: linear-gradient(135deg, var(--yellow), #f59e0b);
+            border-color: var(--yellow);
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.4);
+        }
+
+        .ward-cell.low {
+            background: linear-gradient(135deg, var(--green), #10b981);
+            border-color: var(--green);
+            box-shadow: 0 0 20px rgba(0, 255, 148, 0.4);
+        }
+
+        .ward-cell:hover {
+            transform: scale(1.15) rotateZ(5deg);
+            box-shadow: 0 15px 40px rgba(0, 255, 198, 0.4);
+            z-index: 10;
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: 130%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass-bg);
+            border: 2px solid var(--cyan);
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .ward-cell:hover .tooltip {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-5px);
+        }
+
+        /* Enhanced Hall of Trust */
+        .trust-section {
+            margin-bottom: 60px;
+        }
+
+        .trust-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .trust-card {
+            background: var(--glass-bg);
+            border: 2px solid var(--green);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 10px 30px rgba(0, 255, 148, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .trust-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 148, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .trust-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 
+                0 30px 60px rgba(0, 255, 148, 0.3),
+                0 0 50px rgba(0, 255, 148, 0.2);
+            border-color: var(--cyan);
+        }
+
+        .trust-card:hover::before {
+            left: 100%;
+        }
+
+        .trust-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--cyan), var(--green));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--navy);
+            margin: 0 auto 20px;
+            box-shadow: 0 0 30px rgba(0, 255, 148, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        .trust-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #e2e8f0;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .trust-dept {
+            color: #94a3b8;
+            margin-bottom: 20px;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        .trust-badge {
+            background: linear-gradient(135deg, var(--green), var(--cyan));
+            color: var(--navy);
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 20px rgba(0, 255, 148, 0.4);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .container { padding: 20px; }
+            .header h1 { font-size: 2.8rem; }
+            .kpi-section { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+            .podium-container { flex-direction: column; align-items: center; }
+            .podium-place { width: 100%; max-width: 300px; }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2.2rem; }
+            .kpi-section { grid-template-columns: 1fr; }
+            .filter-controls { flex-direction: column; align-items: stretch; }
+            select { min-width: auto; }
+            .ward-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
+            table { font-size: 0.85rem; }
+            th, td { padding: 12px 8px; }
+            .trust-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Loading Animation */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .loading {
+            animation: pulse 2s infinite;
+        }
+
+        /* Scroll Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Enhanced Header -->
+        <header class="header fade-in">
+            <h1>🛡️ Nigam Setu - Officer Accountability Portal</h1>
+            <p>Indore Smart City | निगम सेतु - अधिकारी जवाबदेही पोर्टल</p>
+        </header>
+
+        <!-- Premium KPI Cards -->
+        <section class="kpi-section fade-in">
+            <div class="kpi-card" onclick="showActiveOfficers()">
+                <div class="kpi-number" id="totalOfficers">1,247</div>
+                <div class="kpi-label">Total Officers</div>
+                <div class="kpi-sublabel">Active Officers</div>
+            </div>
+            <div class="kpi-card warning">
+                <div class="kpi-number" id="performanceIssues">47</div>
+                <div class="kpi-label">Performance Issues</div>
+                <div class="kpi-sublabel">Requires Attention</div>
+            </div>
+            <div class="kpi-card success">
+                <div class="kpi-number" id="responseRate">94.2%</div>
+                <div class="kpi-label">Avg Response Rate</div>
+                <div class="kpi-sublabel">This Month</div>
+            </div>
+        </section>
+
+        <!-- Enhanced Department Filter -->
+        <section class="filter-section fade-in">
+            <div class="filter-controls">
+                <label class="filter-label">🏢 Select Department / विभाग चुनें:</label>
+                <select id="departmentFilter" onchange="filterByDepartment()">
+                    <option value="">All Departments</option>
+                    <option value="lighting">Lighting</option>
+                    <option value="health">Health</option>
+                    <option value="sewerage">Sewerage & Drainage</option>
+                    <option value="animals">Stray Animals</option>
+                    <option value="horticulture">Horticulture</option>
+                    <option value="water">Water</option>
+                    <option value="consumer">Consumer Charges</option>
+                    <option value="pan">Pan/Gutka/Spitting</option>
+                    <option value="housing">PM Housing</option>
+                    <option value="sanitization">Paid Sanitization</option>
+                    <option value="works">Public Works</option>
+                </select>
+                <button class="reset-btn" onclick="resetFilter()">🔄 Reset Filter</button>
+            </div>
+            
+            <div class="department-data" id="departmentData">
+                <h3 style="color: var(--cyan); margin-bottom: 20px; font-size: 1.5rem;">📊 Department Performance</h3>
+                <div class="department-stats" id="departmentStats">
+                    <!-- Stats will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Premium Winner Podium -->
+        <section class="podium-section fade-in">
+            <h2 class="section-title">🏆 Best Performing Departments</h2>
+            <div class="podium-container">
+                <div class="podium-place second">
+                    <div class="podium-rank">🥈</div>
+                    <div class="podium-dept">Water Department</div>
+                    <div class="podium-rate">91.5%</div>
+                </div>
+                <div class="podium-place first">
+                    <div class="podium-rank">🥇</div>
+                    <div class="podium-dept">Lighting Department</div>
+                    <div class="podium-rate">96.8%</div>
+                </div>
+                <div class="podium-place third">
+                    <div class="podium-rank">🥉</div>
+                    <div class="podium-dept">Horticulture</div>
+                    <div class="podium-rate">88.2%</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enhanced Complaint Table -->
+        <section class="table-section fade-in">
+            <h2 class="section-title">📋 Officer-Level Complaints Database</h2>
+            <div class="table-container">
+                <table id="complaintTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">👤 Officer Name</th>
+                            <th onclick="sortTable(1)">🏢 Department</th>
+                            <th onclick="sortTable(2)">🆔 Complaint ID</th>
+                            <th onclick="sortTable(3)">📝 Type</th>
+                            <th onclick="sortTable(4)">📄 Details</th>
+                            <th onclick="sortTable(5)">📅 Date</th>
+                            <th onclick="sortTable(6)">⚡ Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="complaintTableBody">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Enhanced AI Insights -->
+        <section class="insights-section fade-in">
+            <h2 class="section-title">🤖 AI Insights & Recommendations</h2>
+            <div class="insight-item">
+                <div class="insight-icon">⚡</div>
+                <div class="insight-text">Ward 12 resolves complaints 2x faster than average - Best practices should be shared across other wards for improved efficiency</div>
+            </div>
+            <div class="insight-item">
+                <div class="insight-icon">⚠️</div>
+                <div class="insight-text">Health Department shows 23% increase in bribery complaints - Immediate intervention and training required</div>
+            </div>
+            <div class="insight-item">
+                <div class="insight-icon">✅</div>
+                <div class="insight-text">Lighting Department improved response time by 15% this month - Excellent progress in officer accountability!</div>
+            </div>
+            <div class="insight-item">
+                <div class="insight-icon">📊</div>
+                <div class="insight-text">Peak complaint hours: 9-11 AM and 6-8 PM - Consider adjusting staff schedules for better coverage</div>
+            </div>
+            <div class="insight-item">
+                <div class="insight-icon">🎯</div>
+                <div class="insight-text">Officers with 0 complaints show 40% higher citizen satisfaction - Reward system recommended</div>
+            </div>
+        </section>
+
+        <!-- Enhanced Ward Heatmap -->
+        <section class="heatmap-section fade-in">
+            <h2 class="section-title">🗺️ Ward Officer Accountability Heatmap (85 Wards)</h2>
+            <div class="ward-grid" id="wardGrid">
+                <!-- Ward cells will be generated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Enhanced Hall of Trust -->
+        <section class="trust-section fade-in">
+            <h2 class="section-title">🛡️ Hall of Trust & Excellence</h2>
+            <div class="trust-grid" id="trustGrid">
+                <!-- Trust cards will be generated by JavaScript -->
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Comprehensive complaint data with realistic entries
+        const complaintData = {
+            lighting: [
+                {name: "Rajesh Kumar", dept: "Lighting", id: "LT-2024-001", type: "Delayed Work", details: "Street light repair delayed by 15 days", date: "2024-01-15", status: "resolved"},
+                {name: "Suresh Patel", dept: "Lighting", id: "LT-2024-006", type: "Bribery", details: "Demanded ₹500 for bulb replacement", date: "2024-01-10", status: "pending"},
+                {name: "Mohan Singh", dept: "Lighting", id: "LT-2024-011", type: "Negligence", details: "Failed to inspect faulty wiring", date: "2024-01-08", status: "in-progress"}
+            ],
+            health: [
+                {name: "Priya Sharma", dept: "Health", id: "HT-2024-002", type: "Incomplete Work", details: "Garbage collection skipped for 3 days", date: "2024-01-14", status: "pending"},
+                {name: "Dr. Anil Verma", dept: "Health", id: "HT-2024-007", type: "Bribery", details: "Asked ₹2000 for food license approval", date: "2024-01-09", status: "in-progress"},
+                {name: "Sunita Joshi", dept: "Health", id: "HT-2024-012", type: "Delayed Response", details: "Health inspection delayed by 20 days", date: "2024-01-07", status: "resolved"},
+                {name: "Ramesh Gupta", dept: "Health", id: "HT-2024-017", type: "Negligence", details: "Ignored sanitation complaint", date: "2024-01-05", status: "pending"}
+            ],
+            water: [
+                {name: "Amit Patel", dept: "Water", id: "WT-2024-003", type: "Quality Issue", details: "Ignored water contamination report", date: "2024-01-13", status: "in-progress"},
+                {name: "Kavita Sharma", dept: "Water", id: "WT-2024-008", type: "Bribery", details: "Demanded ₹1500 for new connection", date: "2024-01-11", status: "resolved"},
+                {name: "Deepak Kumar", dept: "Water", id: "WT-2024-013", type: "Delayed Work", details: "Pipeline repair delayed by 10 days", date: "2024-01-06", status: "pending"}
+            ],
+            sewerage: [
+                {name: "Sunita Verma", dept: "Sewerage", id: "ST-2024-004", type: "Delayed Work", details: "Drain cleaning delayed by 12 days", date: "2024-01-12", status: "resolved"},
+                {name: "Ravi Tiwari", dept: "Sewerage", id: "ST-2024-009", type: "Negligence", details: "Failed to clear blocked drain", date: "2024-01-10", status: "in-progress"},
+                {name: "Geeta Devi", dept: "Sewerage", id: "ST-2024-014", type: "Bribery", details: "Asked ₹800 for sewage connection", date: "2024-01-04", status: "pending"}
+            ],
+            horticulture: [
+                {name: "Vikash Singh", dept: "Horticulture", id: "HG-2024-005", type: "Delayed Work", details: "Park maintenance delayed by 18 days", date: "2024-01-11", status: "pending"},
+                {name: "Anita Yadav", dept: "Horticulture", id: "HG-2024-010", type: "Negligence", details: "Tree trimming work incomplete", date: "2024-01-09", status: "resolved"},
+                {name: "Manoj Kumar", dept: "Horticulture", id: "HG-2024-015", type: "Bribery", details: "Demanded ₹300 for garden permit", date: "2024-01-03", status: "in-progress"}
+            ],
+            consumer: [
+                {name: "Rohit Agarwal", dept: "Consumer", id: "CT-2024-016", type: "Bribery", details: "Asked ₹1000 for bill correction", date: "2024-01-02", status: "pending"},
+                {name: "Neha Jain", dept: "Consumer", id: "CT-2024-018", type: "Delayed Work", details: "Meter reading delayed by 8 days", date: "2024-01-01", status: "resolved"}
+            ],
+            housing: [
+                {name: "Sanjay Mishra", dept: "Housing", id: "PM-2024-019", type: "Bribery", details: "Demanded ₹5000 for housing approval", date: "2023-12-30", status: "in-progress"},
+                {name: "Rekha Singh", dept: "Housing", id: "PM-2024-020", type: "Delayed Work", details: "Housing verification delayed by 25 days", date: "2023-12-28", status: "pending"}
+            ]
+        };
+
+        // Department statistics
+        const departmentStats = {
+            lighting: { complaints: 12, officers: 45, resolved: 8, rate: "96.8%" },
+            health: { complaints: 23, officers: 67, resolved: 15, rate: "87.3%" },
+            water: { complaints: 8, officers: 38, resolved: 6, rate: "91.5%" },
+            sewerage: { complaints: 15, officers: 42, resolved: 11, rate: "89.2%" },
+            horticulture: { complaints: 9, officers: 35, resolved: 7, rate: "88.2%" },
+            consumer: { complaints: 6, officers: 28, resolved: 4, rate: "92.1%" },
+            housing: { complaints: 11, officers: 33, resolved: 7, rate: "85.7%" }
+        };
+
+        // Trust officers data
+        const trustOfficers = [
+            {name: "Ankit Kumar", dept: "Lighting", initials: "AK"},
+            {name: "Meera Singh", dept: "Water", initials: "MS"},
+            {name: "Rahul Gupta", dept: "Horticulture", initials: "RG"},
+            {name: "Pooja Jain", dept: "Health", initials: "PJ"},
+            {name: "Arjun Patel", dept: "Sewerage", initials: "AP"},
+            {name: "Kavya Sharma", dept: "Consumer", initials: "KS"},
+            {name: "Deepak Yadav", dept: "Housing", initials: "DY"},
+            {name: "Priyanka Verma", dept: "Lighting", initials: "PV"},
+            {name: "Rohit Kumar", dept: "Water", initials: "RK"},
+            {name: "Sneha Gupta", dept: "Health", initials: "SG"},
+            {name: "Vikram Singh", dept: "Horticulture", initials: "VS"},
+            {name: "Anjali Tiwari", dept: "Sewerage", initials: "AT"}
+        ];
+
+        const allComplaints = Object.values(complaintData).flat();
+
+        // Initialize everything
+        function initializeApp() {
+            initializeWardHeatmap();
+            initializeTrustOfficers();
+            populateComplaintTable();
+            initializeScrollAnimations();
+        }
+
+        // Initialize ward heatmap with officer data
+        function initializeWardHeatmap() {
+            const wardGrid = document.getElementById('wardGrid');
+            wardGrid.innerHTML = '';
+            
+            for (let i = 1; i <= 85; i++) {
+                const wardCell = document.createElement('div');
+                wardCell.className = 'ward-cell';
+                wardCell.textContent = i;
+                
+                // Generate realistic officer and complaint data
+                const officers = Math.floor(Math.random() * 30) + 20; // 20-50 officers per ward
+                const complaints = Math.floor(Math.random() * officers * 0.3); // Up to 30% complaint rate
+                const resolution = Math.floor(Math.random() * 40) + 60; // 60-100% resolution rate
+                
+                // Determine complaint level
+                const complaintRate = complaints / officers;
+                if (complaintRate > 0.2) {
+                    wardCell.classList.add('high');
+                } else if (complaintRate > 0.1) {
+                    wardCell.classList.add('medium');
+                } else {
+                    wardCell.classList.add('low');
+                }
+                
+                // Add enhanced tooltip
+                const tooltip = document.createElement('div');
+                tooltip.className = 'tooltip';
+                tooltip.innerHTML = `
+                    <strong>Ward ${i}</strong><br>
+                    👥 Officers: ${officers}<br>
+                    ⚠️ Complaints: ${complaints}<br>
+                    ✅ Resolution: ${resolution}%<br>
+                    📊 Rate: ${(complaintRate * 100).toFixed(1)}%
+                `;
+                wardCell.appendChild(tooltip);
+                
+                wardGrid.appendChild(wardCell);
+            }
+        }
+
+        // Initialize trust officers
+        function initializeTrustOfficers() {
+            const trustGrid = document.getElementById('trustGrid');
+            trustGrid.innerHTML = '';
+            
+            trustOfficers.forEach(officer => {
+                const trustCard = document.createElement('div');
+                trustCard.className = 'trust-card';
+                trustCard.innerHTML = `
+                    <div class="trust-avatar">${officer.initials}</div>
+                    <div class="trust-name">${officer.name}</div>
+                    <div class="trust-dept">${officer.dept} Department</div>
+                    <div class="trust-badge">🛡️ 0 Complaints - Guardian of Trust</div>
+                `;
+                trustGrid.appendChild(trustCard);
+            });
+        }
+
+        // Populate complaint table with all data
+        function populateComplaintTable() {
+            const tableBody = document.getElementById('complaintTableBody');
+            tableBody.innerHTML = '';
+            
+            allComplaints.forEach(complaint => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${complaint.name}</strong></td>
+                    <td>${complaint.dept}</td>
+                    <td><code>${complaint.id}</code></td>
+                    <td>${complaint.type}</td>
+                    <td>${complaint.details}</td>
+                    <td>${complaint.date}</td>
+                    <td><span class="status ${complaint.status}">${complaint.status.charAt(0).toUpperCase() + complaint.status.slice(1).replace('-', ' ')}</span></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Enhanced department filter
+        function filterByDepartment() {
+            const selectedDept = document.getElementById('departmentFilter').value;
+            const departmentData = document.getElementById('departmentData');
+            const departmentStatsDiv = document.getElementById('departmentStats');
+            const tableBody = document.getElementById('complaintTableBody');
+            
+            if (selectedDept) {
+                // Show department data
+                departmentData.style.display = 'block';
+                
+                // Populate department stats
+                const stats = departmentStats[selectedDept];
+                if (stats) {
+                    departmentStatsDiv.innerHTML = `
+                        <div class="stat-item">
+                            <div class="stat-number">${stats.complaints}</div>
+                            <div class="stat-label">Total Complaints</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">${stats.officers}</div>
+                            <div class="stat-label">Total Officers</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">${stats.resolved}</div>
+                            <div class="stat-label">Resolved Cases</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">${stats.rate}</div>
+                            <div class="stat-label">Success Rate</div>
+                        </div>
+                    `;
+                }
+                
+                // Filter table
+                const dataToShow = complaintData[selectedDept] || [];
+                tableBody.innerHTML = '';
+                dataToShow.forEach(complaint => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><strong>${complaint.name}</strong></td>
+                        <td>${complaint.dept}</td>
+                        <td><code>${complaint.id}</code></td>
+                        <td>${complaint.type}</td>
+                        <td>${complaint.details}</td>
+                        <td>${complaint.date}</td>
+                        <td><span class="status ${complaint.status}">${complaint.status.charAt(0).toUpperCase() + complaint.status.slice(1).replace('-', ' ')}</span></td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            } else {
+                departmentData.style.display = 'none';
+                populateComplaintTable();
+            }
+        }
+
+        // Reset filter
+        function resetFilter() {
+            document.getElementById('departmentFilter').value = '';
+            document.getElementById('departmentData').style.display = 'none';
+            populateComplaintTable();
+        }
+
+        // Enhanced table sorting
+        function sortTable(columnIndex) {
+            const table = document.getElementById('complaintTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            rows.sort((a, b) => {
+                const aText = a.cells[columnIndex].textContent.trim();
+                const bText = b.cells[columnIndex].textContent.trim();
+                
+                // Handle date sorting
+                if (columnIndex === 5) {
+                    return new Date(bText) - new Date(aText);
+                }
+                
+                return aText.localeCompare(bText);
+            });
+            
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+            
+            // Add visual feedback
+            const th = table.querySelectorAll('th')[columnIndex];
+            th.style.background = 'linear-gradient(135deg, rgba(0, 255, 198, 0.4), rgba(0, 209, 255, 0.4))';
+            setTimeout(() => {
+                th.style.background = 'linear-gradient(135deg, rgba(0, 255, 198, 0.2), rgba(0, 209, 255, 0.2))';
+            }, 300);
+        }
+
+        // Show active officers
+        function showActiveOfficers() {
+            alert('🚀 Active Officers Dashboard\n\n📊 Total: 1,247 Officers\n✅ Active: 1,200 Officers\n⚠️ On Leave: 47 Officers\n\nDetailed view coming soon!');
+        }
+
+        // Scroll animations
+        function initializeScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                resetFilter();
+            }
+            if (e.ctrlKey && e.key === 'f') {
+                e.preventDefault();
+                document.getElementById('departmentFilter').focus();
+            }
+        });
+
+        // Initialize app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initializeApp);
+
+        // Add periodic glow effects
+        setInterval(() => {
+            const glowElements = document.querySelectorAll('.kpi-card, .podium-place, .trust-card');
+            glowElements.forEach(el => el.classList.remove('loading'));
+            
+            const randomElement = glowElements[Math.floor(Math.random() * glowElements.length)];
+            randomElement.classList.add('loading');
+            
+            setTimeout(() => {
+                randomElement.classList.remove('loading');
+            }, 2000);
+        }, 6000);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97035171e5fca854',t:'MTc1NTM3MjMzMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

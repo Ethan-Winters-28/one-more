@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Ward, My News - Nigam Setu Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Header Section */
+        .header-section {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            padding: 30px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .logo-container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-img {
+            height: 80px;
+            width: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .logo-img:hover {
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        .header-title {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-top: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            margin-top: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Featured Image Section */
+        .featured-section {
+            padding: 50px 20px;
+            text-align: center;
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .featured-card {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .featured-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .featured-img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .featured-card:hover .featured-img {
+            transform: scale(1.05);
+        }
+
+        /* Section Headers */
+        .section-header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            margin: 40px 0 30px 0;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
+        }
+
+        .section-header h3 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin: 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* News Cards */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .news-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .news-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 300% 100%;
+            animation: gradient 3s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .news-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .news-card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            position: relative;
+        }
+
+        .ward-badge {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .news-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 10px 0;
+            line-height: 1.4;
+        }
+
+        .parshad-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .parshad-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .news-card-body {
+            padding: 25px;
+        }
+
+        .news-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .read-more-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .read-more-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(238, 90, 36, 0.4);
+        }
+
+        /* Message Section */
+        .message-section {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 40px 20px;
+            border-radius: 20px;
+            margin: 40px 20px;
+        }
+
+        .message-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #ff6b6b;
+            transition: all 0.3s ease;
+        }
+
+        .message-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .message-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .message-info h5 {
+            margin: 0;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .message-info small {
+            color: #666;
+        }
+
+        .message-text {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #4facfe;
+            font-style: italic;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        /* WhatsApp Section */
+        .whatsapp-section {
+            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+            padding: 50px 20px;
+            text-align: center;
+            color: white;
+            margin: 40px 20px;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .whatsapp-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 15s linear infinite reverse;
+        }
+
+        .whatsapp-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .whatsapp-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .ward-selector {
+            max-width: 400px;
+            margin: 30px auto;
+        }
+
+        .ward-select {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            background: white;
+            color: #333;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .ward-select:focus {
+            outline: none;
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .whatsapp-join-btn {
+            background: white;
+            color: #25d366;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .whatsapp-join-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .whatsapp-join-btn.show {
+            display: inline-block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2rem;
+            }
+            
+            .section-header h3 {
+                font-size: 1.8rem;
+            }
+            
+            .news-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .main-container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Scroll Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="logo-container">
+                <img src="img/Nagar Nigam Logo.jpg" alt="Nagar Nigam Logo" class="logo-img">
+                <h1 class="header-title">My Ward, My News</h1>
+                <p class="header-subtitle">मेरा वार्ड, मेरी खबर | Nigam Setu Portal</p>
+            </div>
+        </div>
+
+        <!-- Featured Image Section -->
+        <div class="featured-section">
+            <div class="featured-card fade-in">
+                <img src="img/News artuccle.jpeg" alt="Featured News" class="featured-img">
+                <style>
+.logo-img {
+    max-width: 150px;
+    height: auto;
+    display: block;
+}
+.featured-img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    display: block;
+}
+</style>
+
+            </div>
+        </div>
+
+        <!-- Latest News Section -->
+        <div class="section-header fade-in">
+            <h3><i class="fas fa-newspaper me-3"></i>Latest Civic News by Ward Parshads</h3>
+        </div>
+
+        <div class="news-grid" id="newsGrid">
+            <!-- News cards will be populated by JavaScript -->
+        </div>
+
+        <!-- Message from Parshad Section -->
+        <div class="section-header fade-in">
+            <h3><i class="fas fa-bullhorn me-3"></i>Message from Your Parshad | आपके पार्षद का संदेश</h3>
+        </div>
+
+        <div class="message-section fade-in">
+            <div id="parshadMessages">
+                <!-- Messages will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- WhatsApp Channel Section -->
+        <div class="whatsapp-section fade-in">
+            <div class="whatsapp-content">
+                <i class="fab fa-whatsapp whatsapp-icon"></i>
+                <h3>Join Your Ward's WhatsApp Channel</h3>
+                <p>अपने वार्ड के व्हाट्सऐप चैनल से जुड़ें</p>
+                
+                <div class="ward-selector">
+                    <select class="ward-select" id="wardSelect">
+                        <option value="">Select Your Ward / अपना वार्ड चुनें</option>
+                    </select>
+                    <button class="whatsapp-join-btn" id="joinBtn" onclick="joinWhatsApp()">
+                        <i class="fab fa-whatsapp me-2"></i>Join WhatsApp Channel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Ward WhatsApp Channels
+        const wardChannels = {
+            "Ward 1": "https://whatsapp.com/channel/Ward1ABC",
+            "Ward 2": "https://whatsapp.com/channel/Ward2DEF",
+            "Ward 3": "https://whatsapp.com/channel/Ward3GHI",
+            "Ward 4": "https://whatsapp.com/channel/Ward4JKL",
+            "Ward 5": "https://whatsapp.com/channel/Ward5MNO",
+            "Ward 10": "https://whatsapp.com/channel/Ward10PQR",
+            "Ward 15": "https://whatsapp.com/channel/Ward15STU",
+            "Ward 20": "https://whatsapp.com/channel/Ward20VWX",
+            "Ward 25": "https://whatsapp.com/channel/Ward25YZA",
+            "Ward 30": "https://whatsapp.com/channel/Ward30BCD",
+            "Ward 35": "https://whatsapp.com/channel/Ward35EFG",
+            "Ward 40": "https://whatsapp.com/channel/Ward40HIJ",
+            "Ward 45": "https://whatsapp.com/channel/Ward45KLM",
+            "Ward 50": "https://whatsapp.com/channel/Ward50NOP",
+            "Ward 55": "https://whatsapp.com/channel/Ward55QRS",
+            "Ward 60": "https://whatsapp.com/channel/Ward60TUV",
+            "Ward 65": "https://whatsapp.com/channel/Ward65WXY",
+            "Ward 70": "https://whatsapp.com/channel/Ward70ZAB",
+            "Ward 75": "https://whatsapp.com/channel/Ward75CDE",
+            "Ward 80": "https://whatsapp.com/channel/Ward80FGH",
+            "Ward 85": "https://whatsapp.com/channel/Ward85IJK"
+        };
+
+        // News Data
+        const newsData = [
+            {
+                ward: 12,
+                parshad: "Smt. Priya Sharma",
+                title: "New Street Light Installation Completed",
+                description: "All 45 street lights have been successfully installed in Sector 12. The work was completed ahead of schedule and will improve safety for evening commuters and residents.",
+                date: "2024-01-15",
+                image: "https://via.placeholder.com/300x200/4facfe/white?text=Street+Lights"
+            },
+            {
+                ward: 25,
+                parshad: "Sh. Rajesh Kumar",
+                title: "Drainage System Upgrade in Progress",
+                description: "Major drainage improvement work has begun in Ward 25. The project will prevent waterlogging during monsoon season and improve overall sanitation in the area.",
+                date: "2024-01-14",
+                image: "https://via.placeholder.com/300x200/ff6b6b/white?text=Drainage+Work"
+            },
+            {
+                ward: 8,
+                parshad: "Dr. Anjali Verma",
+                title: "Community Health Camp Organized",
+                description: "Free health checkup camp was organized at Ward 8 community center. Over 200 residents benefited from free medical consultation and medicine distribution.",
+                date: "2024-01-13",
+                image: "https://via.placeholder.com/300x200/4ecdc4/white?text=Health+Camp"
+            },
+            {
+                ward: 45,
+                parshad: "Sh. Mohan Singh",
+                title: "Road Repair Work Completed",
+                description: "Potholes on Main Road and connecting streets have been filled. The road surface has been improved to ensure smooth traffic flow and reduce vehicle damage.",
+                date: "2024-01-12",
+                image: "https://via.placeholder.com/300x200/96ceb4/white?text=Road+Repair"
+            },
+            {
+                ward: 33,
+                parshad: "Smt. Kavita Jain",
+                title: "Garbage Collection Schedule Updated",
+                description: "New garbage collection timings have been implemented. Morning collection will be from 6-8 AM and evening collection from 6-8 PM for better waste management.",
+                date: "2024-01-11",
+                image: "https://via.placeholder.com/300x200/667eea/white?text=Waste+Management"
+            },
+            {
+                ward: 67,
+                parshad: "Sh. Vikram Gupta",
+                title: "Park Renovation Project Launched",
+                description: "Children's park renovation has started with new swings, slides, and exercise equipment. The project will be completed within 3 weeks for community enjoyment.",
+                date: "2024-01-10",
+                image: "https://via.placeholder.com/300x200/764ba2/white?text=Park+Renovation"
+            },
+            {
+                ward: 19,
+                parshad: "Dr. Sunita Rao",
+                title: "Water Supply Improvement Notice",
+                description: "Water supply timing has been extended to 8 hours daily. New bore well installation will ensure consistent water availability for all residents in the ward.",
+                date: "2024-01-09",
+                image: "https://via.placeholder.com/300x200/45b7d1/white?text=Water+Supply"
+            },
+            {
+                ward: 52,
+                parshad: "Sh. Arun Patel",
+                title: "Street Vendor Regulation Meeting",
+                description: "Meeting with street vendors to discuss designated areas and timing. This will help organize street vending while maintaining cleanliness and traffic flow.",
+                date: "2024-01-08",
+                image: "https://via.placeholder.com/300x200/ff9a9e/white?text=Vendor+Meeting"
+            },
+            {
+                ward: 74,
+                parshad: "Smt. Meera Devi",
+                title: "Cleanliness Drive Success",
+                description: "Weekly cleanliness drive saw participation from 150+ residents. Collected 500kg waste and planted 25 saplings. Next drive scheduled for coming Sunday.",
+                date: "2024-01-07",
+                image: "https://via.placeholder.com/300x200/fecfef/333?text=Clean+Drive"
+            },
+            {
+                ward: 41,
+                parshad: "Sh. Ramesh Chandra",
+                title: "Senior Citizens Welfare Scheme",
+                description: "New welfare scheme for senior citizens includes free medical checkup, medicine subsidy, and monthly grocery support for eligible residents above 65 years.",
+                date: "2024-01-06",
+                image: "https://via.placeholder.com/300x200/fcb69f/white?text=Senior+Care"
+            }
+        ];
+
+        // Parshad Messages
+        const parshadMessages = [
+            {
+                ward: 80,
+                name: "Smt. Neeta Sharma",
+                message: "Dear citizens of Ward 80, In gali no. 4, people are throwing garbage in open drain. I request you to stop this and take responsibility. If anyone is seen doing so, click their photo and upload on Nigam Setu portal so we can take action."
+            },
+            {
+                ward: 25,
+                name: "Sh. Rajesh Kumar",
+                message: "Residents of Ward 25, please cooperate during drainage cleaning work. Avoid parking vehicles on marked areas from 9 AM to 5 PM. Your cooperation will help complete the work faster."
+            },
+            {
+                ward: 12,
+                name: "Smt. Priya Sharma",
+                message: "I am happy to inform that street light installation is complete. If any light is not working, please report on our WhatsApp channel immediately. Your safety is our priority."
+            },
+            {
+                ward: 45,
+                name: "Sh. Mohan Singh",
+                message: "Road repair work is finished in most areas. Please drive carefully on newly repaired roads for next 48 hours. Report any issues directly to me through Nigam Setu app."
+            },
+            {
+                ward: 67,
+                name: "Sh. Vikram Gupta",
+                message: "Park renovation is in progress. Children and parents are requested to use alternative playground near school till work is complete. New equipment will be ready soon."
+            }
+        ];
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            populateWardDropdown();
+            displayNews();
+            displayMessages();
+            setupScrollAnimations();
+            setupWardSelector();
+        });
+
+        // Populate ward dropdown
+        function populateWardDropdown() {
+            const select = document.getElementById('wardSelect');
+            for (let i = 1; i <= 85; i++) {
+                const option = document.createElement('option');
+                option.value = `Ward ${i}`;
+                option.textContent = `Ward ${i} | वार्ड ${i}`;
+                select.appendChild(option);
+            }
+        }
+
+        // Display news cards
+        function displayNews() {
+            const newsGrid = document.getElementById('newsGrid');
+            newsGrid.innerHTML = '';
+
+            newsData.forEach((news, index) => {
+                const newsCard = document.createElement('div');
+                newsCard.className = 'news-card fade-in';
+                newsCard.style.animationDelay = `${index * 0.1}s`;
+                
+                newsCard.innerHTML = `
+                    <div class="news-card-header">
+                        <div class="ward-badge">
+                            <i class="fas fa-map-marker-alt me-1"></i>Ward ${news.ward}
+                        </div>
+                        <h4 class="news-title">${news.title}</h4>
+                        <div class="parshad-info">
+                            <div class="parshad-avatar">
+                                ${news.parshad.charAt(news.parshad.indexOf(' ') + 1)}
+                            </div>
+                            <div>
+                                <strong>${news.parshad}</strong>
+                                <br><small>Ward Parshad</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="news-card-body">
+                        <div class="news-description">
+                            ${news.description}
+                        </div>
+                        <div class="news-meta">
+                            <span><i class="fas fa-calendar-alt me-1"></i>${formatDate(news.date)}</span>
+                            <button class="read-more-btn" onclick="readMore(${index})">
+                                <i class="fas fa-book-open me-1"></i>Read More
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                newsGrid.appendChild(newsCard);
+            });
+        }
+
+        // Display parshad messages
+        function displayMessages() {
+            const messagesContainer = document.getElementById('parshadMessages');
+            messagesContainer.innerHTML = '';
+
+            parshadMessages.forEach((message, index) => {
+                const messageCard = document.createElement('div');
+                messageCard.className = 'message-card fade-in';
+                messageCard.style.animationDelay = `${index * 0.1}s`;
+                
+                messageCard.innerHTML = `
+                    <div class="message-header">
+                        <div class="message-avatar">
+                            ${message.name.charAt(message.name.indexOf(' ') + 1)}
+                        </div>
+                        <div class="message-info">
+                            <h5>${message.name}</h5>
+                            <small><i class="fas fa-map-marker-alt me-1"></i>Ward ${message.ward} Parshad</small>
+                        </div>
+                    </div>
+                    <div class="message-text">
+                        <i class="fas fa-quote-left me-2"></i>
+                        ${message.message}
+                        <i class="fas fa-quote-right ms-2"></i>
+                    </div>
+                `;
+                
+                messagesContainer.appendChild(messageCard);
+            });
+        }
+
+        // Setup ward selector
+        function setupWardSelector() {
+            const wardSelect = document.getElementById('wardSelect');
+            const joinBtn = document.getElementById('joinBtn');
+
+            wardSelect.addEventListener('change', function() {
+                const selectedWard = this.value;
+                if (selectedWard) {
+                    joinBtn.textContent = `Join ${selectedWard} WhatsApp Channel`;
+                    joinBtn.classList.add('show');
+                } else {
+                    joinBtn.classList.remove('show');
+                }
+            });
+        }
+
+        // Join WhatsApp function
+        function joinWhatsApp() {
+            const selectedWard = document.getElementById('wardSelect').value;
+            if (selectedWard && wardChannels[selectedWard]) {
+                // Show loading state
+                const btn = document.getElementById('joinBtn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<div class="loading"></div> Joining...';
+                btn.disabled = true;
+
+                setTimeout(() => {
+                    window.open(wardChannels[selectedWard], '_blank');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }, 1000);
+            } else {
+                alert('WhatsApp channel for this ward is not available yet. Please try again later.');
+            }
+        }
+
+        // Read more function
+        function readMore(index) {
+            const news = newsData[index];
+            alert(`Full Article: ${news.title}\n\nWard: ${news.ward}\nParshad: ${news.parshad}\nDate: ${formatDate(news.date)}\n\n${news.description}\n\nFor more details, please contact your ward office or join the WhatsApp channel.`);
+        }
+
+        // Format date function
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-IN', options);
+        }
+
+        // Setup scroll animations
+        function setupScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all fade-in elements
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Add some interactive features
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click sound effect (optional)
+            document.querySelectorAll('button, .news-card, .message-card').forEach(element => {
+                element.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+
+            // Add typing effect to header
+            const headerTitle = document.querySelector('.header-title');
+            const originalText = headerTitle.textContent;
+            headerTitle.textContent = '';
+            
+            let i = 0;
+            const typeWriter = () => {
+                if (i < originalText.length) {
+                    headerTitle.textContent += originalText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 100);
+                }
+            };
+            
+            setTimeout(typeWriter, 1000);
+
+            // Add floating particles effect
+            createFloatingParticles();
+        });
+
+        // Create floating particles
+        function createFloatingParticles() {
+            const particleContainer = document.createElement('div');
+            particleContainer.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: -1;
+                overflow: hidden;
+            `;
+            document.body.appendChild(particleContainer);
+
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 6 + 2}px;
+                    height: ${Math.random() * 6 + 2}px;
+                    background: rgba(255, 255, 255, 0.3);
+                    border-radius: 50%;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    animation: float ${Math.random() * 10 + 10}s infinite linear;
+                `;
+                particleContainer.appendChild(particle);
+            }
+
+            // Add CSS for particle animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes float {
+                    0% {
+                        transform: translateY(100vh) rotate(0deg);
+                        opacity: 0;
+                    }
+                    10% {
+                        opacity: 1;
+                    }
+                    90% {
+                        opacity: 1;
+                    }
+                    100% {
+                        transform: translateY(-100vh) rotate(360deg);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Add search functionality
+        function addSearchFeature() {
+            const searchContainer = document.createElement('div');
+            searchContainer.className = 'search-container';
+            searchContainer.style.cssText = `
+                position: sticky;
+                top: 20px;
+                z-index: 100;
+                margin: 20px;
+                text-align: center;
+            `;
+            
+            searchContainer.innerHTML = `
+                <div style="max-width: 500px; margin: 0 auto;">
+                    <input type="text" id="newsSearch" placeholder="Search news by ward, parshad, or title..." 
+                           style="width: 100%; padding: 15px 20px; border: none; border-radius: 50px; 
+                                  box-shadow: 0 5px 15px rgba(0,0,0,0.1); font-size: 1rem;
+                                  background: white; outline: none;">
+                </div>
+            `;
+            
+            const newsSection = document.querySelector('.news-grid').parentElement;
+            newsSection.insertBefore(searchContainer, document.querySelector('.news-grid'));
+            
+            // Add search functionality
+            document.getElementById('newsSearch').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const newsCards = document.querySelectorAll('.news-card');
+                
+                newsCards.forEach(card => {
+                    const cardText = card.textContent.toLowerCase();
+                    if (cardText.includes(searchTerm)) {
+                        card.style.display = 'block';
+                        card.style.animation = 'fadeInUp 0.5s ease';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Initialize search after DOM is loaded
+        setTimeout(addSearchFeature, 2000);
+
+        // Add notification system
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'linear-gradient(45deg, #4CAF50, #45a049)' : 'linear-gradient(45deg, #f44336, #da190b)'};
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                z-index: 1000;
+                animation: slideInRight 0.5s ease;
+                max-width: 300px;
+                font-weight: 500;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            // Add slide animation
+            const slideStyle = document.createElement('style');
+            slideStyle.textContent = `
+                @keyframes slideInRight {
+                    from {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+            `;
+            document.head.appendChild(slideStyle);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideInRight 0.5s ease reverse';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+
+        // Enhanced WhatsApp join function with notification
+        function joinWhatsApp() {
+            const selectedWard = document.getElementById('wardSelect').value;
+            if (selectedWard && wardChannels[selectedWard]) {
+                const btn = document.getElementById('joinBtn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<div class="loading"></div> Joining...';
+                btn.disabled = true;
+
+                setTimeout(() => {
+                    window.open(wardChannels[selectedWard], '_blank');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    showNotification(`Successfully joined ${selectedWard} WhatsApp Channel!`, 'success');
+                }, 1000);
+            } else {
+                showNotification('WhatsApp channel for this ward is not available yet.', 'error');
+            }
+        }
+
+        // Add smooth scrolling for better UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add loading screen
+        function addLoadingScreen() {
+            const loader = document.createElement('div');
+            loader.id = 'pageLoader';
+            loader.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 9999;
+                flex-direction: column;
+                color: white;
+            `;
+            
+            loader.innerHTML = `
+                <div style="width: 60px; height: 60px; border: 4px solid rgba(255,255,255,0.3); 
+                           border-top: 4px solid white; border-radius: 50%; 
+                           animation: spin 1s linear infinite; margin-bottom: 20px;"></div>
+                <h3 style="font-family: 'Poppins', sans-serif; font-weight: 300;">Loading Nigam Setu Portal...</h3>
+                <p style="margin-top: 10px; opacity: 0.8;">मेरा वार्ड, मेरी खबर</p>
+            `;
+            
+            document.body.appendChild(loader);
+            
+            // Remove loader after page loads
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    loader.style.opacity = '0';
+                    loader.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => loader.remove(), 500);
+                }, 1500);
+            });
+        }
+
+        // Initialize loading screen
+        addLoadingScreen();
+
+        // Add back to top button
+        function addBackToTop() {
+            const backToTop = document.createElement('button');
+            backToTop.innerHTML = '<i class="fas fa-arrow-up"></i>';
+            backToTop.style.cssText = `
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+                color: white;
+                border: none;
+                font-size: 1.2rem;
+                cursor: pointer;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                opacity: 0;
+                transition: all 0.3s ease;
+                z-index: 1000;
+            `;
+            
+            document.body.appendChild(backToTop);
+            
+            // Show/hide based on scroll
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTop.style.opacity = '1';
+                    backToTop.style.transform = 'scale(1)';
+                } else {
+                    backToTop.style.opacity = '0';
+                    backToTop.style.transform = 'scale(0.8)';
+                }
+            });
+            
+            // Scroll to top on click
+            backToTop.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        // Initialize back to top button
+        setTimeout(addBackToTop, 3000);
+
+        // Add progressive loading for images
+        function addProgressiveImageLoading() {
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.style.transition = 'opacity 0.3s ease';
+                img.style.opacity = '0';
+                
+                img.addEventListener('load', function() {
+                    this.style.opacity = '1';
+                });
+                
+                // Add error handling
+                img.addEventListener('error', function() {
+                    this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIE5vdCBBdmFpbGFibGU8L3RleHQ+PC9zdmc+';
+                    this.style.opacity = '1';
+                });
+            });
+        }
+
+        // Initialize progressive image loading
+        setTimeout(addProgressiveImageLoading, 1000);
+    </script>
+</body>
+</html>

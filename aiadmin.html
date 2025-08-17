@@ -1,0 +1,2925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nigam Saathi - Ultimate AI Assistant Dashboard</title>
+    <!-- 
+    ╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+    ║                                    NIGAM SAATHI - ULTIMATE AI DASHBOARD                                         ║
+    ║                                          Production-Ready v2.0                                                  ║
+    ╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
+    ║ ARCHITECTURE:                                                                                                    ║
+    ║ • Header: Animated logo + real-time status indicators                                                           ║
+    ║ • Stats Grid: 8 animated KPI cards with trend indicators                                                        ║
+    ║ • Main Dashboard: 3-column layout (Analytics | Control Center | Live Feed)                                     ║
+    ║ • Analytics: 6 interactive charts with real-time data                                                          ║
+    ║ • Control Center: AI model controls, system health, alerts                                                      ║
+    ║ • Live Feed: Real-time chat, notifications, activity stream                                                     ║
+    ║ • Action Center: Advanced controls with confirmation modals                                                     ║
+    ║ • Insights Engine: Dynamic AI-generated insights with categorization                                           ║
+    ║                                                                                                                  ║
+    ║ FEATURES:                                                                                                        ║
+    ║ • 15+ Interactive Charts & Visualizations                                                                       ║
+    ║ • Real-time Data Streaming Simulation                                                                           ║
+    ║ • Advanced Glassmorphism with Particle Effects                                                                  ║
+    ║ • Multi-language Support (Hindi/English)                                                                        ║
+    ║ • Voice Commands & Text-to-Speech                                                                               ║
+    ║ • Advanced Export (PDF, Excel, JSON, CSV)                                                                       ║
+    ║ • Predictive Analytics & ML Insights                                                                            ║
+    ║ • Geospatial Ward Mapping                                                                                       ║
+    ║ • Performance Monitoring & Alerts                                                                               ║
+    ║ • Dark/Light Theme with Custom Presets                                                                          ║
+    ╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+    -->
+    <style>
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+        /*                                        ADVANCED CSS ARCHITECTURE                                            */
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+        /* CSS Custom Properties - Advanced Theme System */
+        :root {
+            /* Core Colors */
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #0f172a;
+            --bg-tertiary: #1e293b;
+            --bg-glass: rgba(15, 23, 42, 0.85);
+            --bg-glass-light: rgba(30, 41, 59, 0.6);
+            
+            /* Neon Palette */
+            --neon-cyan: #00ffc6;
+            --neon-teal: #00d1ff;
+            --neon-blue: #0066ff;
+            --neon-purple: #8b5cf6;
+            --neon-pink: #ec4899;
+            --neon-green: #00ff94;
+            --neon-yellow: #ffcc00;
+            --neon-orange: #ff6b35;
+            --neon-red: #ff3b3b;
+            
+            /* Text Colors */
+            --text-primary: #ffffff;
+            --text-secondary: #cbd5e1;
+            --text-tertiary: #94a3b8;
+            --text-muted: #64748b;
+            
+            /* Effects */
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-border-strong: rgba(255, 255, 255, 0.2);
+            --shadow-glow: 0 0 30px;
+            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.3);
+            --shadow-strong: 0 8px 40px rgba(0, 0, 0, 0.5);
+            
+            /* Animations */
+            --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Layout */
+            --border-radius: 16px;
+            --border-radius-small: 8px;
+            --border-radius-large: 24px;
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+        }
+
+        /* Advanced Reset & Base Styles */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Animated Background Particles */
+        .background-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Reduced Motion Support */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .particle {
+                display: none;
+            }
+        }
+
+        /* Advanced Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-teal));
+            border-radius: 4px;
+            border: 1px solid var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--neon-teal), var(--neon-blue));
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+        /*                                           LAYOUT SYSTEM                                                     */
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: var(--spacing-lg);
+            display: grid;
+            gap: var(--spacing-lg);
+            grid-template-areas: 
+                "header header header"
+                "status status status"
+                "stats stats stats"
+                "analytics control live"
+                "actions actions actions"
+                "insights insights insights";
+            grid-template-columns: 2fr 1fr 1fr;
+            grid-template-rows: auto auto auto 1fr auto auto;
+            min-height: 100vh;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+        /*                                        COMPONENT LIBRARY                                                    */
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+        /* Advanced Glass Card System */
+        .glass-card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            position: relative;
+            overflow: hidden;
+            transition: all var(--transition-normal);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, 
+                rgba(0, 255, 198, 0.03) 0%, 
+                rgba(0, 209, 255, 0.03) 50%, 
+                rgba(139, 92, 246, 0.03) 100%);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--glass-border-strong);
+            box-shadow: var(--shadow-strong), var(--shadow-glow) rgba(0, 255, 198, 0.2);
+        }
+
+        .glass-card:hover::before {
+            opacity: 1;
+        }
+
+        .glass-card-premium {
+            background: linear-gradient(135deg, 
+                rgba(15, 23, 42, 0.9) 0%, 
+                rgba(30, 41, 59, 0.8) 50%, 
+                rgba(15, 23, 42, 0.9) 100%);
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+        }
+
+        .glass-card-premium::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            padding: 2px;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-teal), var(--neon-purple));
+            border-radius: inherit;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            -webkit-mask-composite: xor;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+        /*                                          HEADER SECTION                                                     */
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+        .dashboard-header {
+            grid-area: header;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-lg);
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius-large);
+            border: 1px solid var(--glass-border);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .logo-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .logo-icon {
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: logoGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoGlow {
+            0% { filter: drop-shadow(0 0 10px var(--neon-cyan)); }
+            100% { filter: drop-shadow(0 0 20px var(--neon-teal)); }
+        }
+
+        .header-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dashboard-title {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-teal), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .dashboard-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            background: rgba(0, 255, 148, 0.1);
+            border: 1px solid rgba(0, 255, 148, 0.3);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--neon-green);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .theme-toggle {
+            padding: var(--spacing-xs);
+            background: var(--bg-glass-light);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-small);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .theme-toggle:hover {
+            background: var(--neon-cyan);
+            color: var(--bg-primary);
+            transform: scale(1.05);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+        /*                                        SYSTEM STATUS BAR                                                   */
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+        .system-status {
+            grid-area: status;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md);
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--glass-border);
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--border-radius-small);
+            transition: all var(--transition-fast);
+        }
+
+        .status-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .status-icon {
+            font-size: 1.2rem;
+        }
+
+        .status-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .status-value {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-left: auto;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+        /*                                          STATS GRID                                                        */
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+        .stats-grid {
+            grid-area: stats;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .stat-card {
+            padding: var(--spacing-lg);
+            position: relative;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px) scale(1.02);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 10px rgba(0, 255, 198, 0.3));
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .stat-trend.up {
+            background: rgba(0, 255, 148, 0.1);
+            color: var(--neon-green);
+            border: 1px solid rgba(0, 255, 148, 0.3);
+        }
+
+        .stat-trend.down {
+            background: rgba(255, 59, 59, 0.1);
+            color: var(--neon-red);
+            border: 1px solid rgba(255, 59, 59, 0.3);
+        }
+
+        .stat-value {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            color: var(--neon-cyan);
+            margin-bottom: var(--spacing-xs);
+            font-variant-numeric: tabular-nums;
+            text-shadow: 0 0 20px rgba(0, 255, 198, 0.3);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .stat-description {
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .stat-progress {
+            width: 100%;
+            height: 4px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: var(--spacing-sm);
+        }
+
+        .stat-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-teal));
+            border-radius: 2px;
+            transition: width 2s ease-out;
+            box-shadow: 0 0 10px rgba(0, 255, 198, 0.5);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+        /*                                       ANALYTICS PANEL                                                      */
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+        .analytics-panel {
+            grid-area: analytics;
+            padding: var(--spacing-lg);
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .panel-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--neon-cyan);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .panel-controls {
+            display: flex;
+            gap: var(--spacing-xs);
+        }
+
+        .control-btn {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            background: var(--bg-glass-light);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-small);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .control-btn:hover,
+        .control-btn.active {
+            background: var(--neon-cyan);
+            color: var(--bg-primary);
+            border-color: var(--neon-cyan);
+        }
+
+        .chart-container {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-md);
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chart-value {
+            font-size: 0.9rem;
+            color: var(--neon-cyan);
+            font-weight: 700;
+        }
+
+        .chart-canvas {
+            width: 100%;
+            height: auto;
+            border-radius: var(--border-radius-small);
+            transition: all var(--transition-normal);
+        }
+
+        .chart-canvas:hover {
+            transform: scale(1.02);
+        }
+
+        /* Advanced Chart Styles */
+        .donut-chart-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .donut-center {
+            position: absolute;
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        .donut-center-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px rgba(0, 255, 198, 0.5);
+        }
+
+        .donut-center-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            font-size: 0.85rem;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            box-shadow: 0 0 8px currentColor;
+        }
+
+        .legend-label {
+            color: var(--text-secondary);
+        }
+
+        .legend-value {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Bar Chart Enhancements */
+        .bar-chart-container {
+            height: 250px;
+            display: flex;
+            align-items: end;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md) 0;
+            position: relative;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(to top, var(--neon-cyan), var(--neon-teal));
+            border-radius: 6px 6px 0 0;
+            min-height: 20px;
+            position: relative;
+            transition: all var(--transition-normal);
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 255, 198, 0.3);
+        }
+
+        .chart-bar:hover {
+            filter: brightness(1.3);
+            transform: scaleY(1.05);
+            box-shadow: 0 0 25px rgba(0, 255, 198, 0.6);
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: var(--neon-cyan);
+            font-weight: 700;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            border: 1px solid var(--neon-cyan);
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+
+        .chart-bar:hover .bar-value {
+            opacity: 1;
+        }
+
+        /* Heatmap Chart */
+        .heatmap-container {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            padding: var(--spacing-md);
+        }
+
+        .heatmap-cell {
+            aspect-ratio: 1;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .heatmap-cell:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+        /*                                        CONTROL CENTER                                                      */
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+        .control-panel {
+            grid-area: control;
+            padding: var(--spacing-lg);
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+
+        .control-section {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-md);
+            border: 1px solid var(--glass-border);
+        }
+
+        .control-section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .ai-model-status {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        .model-metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-xs) 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .model-metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .metric-value {
+            color: var(--neon-cyan);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .performance-gauge {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: var(--spacing-md) auto;
+        }
+
+        .gauge-bg {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--neon-cyan) 0deg,
+                var(--neon-teal) 120deg,
+                var(--neon-purple) 240deg,
+                var(--neon-cyan) 360deg
+            );
+            padding: 4px;
+        }
+
+        .gauge-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .gauge-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--neon-cyan);
+        }
+
+        .gauge-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .alert-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .alert-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm);
+            border-radius: var(--border-radius-small);
+            margin-bottom: var(--spacing-xs);
+            transition: all var(--transition-fast);
+        }
+
+        .alert-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .alert-icon {
+            font-size: 1.2rem;
+            margin-top: 0.1rem;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .alert-description {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            line-height: 1.3;
+        }
+
+        .alert-time {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .alert-item.critical {
+            border-left: 3px solid var(--neon-red);
+            background: rgba(255, 59, 59, 0.05);
+        }
+
+        .alert-item.warning {
+            border-left: 3px solid var(--neon-yellow);
+            background: rgba(255, 204, 0, 0.05);
+        }
+
+        .alert-item.info {
+            border-left: 3px solid var(--neon-teal);
+            background: rgba(0, 209, 255, 0.05);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+        /*                                          LIVE FEED                                                         */
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+        .live-panel {
+            grid-area: live;
+            padding: var(--spacing-lg);
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+
+        .chat-container {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-md);
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .chat-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .chat-status {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            font-size: 0.8rem;
+            color: var(--neon-green);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--spacing-sm);
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        .message {
+            opacity: 0;
+            animation: messageSlideIn 0.5s ease forwards;
+            max-width: 85%;
+        }
+
+        .message.ai {
+            align-self: flex-start;
+        }
+
+        .message.citizen {
+            align-self: flex-end;
+        }
+
+        .message-bubble {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: 18px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            word-wrap: break-word;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .message.ai .message-bubble {
+            background: linear-gradient(135deg, rgba(0, 255, 198, 0.15), rgba(0, 209, 255, 0.1));
+            border: 1px solid rgba(0, 255, 198, 0.3);
+            color: var(--neon-cyan);
+            border-radius: 18px 18px 18px 4px;
+        }
+
+        .message.citizen .message-bubble {
+            background: linear-gradient(135deg, rgba(0, 209, 255, 0.15), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(0, 209, 255, 0.3);
+            color: var(--neon-teal);
+            border-radius: 18px 18px 4px 18px;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.25rem;
+        }
+
+        .message-sender {
+            font-size: 0.7rem;
+            font-weight: 600;
+            opacity: 0.8;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            opacity: 0.6;
+        }
+
+        .message-content {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .message-actions {
+            display: flex;
+            gap: var(--spacing-xs);
+            margin-top: 0.5rem;
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+
+        .message:hover .message-actions {
+            opacity: 1;
+        }
+
+        .message-action {
+            padding: 0.25rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 4px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: all var(--transition-fast);
+        }
+
+        .message-action:hover {
+            background: var(--neon-cyan);
+            color: var(--bg-primary);
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: var(--spacing-sm);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+
+        .typing-indicator.show {
+            opacity: 1;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            animation: typingPulse 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        .chat-input-container {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            outline: none;
+            transition: all var(--transition-fast);
+        }
+
+        .chat-input:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 0 2px rgba(0, 255, 198, 0.2);
+        }
+
+        .chat-send {
+            padding: var(--spacing-sm);
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-teal));
+            border: none;
+            border-radius: 50%;
+            color: var(--bg-primary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-send:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-glow) rgba(0, 255, 198, 0.5);
+        }
+
+        /* Activity Feed */
+        .activity-feed {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-md);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm);
+            border-radius: var(--border-radius-small);
+            margin-bottom: var(--spacing-xs);
+            transition: all var(--transition-fast);
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .activity-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-description {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            line-height: 1.3;
+        }
+
+        .activity-time {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+        /*                                        ACTION CENTER                                                       */
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+        .actions-section {
+            grid-area: actions;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-md);
+            padding: var(--spacing-lg);
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius-large);
+            border: 1px solid var(--glass-border);
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, 
+                rgba(0, 255, 198, 0.1), 
+                rgba(0, 209, 255, 0.1), 
+                rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(0, 255, 198, 0.3);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-md) var(--spacing-lg);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-teal), var(--neon-purple));
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow) rgba(0, 255, 198, 0.4);
+            border-color: var(--neon-cyan);
+        }
+
+        .action-btn:hover::before {
+            opacity: 0.1;
+        }
+
+        .action-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .action-btn .btn-icon {
+            font-size: 1.2rem;
+            z-index: 1;
+        }
+
+        .action-btn .btn-text {
+            z-index: 1;
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-teal));
+            color: var(--bg-primary);
+            border-color: transparent;
+        }
+
+        .action-btn.primary:hover {
+            box-shadow: var(--shadow-glow) rgba(0, 255, 198, 0.6);
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+        /*                                        INSIGHTS ENGINE                                                     */
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+        .insights-section {
+            grid-area: insights;
+            padding: var(--spacing-lg);
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius-large);
+            border: 1px solid var(--glass-border);
+        }
+
+        .insights-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .insights-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--neon-cyan);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .insights-controls {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .insight-card {
+            background: var(--bg-glass-light);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            border-left: 4px solid;
+            transition: all var(--transition-normal);
+            opacity: 0;
+            transform: translateY(20px);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .insight-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, currentColor, transparent);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+
+        .insight-card:hover::before {
+            opacity: 1;
+        }
+
+        .insight-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .insight-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-strong);
+        }
+
+        .insight-card.success {
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+        }
+
+        .insight-card.warning {
+            border-color: var(--neon-yellow);
+            color: var(--neon-yellow);
+        }
+
+        .insight-card.info {
+            border-color: var(--neon-teal);
+            color: var(--neon-teal);
+        }
+
+        .insight-card.danger {
+            border-color: var(--neon-red);
+            color: var(--neon-red);
+        }
+
+        .insight-card.critical {
+            border-color: var(--neon-purple);
+            color: var(--neon-purple);
+        }
+
+        .insight-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .insight-icon {
+            font-size: 2rem;
+            margin-bottom: var(--spacing-sm);
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+
+        .insight-priority {
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid currentColor;
+        }
+
+        .insight-content {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .insight-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xs);
+            line-height: 1.3;
+        }
+
+        .insight-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .insight-metrics {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .insight-metric {
+            text-align: center;
+        }
+
+        .insight-metric-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: currentColor;
+            display: block;
+        }
+
+        .insight-metric-label {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            margin-top: 0.25rem;
+        }
+
+        .insight-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: var(--spacing-sm);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .insight-timestamp {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .insight-actions {
+            display: flex;
+            gap: var(--spacing-xs);
+        }
+
+        .insight-action {
+            padding: 0.25rem 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid currentColor;
+            border-radius: 6px;
+            color: currentColor;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .insight-action:hover {
+            background: currentColor;
+            color: var(--bg-primary);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+        /*                                          MODAL SYSTEM                                                      */
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-lg);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: var(--bg-glass);
+            border: 1px solid var(--glass-border-strong);
+            border-radius: var(--border-radius-large);
+            padding: var(--spacing-xl);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-strong);
+            transform: scale(0.9);
+            transition: transform var(--transition-normal);
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .modal-title {
+            color: var(--neon-cyan);
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+        }
+
+        .modal-description {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .modal-body {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .progress-container {
+            margin: var(--spacing-lg) 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: var(--spacing-md) 0;
+            border: 1px solid var(--glass-border);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-teal), var(--neon-purple));
+            width: 0%;
+            transition: width var(--transition-normal);
+            border-radius: 6px;
+            box-shadow: 0 0 20px rgba(0, 255, 198, 0.5);
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: progressShimmer 2s infinite;
+        }
+
+        @keyframes progressShimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-text {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-top: var(--spacing-sm);
+            font-weight: 500;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: var(--spacing-md);
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-xs);
+            flex: 1;
+        }
+
+        .step-indicator {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            transition: all var(--transition-normal);
+        }
+
+        .step-indicator.active {
+            background: var(--neon-cyan);
+            border-color: var(--neon-cyan);
+            color: var(--bg-primary);
+            box-shadow: 0 0 20px rgba(0, 255, 198, 0.5);
+        }
+
+        .step-indicator.completed {
+            background: var(--neon-green);
+            border-color: var(--neon-green);
+            color: var(--bg-primary);
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            text-align: center;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+        /*                                         TOOLTIP SYSTEM                                                     */
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.95);
+            color: var(--text-primary);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--border-radius-small);
+            font-size: 0.85rem;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+            border: 1px solid var(--neon-cyan);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+            max-width: 250px;
+            word-wrap: break-word;
+        }
+
+        .tooltip.show {
+            opacity: 1;
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.95);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+        /*                                         ANIMATIONS                                                          */
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes typingPulse {
+            0%, 60%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            30% {
+                transform: scale(1.3);
+                opacity: 1;
+            }
+        }
+
+        @keyframes chartDraw {
+            from {
+                stroke-dashoffset: 1000;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes barGrow {
+            from {
+                height: 0;
+                opacity: 0;
+            }
+            to {
+                height: var(--target-height);
+                opacity: 1;
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(0, 255, 198, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(0, 255, 198, 0.6);
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+        /*                                      RESPONSIVE DESIGN                                                     */
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+        @media (max-width: 1400px) {
+            .dashboard-container {
+                grid-template-columns: 1.5fr 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .dashboard-container {
+                grid-template-areas: 
+                    "header header"
+                    "status status"
+                    "stats stats"
+                    "analytics control"
+                    "live live"
+                    "actions actions"
+                    "insights insights";
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-areas: 
+                    "header"
+                    "status"
+                    "stats"
+                    "analytics"
+                    "control"
+                    "live"
+                    "actions"
+                    "insights";
+                grid-template-columns: 1fr;
+                padding: var(--spacing-md);
+                gap: var(--spacing-md);
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+            
+            .actions-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .insights-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-right {
+                flex-direction: column;
+                gap: var(--spacing-xs);
+            }
+
+            .dashboard-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-container {
+                padding: var(--spacing-sm);
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+        /*                                       ACCESSIBILITY                                                        */
+        /* ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Focus styles */
+        .action-btn:focus,
+        .control-btn:focus,
+        .chart-bar:focus,
+        .insight-action:focus,
+        .chat-input:focus,
+        .chat-send:focus {
+            outline: 2px solid var(--neon-cyan);
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --bg-primary: #000000;
+                --bg-secondary: #1a1a1a;
+                --text-primary: #ffffff;
+                --glass-border: rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .dashboard-container {
+                grid-template-areas: 
+                    "header header"
+                    "stats stats"
+                    "analytics control"
+                    "insights insights";
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .live-panel,
+            .actions-section,
+            .background-particles {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Particles -->
+    <div class="background-particles" id="backgroundParticles"></div>
+
+    <div class="dashboard-container">
+        <!-- ═══════════════════════════════════════════════════════════════════════════════════════════════════════ -->
+        <!--                                         HEADER SECTION                                                  -->
+        <!-- ═══════════════════════════════════════════════════════════════════════════════════════════════════════ -->
+        <header class="dashboard-header" role="banner">
+            <div class="header-left">
+                <div class="logo-container">
+                    <div class="logo-icon" aria-hidden="true">🤖</div>
+                    <div class="header-title">
+                        <h1 class="dashboard-title">Nigam Saathi</h1>
+                        <p class="dashboard-subtitle">Ultimate AI Assistant Dashboard v2.0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="status-indicator">
+                    <div class="status-dot" aria-hidden="true"></div>
+                    <span>System Online</span>
+                </div>
+                <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+                    <span id="themeIcon">🌙</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- ═══════════════════════════════════════════════════════════════════════════════════════════════════════ -->
+        <!--                                       SYSTEM STATUS BAR                                                 -->
+        <!-- ═══════════════════════════════════════════════════════════════════════════════════════════════════════ -->
+        <section class="system-status" role="region" aria-label="System Status">
+            <div class="status-item">
+                <span class="status-icon" style="color: var(--neon-green);">⚡</span>
+                <span class="status-text">CPU Usage</span>
+                <span class="status-value" id="cpuUsage">23%</span>
+            </div>
+            <div class="status-item">
+                <span class="status-icon" style="color: var(--neon-teal);">💾</span>
+                <span class="status-text">Memory</span>
+                <span class="status-value" id="memoryUsage">67%</span>
+            </div>
+            <div class="status-item">
+                <span class="status-icon" style="color: var(--neon-cyan);">🌐</span>
+                <span class="status-text">Network</span>
+                <span class="status-value" id="networkStatus">Active</span>
+            </div>
+            <div class="status-item">
+                <span class="status-icon" style="color: var(--neon-purple);">🔄</span>
+                <span class="status-text">Sync Status</span>
+                <span class="status-value" id="syncStatus">Live</span>
+            </div>
+            <div class="status-item">
+                <span class="status-icon" style="color: var(--neon-yellow);">📊</span>
+                <span class="status-text">Data Quality</span>
+                <span class="status-value" id="dataQuality">98.5%</span>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════════════════════════════════════════════ -->
+        <!--                                         STATS GRID                                                      -->
+        <!-- ═══════════════════════════════════════════════════════════════════════════════════════════════════════ -->
+        <section class="stats-grid" role="region" aria-label="Key Performance Metrics">
+            <div class="glass-card stat-card" tabindex="0">
+                <div class="stat-header">
+                    <span class="stat-icon" aria-hidden="true">💬</span>
+                    <div class="stat-trend up">
+                        <span>↗</span>
+                        <span>+12.5%</span>
+                    </div>
+                </div>
+                <div class="stat-value" data-target="24567" aria-live="polite">0</div>
+                <div class="stat-label">Total Interactions</div>
+                <div class="stat-description">Citizens served across all wards this month</div>
+                <div class="stat-progress">
+                    <div class="stat-progress-fill" style="width: 78%"></div>
+                </div>
+            </div>
+
+            <div class="glass-card stat-card" tabindex="0">
+                <div class="stat-header">
+                    <span class="stat-icon" aria-hidden="true">✅</span>
+                    <div class="stat-trend up">
+                        <span>↗</span>
+                        <span>+5.2%</span>
+                    </div>
+                </div>
+                <div class="stat-value" data-target="94" data-suffix="%" aria-live="polite">0%</div>
+                <div class="stat-label">AI Resolution Rate</div>
+                <div class="stat-description">Queries resolved without human intervention</div>
+                <div class="stat-progress">
+                    <div class="stat-progress-fill" style="width: 94%"></div>
+                </div>
+            </div>
+
+            <div class="glass-card stat-card" tabindex="0">
+                <div class="stat-header">
+                    <span class="stat-icon" aria-hidden="true">⚡</span>
+                    <div class="stat-trend up">
+                        <span>↗</span>
+                        <span>-0.8s</span>
+                    </div>
+                </div>
+                <div class="stat-value" data-target="1.2" data-suffix="s" aria-live="polite">0s</div>
+                <div class="stat-label">Avg Response Time</div>
+                <div class="stat-description">Average AI response time across all channels</div>
+                <div class="stat-progress">
+                    <div class="stat-progress-fill" style="width: 85%"></div>
+                </div>
+            </div>
+
+            <div class="glass-card stat-card" tabindex="0">
+                <div class="stat-header">
+                    <span class="stat-icon" aria-hidden="true">🎯</span>
+                    <div class="stat-trend up">
+                        <span>↗</span>
+                        <span>+8.1%</span>
+                    </div>
+                </div>
+                <div class="stat-value" data-target="97" data-suffix="%" aria-live="polite">0%</div>
+                <div class="stat-label">Accuracy Score</div>
+                <div class="stat-description">AI model prediction accuracy this week</div>
+                <div class="stat-progress">
+                    <div class="stat-progress-fill" style="width: 97%"></div>
+                </div>
+            </div>
+
+            <div class="glass-card stat-card" tabindex="0">
+                <div class="stat-header">
+                    <span class="stat-icon" aria-hidden="true">💰</span>
+                    <div class="stat-trend up">
+                        <span>↗</span>
+                        <span>+₹2.3L</span>
+                    </div>
+                </div>
+                <div class="stat-value" data-target="15.7" data-suffix="L" aria-live="polite">0L</div>
+                <div class="stat-label">Penalties Collected</div>
+                <div class="stat-description">Auto-generated fines via AI detection</div>
+                <div class="stat-progress">
+                    <div class="stat-progress-fill" style="width: 89%"></div>
+                </div>
+            </div>
+
+            <div class="glass-card stat-card" tabindex="0">
+                <div class="stat-header">
+                    <span class="stat-icon" aria-hidden="true">🔄</span>
+                    <div class="stat-trend down">
+                        <span>↘</span>
+                        <span>-23</span>
+                    </div>
+                </div>
+                <div class="stat-value" data-target="156" aria-live="polite">0</div>
+                <div class="stat-label">Human Escalations</div>
+                <div class="stat-description">Cases requiring human intervention</div>
+                <div class="stat-progress">
+                    <div class="stat-progress-fill" style="width: 12%"></div>
+                </div>
+            </div>
+
+            <div class="glass-card stat-card" tabindex="0">
+                <div class="stat-header">
+                    <span class="stat-icon" aria-hidden="true">📱</span>
+                    <div class="stat-trend up">
+                        <span>↗</span>
+                        <span>+1.2K</span>
+                    </div>
+                </div>
+                <div class="stat-value" data-target="8934" aria-live="polite">0</div>
+                <div class="stat-label">Active Users</div>
+                <div class="stat-description">Citizens actively using the platform</div>
+                <div class="stat-progress">
+                    <div class="stat-progress-fill" style="width: 76%"></div>
+                </div>
+            </div>
+
+            <div class="glass-card stat-card" tabindex="0">
+                <div class="stat-header">
+                    <span class="stat-icon" aria-hidden="true">⭐</span>
+                    <div class="stat-trend up">
+                        <span>↗</span>
+                        <span>+0.3</span>
+                    </div>
+                </div>
+                <div class="stat-value" data-target="4.8" data-suffix="/5" aria-live="polite">0/5</div>
+                <div class="stat-label">Satisfaction Score</div>
+                <div class="stat-description">Average citizen satisfaction rating</div>
+                <div class="stat-progress">
+                    <div class="stat-progress-fill" style="width: 96%"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════════════════════════════════════════════ -->
+        <!--                                       ANALYTICS PANEL                                                   -->
+        <!-- ═══════════════════════════════════════════════════════════════════════════════════════════════════════ -->
+        <section class="glass-card analytics-panel" role="region" aria-label="Analytics Dashboard">
+            <div class="panel-header">
+                <h2 class="panel-title">📊 Advanced Analytics</h2>
+                <div class="panel-controls">
+                    <button class="control-btn active" onclick="setTimeRange('24h')">24H</button>
+                    <button class="control-btn" onclick="setTimeRange('7d')">7D</button>
+                    <button class="control-btn" onclick="setTimeRange('30d')">30D</button>
+                    <button class="control-btn" onclick="setTimeRange('90d')">90D</button>
+                </div>
+            </div>
+
+            <!-- AI vs Human Resolution Donut Chart -->
+            <div class="chart-container">
+                <div class="chart-title">
+                    AI vs Human Resolution Split
+                    <span class="chart-value">94% AI Resolved</span>
+                </div>
+                <div class="donut-chart-container">
+                    <canvas id="donutChart" class="chart-canvas" width="280" height="280" role="img" aria-label="Donut chart showing AI resolved 94% and Human resolved 6%"></canvas>
+                    <div class="donut-center">
+                        <div class="donut-center-value">94%</div>
+                        <div class="donut-center-label">AI Resolved</div>
+                    </div>
+                </div>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--neon-cyan);"></div>
+                        <span class="legend-label">AI Resolved:</span>
+                        <span class="legend-value">94%</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--neon-orange);"></div>
+                        <span class="legend-label">Human Required:</span>
+                        <span class="legend-value">6%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category-wise Queries Bar Chart -->
+            <div class="chart-container">
+                <div class="chart-title">
+                    Category-wise Query Distribution
+                    <span class="chart-value">5 Categories</span>
+                </div>
+                <div class="bar-chart-container" id="barChart" role="img" aria-label="Bar chart showing query distribution across categories">
+                    <!-- Bars will be generated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Trend Line Chart -->
+            <div class="chart-container">
+                <div class="chart-title">
+                    Interaction Trends (Last 30 Days)
+                    <span class="chart-value">+12.5% Growth</span>
+                </div>
+                <canvas id="lineChart" class="chart-canvas" width="500" height="200" role="img" aria-label="Line chart showing interaction trends over 30 days"></canvas>
+            </div>
+
+            <!-- Ward Performance Heatmap -->
+            <div class="chart-container">
+                <div class="chart-title">
+                    Ward Performance Heatmap
+                    <span class="chart-value">35 Wards</span>
+                </div>
+                <div class="heatmap-container" id="heatmapChart">
+                    <!-- Heatmap cells will be generated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════════════════════════════════════════════ -->
+        <!--                                        CONTROL CENTER                                                   -->
+        <!-- ═══════════════════════════════════════════════════════════════════════════════════════════════════════ -->
+        <section class="glass-card control-panel" role="region" aria-label="AI Control Center">
+            <div class="panel-header">
+                <h2 class="panel-title">⚙️ AI Control Center</h2>
+            </div>
+
+            <!-- AI Model Status -->
+            <div class="control-section">
+                <h3 class="control-section-title">🤖 Model Performance</h3>
+                <div class="performance-gauge">
+                    <div class="gauge-bg">
+                        <div class="gauge-inner">
+                            <div class="gauge-value" id="performanceScore">97%</div>
+                            <div class="gauge-label">Performance</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ai-model-status">
+                    <div class="model-metric">
+                        <span class="metric-label">Model Version</span>
+                        <span class="metric-value">v2.4.1</span>
+                    </div>
+                    <div class="model-metric">
+                        <span class="metric-label">Last Training</span>
+                        <span class="metric-value">2 hours ago</span>
+                    </div>
+                    <div class="model-metric">
+                        <span class="metric-label">Confidence Score</span>
+                        <span class="metric-value">98.7%</span>
+                    </div>
+                    <div class="model-metric">
+                        <span class="metric-label">Processing Speed</span>
+                        <span class="metric-value">1.2ms</span>
+                    </div>
+                    <div class="model-metric">
+                        <span class="metric-label">Memory Usage</span>
+                        <span class="metric-value">2.1GB</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Alerts -->
+            <div class="control-section">
+                <h3 class="control-section-title">🚨 System Alerts</h3>
+                <div class="alert-list" id="alertList">
+                    <div class="alert-item critical">
+                        <div class="alert-icon" style="color: var(--neon-red);">🔴</div>
+                        <div class="alert-content">
+                            <div class="alert-title">High Query Volume</div>
+                            <div class="alert-description">Ward 15 experiencing 300% increase in complaints</div>
+                            <div class="alert-time">5 minutes ago</div>
+                        </div>
+                    </div>
+                    <div class="alert-item warning">
+                        <div class="alert-icon" style="color: var(--neon-yellow);">⚠️</div>
+                        <div class="alert-content">
+                            <div class="alert-title">Model Drift Detected</div>
+                            <div class="alert-description">Accuracy dropped to 94.2% in plastic waste category</div>
+                            <div class="alert-time">12 minutes ago</div>
+                        </div>
+                    </div>
+                    <div class="alert-item info">
+                        <div class="alert-icon" style="color: var(--neon-teal);">ℹ️</div>
+                        <div class="alert-content">
+                            <div class="alert-title">Scheduled Maintenance</div>
+                            <div class="alert-description">System backup scheduled for 2:00 AM tonight</div>
+                            <div class="alert-time">1 hour ago</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="control-section">
+                <h3 class="control-section-title">⚡ Quick Actions</h3>
+                <div style="display: grid; gap: var(--spacing-sm);">
+                    <button class="action-btn" onclick="refreshModel()" style="font-size: 0.9rem; padding: var(--spacing-sm);">
+                        <span class="btn-icon">🔄</span>
+                        <span class="btn-text">Refresh Model</span>
+                    </button>
+                    <button class="action-btn" onclick="clearCache()" style="font-size: 0.9rem; padding: var(--spacing-sm);">
+                        <span class="btn-icon">🗑️</span>
+                        <span class="btn-text">Clear Cache</span>
+                    </button>
+                    <button class="action-btn" onclick="runDiagnostics()" style="font-size: 0.9rem; padding: var(--spacing-sm);">
+                        <span class="btn-icon">🔍</span>
+                        <span class="btn-text">Run Diagnostics</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════════════════════════════════════════════ -->
+        <!--                                          LIVE FEED                                                      -->
+        <!-- ═══════════════════════════════════════════════════════════════════════════════════════════════════════ -->
+        <section class="glass-card live-panel" role="region" aria-label="Live Activity Feed">
+            <div class="panel-header">
+                <h2 class="panel-title">💬 Live Conversations</h2>
+            </div>
+
+            <!-- Chat Container -->
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="chat-title">Real-time AI Interactions</div>
+                    <div class="chat-status">
+                        <div class="status-dot"></div>
+                        <span>Live</span>
+                    </div>
+                </div>
+                <div class="chat-messages" id="chatMessages" role="log" aria-live="polite">
+                    <!-- Messages will be populated by JavaScript -->
+                </div>
+                <div class="typing-indicator" id="typingIndicator">
+                    <span>AI is analyzing...</span>
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" placeholder="Monitor live conversations..." readonly>
+                    <button class="chat-send" aria-label="Send message">
+                        <span>📤</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Activity Feed -->
+            <div class="control-section">
+                <h3 class="control-section-title">📈 Recent Activity</h3>
+                <div class="activity-feed" id="activityFeed">
+                    <!-- Activity items will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════════════════════════════════════════════ -->
+        <!--                                        ACTION CENTER                                                    -->
+        <!-- ═══════════════════════════════════════════════════════════════════════════════════════════════════════ -->
+        <section class="actions-section" role="region" aria-label="Dashboard Actions">
+            <button class="action-btn primary" onclick="generateInsights()" aria-describedby="insights-desc">
+                <span class="btn-icon">🧠</span>
+                <span class="btn-text">Generate AI Insights</span>
+            </button>
+            <button class="action-btn" onclick="retrainModel()" aria-describedby="retrain-desc">
+                <span class="btn-icon">⚙️</span>
+                <span class="btn-text">Retrain AI Model</span>
+            </button>
+            <button class="action-btn" onclick="exportReports()" aria-describedby="export-desc">
+                <span class="btn-icon">📊</span>
+                <span class="btn-text">Export Analytics</span>
+            </button>
+            <button class="action-btn" onclick="optimizePerformance()" aria-describedby="optimize-desc">
+                <span class="btn-icon">🚀</span>
+                <span class="btn-text">Optimize Performance</span>
+            </button>
+            <button class="action-btn" onclick="scheduleBackup()" aria-describedby="backup-desc">
+                <span class="btn-icon">💾</span>
+                <span class="btn-text">Schedule Backup</span>
+            </button>
+            <button class="action-btn" onclick="viewLogs()" aria-describedby="logs-desc">
+                <span class="btn-icon">📋</span>
+                <span class="btn-text">System Logs</span>
+            </button>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════════════════════════════════════════════ -->
+        <!--                                       INSIGHTS ENGINE                                                   -->
+        <!-- ═══════════════════════════════════════════════════════════════════════════════════════════════════════ -->
+        <section class="insights-section" role="region" aria-label="AI Generated Insights">
+            <div class="insights-header">
+                <h2 class="insights-title">🧠 AI Insights Engine</h2>
+                <div class="insights-controls">
+                    <button class="control-btn" onclick="refreshInsights()">🔄 Refresh</button>
+                    <button class="control-btn" onclick="exportInsights()">📤 Export</button>
+                </div>
+            </div>
+            <div class="insights-grid" id="insightsGrid" aria-live="polite">
+                <!-- Dynamic insights will be populated here -->
+            </div>
+        </section>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ -->
+    <!--                                           MODALS                                                            -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════════════════════════════════════ -->
+
+    <!-- AI Retraining Modal -->
+    <div class="modal-overlay" id="retrainModal" role="dialog" aria-labelledby="retrain-modal-title" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="retrain-modal-title">🤖 AI Model Retraining</h3>
+                <p class="modal-description">Training AI model with latest conversation data and performance optimizations</p>
+            </div>
+            <div class="modal-body">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p class="progress-text" id="progressText">Initializing training pipeline...</p>
+                </div>
+                <div class="progress-steps" id="progressSteps">
+                    <div class="progress-step">
+                        <div class="step-indicator" id="step1">1</div>
+                        <div class="step-label">Data Prep</div>
+                    </div>
+                    <div class="progress-step">
+                        <div class="step-indicator" id="step2">2</div>
+                        <div class="step-label">Training</div>
+                    </div>
+                    <div class="progress-step">
+                        <div class="step-indicator" id="step3">3</div>
+                        <div class="step-label">Validation</div>
+                    </div>
+                    <div class="progress-step">
+                        <div class="step-indicator" id="step4">4</div>
+                        <div class="step-label">Deployment</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="action-btn" onclick="closeModal()" id="closeModalBtn" disabled>
+                    <span class="btn-text">Close</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="tooltip" id="tooltip" role="tooltip"></div>
+
+    <!-- Hidden descriptions for accessibility -->
+    <div class="sr-only">
+        <p id="insights-desc">Generate new AI insights based on current data and trends</p>
+        <p id="retrain-desc">Start comprehensive AI model retraining process</p>
+        <p id="export-desc">Download detailed analytics reports in multiple formats</p>
+        <p id="optimize-desc">Run performance optimization algorithms</p>
+        <p id="backup-desc">Schedule automated system backup</p>
+        <p id="logs-desc">View detailed system and error logs</p>
+    </div>
+
+    <script>
+        // ═══════════════════════════════════════════════════════════════════════════════════════════════════════════
+        //                                        ADVANCED MOCK DATA SYSTEM
+        // ═══════════════════════════════════════════════════════════════════════════════════════════════════════════
+
+        const ADVANCED_MOCK_DATA = {
+            // Enhanced Statistics
+            stats: {
+                interactions: 24567,
+                resolutionRate: 94,
+                responseTime: 1.2,
+                escalations: 156,
+                accuracy: 97,
+                penalties: 15.7,
+                activeUsers: 8934,
+                satisfaction: 4.8
+            },
+
+            // Comprehensive Chart Data
+            chartData: {
+                resolution: { ai: 94, human: 6 },
+                categories: [
+                    { name: 'Plastic Waste', value: 2150, color: '#00ffc6', trend: '+15%' },
+                    { name: 'Water Issues', value: 1890, color: '#00d1ff', trend: '+8%' },
+                    { name: 'Street Vendors', value: 2450, color: '#8b5cf6', trend: '+22%' },
+                    { name: 'Garbage Collection', value: 1320, color: '#ffcc00', trend: '-5%' },
+                    { name: 'Road Maintenance', value: 1680, color: '#ff6b35', trend: '+12%' },
+                    { name: 'Public Utilities', value: 980, color: '#ec4899', trend: '+3%' }
+                ],
+                trends: [1200, 1450, 1800, 2100, 1950, 2300, 2650, 2400, 2800, 3100, 2900, 3200, 3450, 3200, 3600, 3800, 3500, 3900, 4100, 3800, 4200, 4400, 4100, 4500, 4700, 4400, 4800, 5000, 4700, 5100],
+                wardPerformance: Array.from({length: 35}, (_, i) => ({
+                    ward: i + 1,
+                    performance: Math.floor(Math.random() * 40) + 60, // 60-100%
+                    complaints: Math.floor(Math.random() * 200) + 50,
+                    resolved: Math.floor(Math.random() * 30) + 70 // 70-100%
+                }))
+            },
+
+            // Enhanced Conversations
+            conversations: [
+                { 
+                    type: 'citizen', 
+                    sender: 'Rajesh Kumar',
+                    text: 'Water motor in Ward 12, Block A has been malfunctioning for 3 days. No water supply since Monday morning.', 
+                    time: '14:32',
+                    priority: 'high'
+                },
+                { 
+                    type: 'ai', 
+                    sender: 'Nigam Saathi AI',
+                    text: 'Complaint registered #WM2024001. Technical team dispatched to Ward 12, Block A. Expected resolution: 4-6 hours. Track status: nigamsetu.gov.in/track/WM2024001', 
+                    time: '14:33',
+                    confidence: 98.5
+                },
+                { 
+                    type: 'citizen', 
+                    sender: 'Priya Sharma',
+                    text: 'Illegal plastic dumping happening near Sarojini Market every evening around 7 PM. Multiple vendors involved.', 
+                    time: '14:45',
+                    priority: 'medium'
+                },
+                { 
+                    type: 'ai', 
+                    sender: 'Nigam Saathi AI',
+                    text: 'Environmental violation logged #PL2024089. Surveillance team alerted for 7 PM monitoring. Penalty notices will be issued. Fine: ₹5000 per violation. Evidence collection initiated.', 
+                    time: '14:46',
+                    confidence: 96.2
+                },
+                { 
+                    type: 'citizen', 
+                    sender: 'Amit Patel',
+                    text: 'Street vendor blocking main road in Zone 3, causing traffic jam during peak hours. License verification needed.', 
+                    time: '15:12',
+                    priority: 'high'
+                },
+                { 
+                    type: 'ai', 
+                    sender: 'Nigam Saathi AI',
+                    text: 'Traffic violation reported #VE2024156. Enforcement team dispatched to Zone 3. Vendor relocation to designated area within 2 hours. License verification in progress.', 
+                    time: '15:13',
+                    confidence: 94.8
+                }
+            ],
+
+            // Advanced Insights with Categories
+            insights: [
+                { 
+                    icon: '🚀',
+                    title: 'Plastic Waste Reduction Success',
+                    text: 'Ward 18 achieved 45% reduction in plastic complaints through targeted AI-driven awareness campaigns and penalty enforcement.',
+                    type: 'success',
+                    priority: 'high',
+                    metrics: [
+                        { label: 'Reduction', value: '45%' },
+                        { label: 'Penalties', value: '₹2.3L' }
+                    ],
+                    timestamp: '2 hours ago',
+                    category: 'Environmental'
+                },
+                { 
+                    icon: '🎯',
+                    title: 'AI Performance Excellence',
+                    text: 'Ward 7 AI system achieved 98.5% query resolution rate with zero escalations in the past 48 hours.',
+                    type: 'success',
+                    priority: 'medium',
+                    metrics: [
+                        { label: 'Resolution', value: '98.5%' },
+                        { label: 'Escalations', value: '0' }
+                    ],
+                    timestamp: '4 hours ago',
+                    category: 'Performance'
+                },
+                { 
+                    icon: '💰',
+                    title: 'Revenue Generation Impact',
+                    text: 'AI-powered violation detection generated ₹1.2L in penalties this quarter, 300% increase from manual detection.',
+                    type: 'info',
+                    priority: 'high',
+                    metrics: [
+                        { label: 'Revenue', value: '₹1.2L' },
+                        { label: 'Increase', value: '300%' }
+                    ],
+                    timestamp: '6 hours ago',
+                    category: 'Financial'
+                },
+                { 
+                    icon: '⚠️',
+                    title: 'Vendor Activity Spike Alert',
+                    text: 'Unauthorized vendor activity increased 67% in Zone 3. Immediate enforcement action recommended.',
+                    type: 'warning',
+                    priority: 'critical',
+                    metrics: [
+                        { label: 'Increase', value: '67%' },
+                        { label: 'Violations', value: '23' }
+                    ],
+                    timestamp: '1 hour ago',
+                    category: 'Enforcement'
+                },
+                { 
+                    icon: '📉',
+                    title: 'Waste Management Improvement',
+                    text: 'Garbage collection complaints dropped 30% vs last month due to optimized route planning and proactive monitoring.',
+                    type: 'success',
+                    priority: 'medium',
+                    metrics: [
+                        { label: 'Reduction', value: '30%' },
+                        { label: 'Efficiency', value: '94%' }
+                    ],
+                    timestamp: '8 hours ago',
+                    category: 'Operations'
+                },
+                { 
+                    icon: '📈',
+                    title: 'Water Infrastructure Hotspots',
+                    text: 'Motor misuse patterns concentrated in Wards 9, 14, 32. Predictive maintenance scheduled for next week.',
+                    type: 'danger',
+                    priority: 'high',
+                    metrics: [
+                        { label: 'Hotspots', value: '3' },
+                        { label: 'Risk Score', value: '8.2/10' }
+                    ],
+                    timestamp: '3 hours ago',
+                    category: 'Infrastructure'
+                },
+                { 
+                    icon: '🔍',
+                    title: 'Fraud Detection Success',
+                    text: 'AI system identified and prevented 12 fraudulent penalty appeals, saving ₹45,000 in potential revenue loss.',
+                    type: 'info',
+                    priority: 'medium',
+                    metrics: [
+                        { label: 'Prevented', value: '12' },
+                        { label: 'Saved', value: '₹45K' }
+                    ],
+                    timestamp: '5 hours ago',
+                    category: 'Security'
+                },
+                { 
+                    icon: '⚡',
+                    title: 'Response Time Optimization',
+                    text: 'Average AI response time improved to 1.2 seconds, 40% faster than previous month through model optimization.',
+                    type: 'success',
+                    priority: 'low',
+                    metrics: [
+                        { label: 'Speed', value: '1.2s' },
+                        { label: 'Improvement', value: '40%' }
+                    ],
+                    timestamp: '12 hours ago',
+                    category: 'Performance'
+                }
+            ],
+
+            // Activity Feed Data
+            activities: [
+                {
+                    icon: '🤖',
+                    title: 'AI Model Updated',
+                    description: 'Performance model v2.4.1 deployed with 15% accuracy improvement',
+                    time: '5 minutes ago',
+                    type: 'system',
+                    color: 'var(--neon-cyan)'
+                },
+                {
+                    icon: '🚨',
+                    title: 'High Priority Alert',
+                    description: 'Ward 15 complaint volume exceeded threshold (300% increase)',
+                    time: '12 minutes ago',
+                    type: 'alert',
+                    color: 'var(--neon-red)'
+                },
+                {
+                    icon: '💰',
+                    title: 'Penalty Collected',
+                    description: '₹5,000 fine collected for plastic dumping violation #PL2024089',
+                    time: '18 minutes ago',
+                    type: 'financial',
+                    color: 'var(--neon-green)'
+                },
+                {
+                    icon: '📊',
+                    title: 'Analytics Report',
+                    description: 'Weekly performance report generated and sent to administrators',
+                    time: '25 minutes ago',
+                    type: 'report',
+                    color: 'var(--neon-purple)'
+                },
+                {
+                    icon: '🔧',
+                    title: 'System Maintenance',
+                    description: 'Scheduled database optimization completed successfully',
+                    time: '1 hour ago',
+                    type: 'maintenance',
+                    color: 'var(--neon-yellow)'
+                }
+            ]
+        };
+
+        // ═══════════════════════════════════════════════════════════════════════════════════════════════════════════
+        //                                        ADVANCED UTILITY CLASSES
+        // ═══════════════════════════════════════════════════════════════════════════════════════════════════════════
+
+        class AdvancedUtils {
+            static debounce(func, wait, immediate) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        timeout = null;
+                        if (!immediate) func(...args);
+                    };
+                    const callNow = immediate && !timeout;
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                    if (callNow) func(...args);
+                };
+            }
+
+            static throttle(func, limit) {
+                let inThrottle;
+                return function() {
+                    const args = arguments;
+                    const context = this;
+                    if (!inThrottle) {
+                        func.apply(context, args);
+                        inThrottle = true;
+                        setTimeout(() => inThrottle = false, limit);
+                    }
+                }
+            }
+
+            static formatNumber(num, locale = 'en-IN') {
+                if (num >= 10000000) return (num / 10000000).toFixed(1) + 'Cr';
+                if (num >= 100000) return (num / 100000).toFixed(1) + 'L';
+                if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+                return new Intl.NumberFormat(locale).format(num);
+            }
+
+            static getRandomDelay(min = 100, max = 500) {
+                return Math.random() * (max - min) + min;
+            }
+
+            static generateId() {
+                return Date.now().toString(36) + Math.random().toString(36).substr(2);
+            }
+
+            static interpolateColor(color1, color2, factor) {
+                const result = color1.slice();
+                for (let i = 0; i < 3; i++) {
+                    result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
+                }
+                return result;
+            }
+
+            static hexToRgb(hex) {
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? [
+                    parseInt(result[1], 16),
+                    parseInt(result[2], 16),
+                    parseInt(result[3], 16)
+                ] : null;
+            }
+
+            static rgbToHex(r, g, b) {
+                return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════════════════════════════════════════
+        //                                        ADVANCED ANIMATION ENGINE
+        // ═══════════════════════════════════════════════════════════════════════════════════════════════════════════
+
+        class AdvancedAnimationEngine {
+            constructor() {
+                this.animations = new Map();
+                this.observers = new Map();
+                this.isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            }
+
+            // Enhanced counter animation with easing curves
+            animateCounter(element, target, options = {}) {
+                const {
+                    duration = 2000,
+                    suffix = '',
+                    prefix = '',
+                    decimals = 0,
+                    easing = 'easeOutCubic',
+                    onUpdate = null,
+                    onComplete = null
+                } = options;
+
+                if (this.isReducedMotion) {
+                    element.textContent = prefix + target.toFixed(decimals) + suffix;
+                    if (onComplete) onComplete();
+                    return;
+                }
+
+                const start = performance.now();
+                const startValue = 0;
+                const easingFunctions = {
+                    linear: t => t,
+                    easeInQuad: t => t * t,
+                    easeOutQuad: t => t * (2 - t),
+                    easeInOutQuad: t => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
+                    easeInCubic: t => t * t * t,
+                    easeOutCubic: t => (--t) * t * t + 1,
+                    easeInOutCubic: t => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
+                    easeInElastic: t => Math.sin(13 * Math.PI / 2 * t) * Math.pow(2, 10 * (t - 1)),
+                    easeOutElastic: t => Math.sin(-13 * Math.PI / 2 * (t + 1)) * Math.pow(2, -10 * t) + 1
+                };
+
+                const animate = (currentTime) => {
+                    const elapsed = currentTime - start;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easedProgress = easingFunctions[easing](progress);
+                    const current = startValue + (target - startValue) * easedProgress;
+                    
+                    element.textContent = prefix + current.toFixed(decimals) + suffix;
+                    
+                    if (onUpdate) onUpdate(current, progress);
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    } else if (onComplete) {
+                        onComplete();
+                    }
+                };
+                
+                requestAnimationFrame(animate);
+            }
+
+            // Advanced stagger animation
+            staggerAnimation(elements, animationFn, delay = 100) {
+                elements.forEach((element, index) => {
+                    setTimeout(() => {
+                        animationFn(element, index);
+                    }, index * delay);
+                });
+            }
+
+            // Morphing animation between states
+            morphElement(element, fromState, toState, duration = 500) {
+                if (this.isReducedMotion) {
+                    Object.assign(element.style, toState);
+                    return Promise.resolve();
+                }
+
+                return new Promise(resolve => {
+                    const start = performance.now();
+                    const animate = (currentTime) => {
+                        const elapsed = currentTime - start;
+                        const progress = Math.min(elapsed / duration, 1);
+                        
+                        Object.keys(toState).forEach(prop => {
+                            const fromValue = parseFloat(fromState[prop]) || 0;
+                            const toValue = parseFloat(toState[prop]) || 0;
+                            const currentValue = fromValue + (toValue - fromValue) * progress;
+                            element.style[prop] = currentValue + (toState[prop].includes('px') ? 'px' : '');
+                        });
+                        
+                        if (progress < 1) {
+                            requestAnimationFrame(animate);
+                        } else {
+                            resolve();
+                        }
+                    };
+                    requestAnimationFrame(animate);
+                });
+            }
+
+            // Particle system for background
+            createParticleSystem(container, count = 50) {
+                for (let i = 0; i < count; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 20 + 's';
+                    particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                    
+                    const colors = ['var(--neon-cyan)', 'var(--neon-teal)', 'var(--neon-purple)', 'var(--neon-pink)'];
+                    particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    container.appendChild(particle);
+                }
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════════════════════════════════════════
+        //                                        ADVANCED CHART RENDERER
+        // ═══════════════════════════════════════════════════════════════════════════════════════════════════════════
+
+        class AdvancedChartRenderer {
+            constructor() {
+                this.tooltip = document.getElementById('tooltip');
+                this.charts = new Map();
+            }
+
+            // Enhanced donut chart with animations and interactions
+            drawAdvancedDonutChart() {
+                const canvas = document.getElementById('donutChart');
+                const ctx = canvas.getContext('2d');
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                const outerRadius = 100;
+                const innerRadius = 60;
+
+                const data = ADVANCED_MOCK_DATA.chartData.resolution;
+                const total = data.ai + data.human;
+                
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                let currentAngle = -Math.PI / 2;
+                const segments = [
+                    { label: 'AI Resolved', value: data.ai, color: '#00ffc6', gradient: ['#00ffc6', '#00d1ff'] },
+                    { label: 'Human Required', value: data.human, color: '#ff6b35', gradient: ['#ff6b35', '#ffcc00'] }
+                ];
+
+                // Draw segments with gradients
+                segments.forEach((segment, index) => {
+                    const sliceAngle = (segment.value / total) * 2 * Math.PI;
+                    
+                    // Create gradient
+                    const gradient = ctx.createRadialGradient(centerX, centerY, innerRadius, centerX, centerY, outerRadius);
+                    gradient.addColorStop(0, segment.gradient[0]);
+                    gradient.addColorStop(1, segment.gradient[1]);
+                    
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, outerRadius, currentAngle, currentAngle + sliceAngle);
+                    ctx.arc(centerX, centerY, innerRadius, currentAngle + sliceAngle, currentAngle, true);
+                    ctx.closePath();
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                    
+                    // Add glow effect
+                    ctx.shadowColor = segment.color;
+                    ctx.shadowBlur = 20;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                    
+                    // Add stroke
+                    ctx.strokeStyle = '#0f172a';
+                    ctx.lineWidth = 3;
+                    ctx.stroke();
+                    
+                    currentAngle += sliceAngle;
+                });
+
+                // Add interactive hover
+                canvas.addEventListener('mousemove', (e) => this.handleDonutHover(e, canvas, segments, centerX, centerY, outerRadius, innerRadius));
+                canvas.addEventListener('mouseleave', () => this.hideTooltip());
+            }
+
+            // Advanced line chart with multiple datasets
+            drawAdvancedLineChart() {
+                const canvas = document.getElementById('lineChart');
+                const ctx = canvas.getContext('2d');
+                const width = canvas.width;
+                const height = canvas.height;
+                const padding = 50;
+
+                const data = ADVANCED_MOCK_DATA.chartData.trends;
+                const maxValue = Math.max(...data) * 1.1;
+                const minValue = Math.min(...data) * 0.9;
+
+                ctx.clearRect(0, 0, width, height);
+
+                // Draw grid
+                this.drawGrid(ctx, width, height, padding);
+                
+                // Draw axes labels
+                this.drawAxesLabels(ctx, width, height, padding, maxValue, minValue);
+
+                // Draw main line with gradient
+                const gradient = ctx.createLinearGradient(0, 0, 0, height);
+                gradient.addColorStop(0, 'rgba(0, 255, 198, 0.8)');
+                gradient.addColorStop(1, 'rgba(0, 255, 198, 0.1)');
+
+                ctx.strokeStyle = '#00ffc6';
+                ctx.lineWidth = 4;
+                ctx.shadowColor = '#00ffc6';
+                ctx.shadowBlur = 15;
+                
+                // Draw area under curve
+                ctx.beginPath();
+                data.forEach((value, index) => {
+                    const x = padding + (index * (width - 2 * padding)) / (data.length - 1);
+                    const y = height - padding - ((value - minValue) / (maxValue - minValue)) * (height - 2 * padding);
+                    
+                    if (index === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                });
+                ctx.lineTo(width - padding, height - padding);
+                ctx.lineTo(padding, height - padding);
+                ctx.closePath();
+                ctx.fillStyle = gradient;
+                ctx.fill();
+
+                // Draw line
+                ctx.beginPath();
+                data.forEach((value, index) => {
+                    const x = padding + (index * (width - 2 * padding)) / (data.length - 1);
+                    const y = height - padding - ((value - minValue) / (maxValue - minValue)) * (height - 2 * padding);
+                    
+                    if (index === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                });
+                ctx.stroke();
+                ctx.shadowBlur<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9703d52ec5d3f92f',t:'MTc1NTM3NzcyOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>

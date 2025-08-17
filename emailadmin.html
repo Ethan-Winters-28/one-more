@@ -1,0 +1,2357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email / Contact Management - Nigam Setu Admin Portal</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        :root {
+            --primary-bg: #0f172a;
+            --secondary-bg: #1e293b;
+            --tertiary-bg: #334155;
+            --neon-cyan: #00ffc6;
+            --neon-teal: #00d1ff;
+            --neon-green: #00ff94;
+            --neon-yellow: #ffcc00;
+            --neon-red: #ff3b3b;
+            --neon-purple: #a855f7;
+            --neon-pink: #ec4899;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0, 255, 198, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 209, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(0, 255, 148, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+            animation: backgroundPulse 10s ease-in-out infinite;
+        }
+
+        @keyframes backgroundPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .email-management-section {
+            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Floating Particles Animation */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+            opacity: 0.3;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Enhanced Section Header */
+        .section-header {
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .section-header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-teal), var(--neon-green));
+            border-radius: 2px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-teal), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(0, 255, 198, 0.5);
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { filter: brightness(1) drop-shadow(0 0 20px rgba(0, 255, 198, 0.3)); }
+            100% { filter: brightness(1.2) drop-shadow(0 0 40px rgba(0, 255, 198, 0.6)); }
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Advanced Summary Cards */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .summary-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+            cursor: pointer;
+        }
+
+        .summary-card:nth-child(1) { animation-delay: 0.1s; }
+        .summary-card:nth-child(2) { animation-delay: 0.2s; }
+        .summary-card:nth-child(3) { animation-delay: 0.3s; }
+        .summary-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1));
+            border-radius: 2rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .summary-card::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, transparent, var(--neon-cyan), transparent);
+            border-radius: 2rem;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.3),
+                0 0 50px rgba(0, 255, 198, 0.2);
+        }
+
+        .summary-card:hover::before {
+            opacity: 1;
+        }
+
+        .summary-card:hover::after {
+            opacity: 1;
+        }
+
+        .summary-card.cyan:hover {
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.3),
+                0 0 60px rgba(0, 255, 198, 0.4);
+        }
+
+        .summary-card.teal:hover {
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.3),
+                0 0 60px rgba(0, 209, 255, 0.4);
+        }
+
+        .summary-card.green:hover {
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.3),
+                0 0 60px rgba(0, 255, 148, 0.4);
+        }
+
+        .summary-card.purple:hover {
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.3),
+                0 0 60px rgba(168, 85, 247, 0.4);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .summary-card:hover .card-icon::before {
+            transform: translateX(100%);
+        }
+
+        .card-icon.cyan {
+            background: linear-gradient(135deg, rgba(0, 255, 198, 0.2), rgba(0, 255, 198, 0.1));
+            color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 255, 198, 0.3);
+        }
+
+        .card-icon.teal {
+            background: linear-gradient(135deg, rgba(0, 209, 255, 0.2), rgba(0, 209, 255, 0.1));
+            color: var(--neon-teal);
+            box-shadow: 0 0 20px rgba(0, 209, 255, 0.3);
+        }
+
+        .card-icon.green {
+            background: linear-gradient(135deg, rgba(0, 255, 148, 0.2), rgba(0, 255, 148, 0.1));
+            color: var(--neon-green);
+            box-shadow: 0 0 20px rgba(0, 255, 148, 0.3);
+        }
+
+        .card-icon.purple {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(168, 85, 247, 0.1));
+            color: var(--neon-purple);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+        }
+
+        .card-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .trend-up {
+            color: var(--neon-green);
+        }
+
+        .trend-down {
+            color: var(--neon-red);
+        }
+
+        .card-counter {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, currentColor, rgba(255, 255, 255, 0.8));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: counterGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes counterGlow {
+            0% { filter: drop-shadow(0 0 10px currentColor); }
+            100% { filter: drop-shadow(0 0 20px currentColor); }
+        }
+
+        .card-counter.cyan { color: var(--neon-cyan); }
+        .card-counter.teal { color: var(--neon-teal); }
+        .card-counter.green { color: var(--neon-green); }
+        .card-counter.purple { color: var(--neon-purple); }
+
+        .card-label {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-subtext {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .card-mini-chart {
+            width: 80px;
+            height: 40px;
+            opacity: 0.7;
+        }
+
+        /* Advanced Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Enhanced Table Section */
+        .table-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+            animation-delay: 0.5s;
+        }
+
+        .table-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.05));
+            border-radius: 2rem;
+            pointer-events: none;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .table-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .table-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-input, .filter-select {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+            padding: 0.875rem 1.25rem;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-input:focus, .filter-select:focus {
+            outline: none;
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 0 3px rgba(0, 255, 198, 0.1), 0 0 20px rgba(0, 255, 198, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .export-btn {
+            background: linear-gradient(135deg, var(--neon-teal), var(--neon-cyan));
+            border: none;
+            border-radius: 1rem;
+            padding: 0.875rem 1.5rem;
+            color: var(--primary-bg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 209, 255, 0.3);
+        }
+
+        /* Premium Data Table */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 1rem;
+            background: rgba(30, 41, 59, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .data-table th {
+            background: rgba(30, 41, 59, 0.8);
+            font-weight: 700;
+            color: var(--neon-cyan);
+            cursor: pointer;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+        }
+
+        .data-table th:hover {
+            background: rgba(30, 41, 59, 1);
+            color: var(--text-primary);
+        }
+
+        .data-table tbody tr {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(30, 41, 59, 0.5);
+            transform: scale(1.01);
+        }
+
+        .data-table tbody tr:hover td {
+            color: var(--text-primary);
+        }
+
+        /* Enhanced Status Badges */
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .status-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .status-badge:hover::before {
+            left: 100%;
+        }
+
+        .status-badge.read {
+            background: linear-gradient(135deg, rgba(0, 255, 148, 0.2), rgba(0, 255, 148, 0.1));
+            color: var(--neon-green);
+            border: 1px solid rgba(0, 255, 148, 0.3);
+            box-shadow: 0 0 15px rgba(0, 255, 148, 0.2);
+        }
+
+        .status-badge.pending {
+            background: linear-gradient(135deg, rgba(255, 204, 0, 0.2), rgba(255, 204, 0, 0.1));
+            color: var(--neon-yellow);
+            border: 1px solid rgba(255, 204, 0, 0.3);
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        .status-badge.unread {
+            background: linear-gradient(135deg, rgba(255, 59, 59, 0.2), rgba(255, 59, 59, 0.1));
+            color: var(--neon-red);
+            border: 1px solid rgba(255, 59, 59, 0.3);
+            box-shadow: 0 0 15px rgba(255, 59, 59, 0.2);
+        }
+
+        .status-badge.active {
+            background: linear-gradient(135deg, rgba(0, 255, 148, 0.2), rgba(0, 255, 148, 0.1));
+            color: var(--neon-green);
+            border: 1px solid rgba(0, 255, 148, 0.3);
+            box-shadow: 0 0 15px rgba(0, 255, 148, 0.2);
+        }
+
+        .status-badge.inactive {
+            background: linear-gradient(135deg, rgba(100, 116, 139, 0.2), rgba(100, 116, 139, 0.1));
+            color: var(--text-muted);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+        }
+
+        /* Premium Action Buttons */
+        .action-btn {
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: 0 0.25rem;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .action-btn.email {
+            background: linear-gradient(135deg, rgba(0, 209, 255, 0.2), rgba(0, 209, 255, 0.1));
+            color: var(--neon-teal);
+            border: 1px solid rgba(0, 209, 255, 0.3);
+        }
+
+        .action-btn.call {
+            background: linear-gradient(135deg, rgba(0, 255, 148, 0.2), rgba(0, 255, 148, 0.1));
+            color: var(--neon-green);
+            border: 1px solid rgba(0, 255, 148, 0.3);
+        }
+
+        .action-btn.view {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(168, 85, 247, 0.1));
+            color: var(--neon-purple);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .action-btn.email:hover {
+            box-shadow: 0 10px 25px rgba(0, 209, 255, 0.3);
+        }
+
+        .action-btn.call:hover {
+            box-shadow: 0 10px 25px rgba(0, 255, 148, 0.3);
+        }
+
+        .action-btn.view:hover {
+            box-shadow: 0 10px 25px rgba(168, 85, 247, 0.3);
+        }
+
+        /* Advanced Analytics Cards */
+        .analytics-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 2rem;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+            animation-delay: 0.7s;
+            transition: all 0.3s ease;
+        }
+
+        .analytics-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .analytics-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.05));
+            border-radius: 2rem;
+            pointer-events: none;
+        }
+
+        .chart-container {
+            height: 300px;
+            margin-top: 1.5rem;
+            position: relative;
+        }
+
+        .chart-container canvas {
+            border-radius: 1rem;
+        }
+
+        /* Real-time Activity Feed */
+        .activity-feed {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .activity-feed::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .activity-feed::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.3);
+            border-radius: 3px;
+        }
+
+        .activity-feed::-webkit-scrollbar-thumb {
+            background: var(--neon-cyan);
+            border-radius: 3px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            background: rgba(30, 41, 59, 0.3);
+            border-radius: 1rem;
+            border-left: 3px solid var(--neon-cyan);
+            transition: all 0.3s ease;
+            animation: slideInRight 0.5s ease-out;
+        }
+
+        .activity-item:hover {
+            background: rgba(30, 41, 59, 0.5);
+            transform: translateX(5px);
+        }
+
+        .activity-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Enhanced Alert System */
+        .alert-system {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .alert-box {
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            min-width: 350px;
+            position: relative;
+            overflow: hidden;
+            animation: slideInRight 0.5s ease-out;
+        }
+
+        .alert-box.critical {
+            border-left: 4px solid var(--neon-red);
+            animation: pulse 2s infinite, slideInRight 0.5s ease-out;
+        }
+
+        .alert-box.warning {
+            border-left: 4px solid var(--neon-yellow);
+        }
+
+        .alert-box.info {
+            border-left: 4px solid var(--neon-teal);
+        }
+
+        .alert-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .alert-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .alert-text {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .alert-message {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .alert-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.25rem;
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .alert-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        /* Quick Stats Widget */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            background: rgba(30, 41, 59, 0.8);
+            transform: scale(1.05);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(255, 59, 59, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 15px rgba(255, 59, 59, 0);
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(0, 255, 198, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(0, 255, 198, 0.8);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .email-management-section {
+                padding: 1rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .table-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .table-controls {
+                flex-direction: column;
+            }
+
+            .data-table {
+                font-size: 0.8rem;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 0.75rem;
+            }
+
+            .alert-system {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-top: 2rem;
+            }
+
+            .alert-box {
+                min-width: auto;
+            }
+
+            .quick-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading States */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+            position: relative;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2rem;
+            height: 2rem;
+            margin: -1rem 0 0 -1rem;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--neon-cyan);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <div class="email-management-section">
+        <!-- Enhanced Section Header -->
+        <div class="section-header">
+            <h1 class="section-title">Email / Contact Management</h1>
+            <p class="section-subtitle">Advanced communication hub for managing citizen emails, official contacts, and department correspondence with real-time analytics</p>
+        </div>
+
+        <!-- Advanced Summary Cards -->
+        <div class="summary-cards">
+            <div class="summary-card cyan">
+                <div class="card-header">
+                    <div class="card-icon cyan">📧</div>
+                    <div class="card-trend trend-up">↗️ +12.5%</div>
+                </div>
+                <div class="card-counter cyan" id="totalEmails">2,847</div>
+                <div class="card-label">Total Emails Registered</div>
+                <div class="card-subtext">All citizen emails across 24 wards with 89% response rate</div>
+                <canvas class="card-mini-chart" id="emailChart"></canvas>
+            </div>
+
+            <div class="summary-card teal">
+                <div class="card-header">
+                    <div class="card-icon teal">🏢</div>
+                    <div class="card-trend trend-up">↗️ +8.3%</div>
+                </div>
+                <div class="card-counter teal" id="totalDepartments">24</div>
+                <div class="card-label">Active Departments</div>
+                <div class="card-subtext">Connected departments with 96% uptime and instant notifications</div>
+                <canvas class="card-mini-chart" id="departmentChart"></canvas>
+            </div>
+
+            <div class="summary-card green">
+                <div class="card-header">
+                    <div class="card-icon green">📬</div>
+                    <div class="card-trend trend-down">↘️ -15.2%</div>
+                </div>
+                <div class="card-counter green" id="unreadMessages">156</div>
+                <div class="card-label">Unread Messages</div>
+                <div class="card-subtext">Pending emails requiring attention with priority classification</div>
+                <canvas class="card-mini-chart" id="unreadChart"></canvas>
+            </div>
+
+            <div class="summary-card purple">
+                <div class="card-header">
+                    <div class="card-icon purple">⚡</div>
+                    <div class="card-trend trend-up">↗️ +23.7%</div>
+                </div>
+                <div class="card-counter purple" id="responseTime">2.4</div>
+                <div class="card-label">Avg Response Time (hrs)</div>
+                <div class="card-subtext">Average response time with 94% satisfaction rate</div>
+                <canvas class="card-mini-chart" id="responseChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Advanced Dashboard Grid -->
+        <div class="dashboard-grid">
+            <div class="main-content">
+                <!-- Enhanced Email Table -->
+                <div class="table-section">
+                    <div class="table-header">
+                        <h3 class="table-title">📧 Email Analytics Dashboard</h3>
+                        <div class="table-controls">
+                            <input type="text" class="search-input" placeholder="🔍 Search emails, senders, subjects..." id="emailSearch">
+                            <select class="filter-select" id="emailFilter">
+                                <option value="all">All Status</option>
+                                <option value="read">✅ Read</option>
+                                <option value="pending">⚠️ Pending</option>
+                                <option value="unread">❌ Unread</option>
+                            </select>
+                            <select class="filter-select" id="departmentFilter">
+                                <option value="all">All Departments</option>
+                                <option value="health">🏥 Health</option>
+                                <option value="education">🎓 Education</option>
+                                <option value="transport">🚌 Transport</option>
+                                <option value="municipal">🏛️ Municipal</option>
+                            </select>
+                            <button class="export-btn" onclick="exportData()">
+                                📊 Export Data
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table" id="emailTable">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortTable(0)">👤 Sender Details ↕️</th>
+                                    <th onclick="sortTable(1)">🏢 Department ↕️</th>
+                                    <th onclick="sortTable(2)">📝 Subject ↕️</th>
+                                    <th onclick="sortTable(3)">📊 Status ↕️</th>
+                                    <th onclick="sortTable(4)">⏰ Received ↕️</th>
+                                    <th>🔧 Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                            <div style="width: 2.5rem; height: 2.5rem; border-radius: 50%; background: linear-gradient(135deg, #00ffc6, #00d1ff); display: flex; align-items: center; justify-content: center; font-weight: bold; color: #0f172a;">RK</div>
+                                            <div>
+                                                <div style="font-weight: 600;">Rajesh Kumar</div>
+                                                <div style="color: #94a3b8; font-size: 0.85rem;">rajesh.kumar@email.com</div>
+                                                <div style="color: #64748b; font-size: 0.75rem;">Ward 12 • Priority: High</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <span>🏥</span>
+                                            <span>Health Department</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <div style="font-weight: 600;">Medical Certificate Request</div>
+                                            <div style="color: #94a3b8; font-size: 0.85rem;">Urgent medical certificate needed for...</div>
+                                        </div>
+                                    </td>
+                                    <td><span class="status-badge read">✅ Read</span></td>
+                                    <td>
+                                        <div>
+                                            <div style="font-weight: 600;">Jan 15, 2024</div>
+                                            <div style="color: #94a3b8; font-size: 0.85rem;">10:30 AM</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button class="action-btn view" onclick="viewEmail('email1')">👁️ View</button>
+                                        <button class="action-btn email" onclick="replyEmail('rajesh.kumar@email.com')">↩️ Reply</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                            <div style="width: 2.5rem; height: 2.5rem; border-radius: 50%; background: linear-gradient(135deg, #ff3b3b, #ffcc00); display: flex; align-items: center; justify-content: center; font-weight: bold; color: #0f172a;">PS</div>
+                                            <div>
+                                                <div style="font-weight: 600;">Priya Sharma</div>
+                                                <div style="color: #94a3b8; font-size: 0.85rem;">priya.sharma@email.com</div>
+                                                <div style="color: #64748b; font-size: 0.75rem;">Ward 8 • Priority: Medium</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <span>🎓</span>
+                                            <span>Education</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <div style="font-weight: 600;">School Admission Query</div>
+                                            <div style="color: #94a3b8; font-size: 0.85rem;">Inquiry about admission process for...</div>
+                                        </div>
+                                    </td>
+                                    <td><span class="status-badge pending">⚠️ Pending</span></td>
+                                    <td>
+                                        <div>
+                                            <div style="font-weight: 600;">Jan 15, 2024</div>
+                                            <div style="color: #94a3b8; font-size: 0.85rem;">09:15 AM</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button class="action-btn view" onclick="viewEmail('email2')">👁️ View</button>
+                                        <button class="action-btn email" onclick="replyEmail('priya.sharma@email.com')">↩️ Reply</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                            <div style="width: 2.5rem; height: 2.5rem; border-radius: 50%; background: linear-gradient(135deg, #a855f7, #ec4899); display: flex; align-items: center; justify-content: center; font-weight: bold; color: #0f172a;">AP</div>
+                                            <div>
+                                                <div style="font-weight: 600;">Amit Patel</div>
+                                                <div style="color: #94a3b8; font-size: 0.85rem;">amit.patel@email.com</div>
+                                                <div style="color: #64748b; font-size: 0.75rem;">Ward 15 • Priority: Low</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <span>🚌</span>
+                                            <span>Transport</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <div style="font-weight: 600;">Bus Route Information</div>
+                                            <div style="color: #94a3b8; font-size: 0.85rem;">Request for updated bus schedule...</div>
+                                        </div>
+                                    </td>
+                                    <td><span class="status-badge unread">❌ Unread</span></td>
+                                    <td>
+                                        <div>
+                                            <div style="font-weight: 600;">Jan 15, 2024</div>
+                                            <div style="color: #94a3b8; font-size: 0.85rem;">08:45 AM</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button class="action-btn view" onclick="viewEmail('email3')">👁️ View</button>
+                                        <button class="action-btn email" onclick="replyEmail('amit.patel@email.com')">↩️ Reply</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Department Contacts Table -->
+                <div class="table-section">
+                    <div class="table-header">
+                        <h3 class="table-title">📞 Department Contact Directory</h3>
+                        <div class="table-controls">
+                            <input type="text" class="search-input" placeholder="🔍 Search contacts, departments..." id="contactSearch">
+                            <select class="filter-select" id="contactFilter">
+                                <option value="all">All Status</option>
+                                <option value="active">🟢 Active</option>
+                                <option value="inactive">🔴 Inactive</option>
+                            </select>
+                            <button class="export-btn" onclick="exportContacts()">
+                                📋 Export Contacts
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table" id="contactTable">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortContactTable(0)">🏢 Department ↕️</th>
+                                    <th onclick="sortContactTable(1)">👤 Contact Person ↕️</th>
+                                    <th onclick="sortContactTable(2)">📧 Contact Info ↕️</th>
+                                    <th onclick="sortContactTable(3)">📊 Status ↕️</th>
+                                    <th>🔧 Quick Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                            <div style="width: 2.5rem; height: 2.5rem; border-radius: 0.75rem; background: linear-gradient(135deg, rgba(0, 255, 148, 0.2), rgba(0, 255, 148, 0.1)); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">🏥</div>
+                                            <div>
+                                                <div style="font-weight: 600;">Health Department</div>
+                                                <div style="color: #94a3b8; font-size: 0.85rem;">Primary Healthcare Division</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <div style="font-weight: 600;">Dr. Anjali Verma</div>
+                                            <div style="color: #94a3b8; font-size: 0.85rem;">Chief Medical Officer</div>
+                                            <div style="color: #64748b; font-size: 0.75rem;">15+ years experience</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                                                <span>📧</span>
+                                                <span style="font-size: 0.9rem;">anjali.verma@health.gov</span>
+                                            </div>
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <span>📞</span>
+                                                <span style="font-size: 0.9rem; color: #94a3b8;">+91 98765 43210</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="status-badge active">🟢 Active</span></td>
+                                    <td>
+                                        <button class="action-btn email" onclick="sendEmail('anjali.verma@health.gov')">📧 Email</button>
+                                        <button class="action-btn call" onclick="makeCall('+91 98765 43210')">📞 Call</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                            <div style="width: 2.5rem; height: 2.5rem; border-radius: 0.75rem; background: linear-gradient(135deg, rgba(0, 209, 255, 0.2), rgba(0, 209, 255, 0.1)); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">🎓</div>
+                                            <div>
+                                                <div style="font-weight: 600;">Education Department</div>
+                                                <div style="color: #94a3b8; font-size: 0.85rem;">Academic Affairs Division</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <div style="font-weight: 600;">Prof. Ramesh Gupta</div>
+                                            <div style="color: #94a3b8; font-size: 0.85rem;">Education Director</div>
+                                            <div style="color: #64748b; font-size: 0.75rem;">PhD in Education Policy</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                                                <span>📧</span>
+                                                <span style="font-size: 0.9rem;">ramesh.gupta@edu.gov</span>
+                                            </div>
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <span>📞</span>
+                                                <span style="font-size: 0.9rem; color: #94a3b8;">+91 98765 43211</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="status-badge active">🟢 Active</span></td>
+                                    <td>
+                                        <button class="action-btn email" onclick="sendEmail('ramesh.gupta@edu.gov')">📧 Email</button>
+                                        <button class="action-btn call" onclick="makeCall('+91 98765 43211')">📞 Call</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-content">
+                <!-- Real-time Activity Feed -->
+                <div class="analytics-card">
+                    <h3 class="table-title">⚡ Real-time Activity Feed</h3>
+                    <div class="activity-feed" id="activityFeed">
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, rgba(0, 255, 148, 0.2), rgba(0, 255, 148, 0.1)); color: var(--neon-green);">📧</div>
+                            <div class="activity-content">
+                                <div class="activity-title">New email from Rajesh Kumar</div>
+                                <div class="activity-time">2 minutes ago</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, rgba(0, 209, 255, 0.2), rgba(0, 209, 255, 0.1)); color: var(--neon-teal);">📞</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Call completed with Health Dept</div>
+                                <div class="activity-time">5 minutes ago</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, rgba(255, 204, 0, 0.2), rgba(255, 204, 0, 0.1)); color: var(--neon-yellow);">⚠️</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Urgent email flagged</div>
+                                <div class="activity-time">8 minutes ago</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(168, 85, 247, 0.1)); color: var(--neon-purple);">📊</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Weekly report generated</div>
+                                <div class="activity-time">15 minutes ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="analytics-card">
+                    <h3 class="table-title">📊 Quick Statistics</h3>
+                    <div class="quick-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" style="color: var(--neon-green);">94%</div>
+                            <div class="stat-label">Response Rate</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" style="color: var(--neon-teal);">2.4h</div>
+                            <div class="stat-label">Avg Response</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" style="color: var(--neon-yellow);">156</div>
+                            <div class="stat-label">Pending</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" style="color: var(--neon-purple);">24/7</div>
+                            <div class="stat-label">Uptime</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Priority Alerts -->
+                <div class="analytics-card">
+                    <h3 class="table-title">🚨 Priority Alerts</h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div class="alert-box critical">
+                            <div class="alert-content">
+                                <div class="alert-icon">🚨</div>
+                                <div class="alert-text">
+                                    <div class="alert-title">Critical</div>
+                                    <div class="alert-message">5 urgent emails need immediate attention</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alert-box warning">
+                            <div class="alert-content">
+                                <div class="alert-icon">⚠️</div>
+                                <div class="alert-text">
+                                    <div class="alert-title">Warning</div>
+                                    <div class="alert-message">Response time exceeding SLA for 3 departments</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alert-box info">
+                            <div class="alert-content">
+                                <div class="alert-icon">ℹ️</div>
+                                <div class="alert-text">
+                                    <div class="alert-title">Info</div>
+                                    <div class="alert-message">System maintenance scheduled for tonight</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Analytics Charts -->
+        <div class="analytics-section" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 2rem; margin-top: 3rem;">
+            <div class="analytics-card">
+                <h3 class="table-title">📈 Email Volume Trends</h3>
+                <div class="chart-container">
+                    <canvas id="mainEmailVolumeChart"></canvas>
+                </div>
+            </div>
+
+            <div class="analytics-card">
+                <h3 class="table-title">📊 Department Response Analytics</h3>
+                <div class="chart-container">
+                    <canvas id="mainDepartmentChart"></canvas>
+                </div>
+            </div>
+
+            <div class="analytics-card">
+                <h3 class="table-title">⏱️ Response Time Distribution</h3>
+                <div class="chart-container">
+                    <canvas id="mainResponseTimeChart"></canvas>
+                </div>
+            </div>
+
+            <div class="analytics-card">
+                <h3 class="table-title">🎯 Priority Classification</h3>
+                <div class="chart-container">
+                    <canvas id="mainPriorityChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                
+                const colors = ['#00ffc6', '#00d1ff', '#00ff94', '#ffcc00', '#a855f7'];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Enhanced counter animation with easing
+        function animateCounter(elementId, targetValue, duration = 2500, suffix = '') {
+            const element = document.getElementById(elementId);
+            const startValue = 0;
+            const startTime = performance.now();
+
+            function easeOutCubic(t) {
+                return 1 - Math.pow(1 - t, 3);
+            }
+
+            function updateCounter(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easedProgress = easeOutCubic(progress);
+                const currentValue = startValue + (targetValue - startValue) * easedProgress;
+
+                if (typeof targetValue === 'number' && targetValue > 100) {
+                    element.textContent = Math.floor(currentValue).toLocaleString() + suffix;
+                } else {
+                    element.textContent = currentValue.toFixed(1) + suffix;
+                }
+
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                }
+            }
+
+            requestAnimationFrame(updateCounter);
+        }
+
+        // Initialize all charts with error handling
+        function initializeCharts() {
+            console.log('Starting chart initialization...');
+            try {
+                // Check if Chart.js is loaded
+                if (typeof Chart === 'undefined') {
+                    console.error('Chart.js not loaded, retrying in 1 second...');
+                    setTimeout(initializeCharts, 1000);
+                    return;
+                }
+                
+                console.log('Chart.js is loaded, creating charts...');
+
+                // Main Email Volume Trend Chart
+                const mainEmailVolumeCanvas = document.getElementById('mainEmailVolumeChart');
+                console.log('Email Volume Canvas:', mainEmailVolumeCanvas);
+                if (mainEmailVolumeCanvas) {
+                    const mainEmailVolumeCtx = mainEmailVolumeCanvas.getContext('2d');
+                    console.log('Creating Email Volume Chart...');
+                    new Chart(mainEmailVolumeCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                            datasets: [{
+                                label: 'Emails Received',
+                                data: [1200, 1350, 1100, 1400, 1600, 1800, 1750, 1900, 2100, 2300, 2500, 2847],
+                                borderColor: '#00ffc6',
+                                backgroundColor: 'rgba(0, 255, 198, 0.1)',
+                                borderWidth: 3,
+                                fill: true,
+                                tension: 0.4,
+                                pointBackgroundColor: '#00ffc6',
+                                pointBorderColor: '#0f172a',
+                                pointBorderWidth: 2,
+                                pointRadius: 6,
+                                pointHoverRadius: 8
+                            }, {
+                                label: 'Emails Resolved',
+                                data: [1150, 1300, 1050, 1350, 1550, 1750, 1700, 1850, 2050, 2250, 2400, 2691],
+                                borderColor: '#00d1ff',
+                                backgroundColor: 'rgba(0, 209, 255, 0.1)',
+                                borderWidth: 3,
+                                fill: true,
+                                tension: 0.4,
+                                pointBackgroundColor: '#00d1ff',
+                                pointBorderColor: '#0f172a',
+                                pointBorderWidth: 2,
+                                pointRadius: 6,
+                                pointHoverRadius: 8
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            interaction: {
+                                intersect: false,
+                                mode: 'index'
+                            },
+                            plugins: {
+                                legend: {
+                                    labels: {
+                                        color: '#e2e8f0',
+                                        font: {
+                                            size: 14,
+                                            weight: 'bold'
+                                        },
+                                        usePointStyle: true,
+                                        padding: 20
+                                    }
+                                },
+                                tooltip: {
+                                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                                    titleColor: '#00ffc6',
+                                    bodyColor: '#e2e8f0',
+                                    borderColor: '#00ffc6',
+                                    borderWidth: 1,
+                                    cornerRadius: 10,
+                                    displayColors: true
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: { 
+                                        color: '#94a3b8',
+                                        font: { size: 12, weight: 'bold' }
+                                    },
+                                    grid: { 
+                                        color: 'rgba(255, 255, 255, 0.1)',
+                                        drawBorder: false
+                                    }
+                                },
+                                y: {
+                                    ticks: { 
+                                        color: '#94a3b8',
+                                        font: { size: 12, weight: 'bold' },
+                                        callback: function(value) {
+                                            return value.toLocaleString();
+                                        }
+                                    },
+                                    grid: { 
+                                        color: 'rgba(255, 255, 255, 0.1)',
+                                        drawBorder: false
+                                    }
+                                }
+                            },
+                            animation: {
+                                duration: 2000,
+                                easing: 'easeInOutQuart'
+                            }
+                        }
+                    });
+                    console.log('Department Chart created successfully!');
+                } else {
+                    console.error('mainDepartmentChart canvas not found!');
+                }
+
+                // Main Department Response Chart
+                const mainDepartmentCanvas = document.getElementById('mainDepartmentChart');
+                console.log('Department Canvas:', mainDepartmentCanvas);
+                if (mainDepartmentCanvas) {
+                    const mainDepartmentCtx = mainDepartmentCanvas.getContext('2d');
+                    console.log('Creating Department Chart...');
+                    new Chart(mainDepartmentCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Health Department', 'Education Department', 'Transport Department', 'Municipal Corporation', 'Revenue Department', 'Others'],
+                            datasets: [{
+                                data: [28, 22, 18, 15, 10, 7],
+                                backgroundColor: [
+                                    '#00ffc6',
+                                    '#00d1ff',
+                                    '#00ff94',
+                                    '#ffcc00',
+                                    '#a855f7',
+                                    '#ec4899'
+                                ],
+                                borderColor: '#0f172a',
+                                borderWidth: 3,
+                                hoverBorderWidth: 5,
+                                hoverOffset: 10
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            cutout: '60%',
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        color: '#e2e8f0',
+                                        font: {
+                                            size: 12,
+                                            weight: 'bold'
+                                        },
+                                        usePointStyle: true,
+                                        padding: 15,
+                                        generateLabels: function(chart) {
+                                            const data = chart.data;
+                                            if (data.labels.length && data.datasets.length) {
+                                                return data.labels.map((label, i) => {
+                                                    const value = data.datasets[0].data[i];
+                                                    return {
+                                                        text: `${label}: ${value}%`,
+                                                        fillStyle: data.datasets[0].backgroundColor[i],
+                                                        strokeStyle: data.datasets[0].borderColor,
+                                                        lineWidth: data.datasets[0].borderWidth,
+                                                        hidden: false,
+                                                        index: i
+                                                    };
+                                                });
+                                            }
+                                            return [];
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                                    titleColor: '#00ffc6',
+                                    bodyColor: '#e2e8f0',
+                                    borderColor: '#00ffc6',
+                                    borderWidth: 1,
+                                    cornerRadius: 10,
+                                    callbacks: {
+                                        label: function(context) {
+                                            return `${context.label}: ${context.parsed}% (${Math.round(context.parsed * 28.47)} emails)`;
+                                        }
+                                    }
+                                }
+                            },
+                            animation: {
+                                animateRotate: true,
+                                animateScale: true,
+                                duration: 2000,
+                                easing: 'easeInOutQuart'
+                            }
+                        }
+                    });
+                    console.log('Department Chart created successfully!');
+                } else {
+                    console.error('mainDepartmentChart canvas not found!');
+                }
+
+                // Main Response Time Distribution
+                const mainResponseTimeCanvas = document.getElementById('mainResponseTimeChart');
+                if (mainResponseTimeCanvas) {
+                    const mainResponseTimeCtx = mainResponseTimeCanvas.getContext('2d');
+                    new Chart(mainResponseTimeCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['< 1 hour', '1-2 hours', '2-4 hours', '4-8 hours', '8-24 hours', '> 24 hours'],
+                            datasets: [{
+                                label: 'Number of Emails',
+                                data: [450, 680, 520, 380, 180, 45],
+                                backgroundColor: [
+                                    'rgba(0, 255, 148, 0.8)',
+                                    'rgba(0, 255, 198, 0.8)',
+                                    'rgba(0, 209, 255, 0.8)',
+                                    'rgba(255, 204, 0, 0.8)',
+                                    'rgba(255, 59, 59, 0.8)',
+                                    'rgba(168, 85, 247, 0.8)'
+                                ],
+                                borderColor: [
+                                    '#00ff94',
+                                    '#00ffc6',
+                                    '#00d1ff',
+                                    '#ffcc00',
+                                    '#ff3b3b',
+                                    '#a855f7'
+                                ],
+                                borderWidth: 2,
+                                borderRadius: 8,
+                                borderSkipped: false,
+                                hoverBackgroundColor: [
+                                    'rgba(0, 255, 148, 1)',
+                                    'rgba(0, 255, 198, 1)',
+                                    'rgba(0, 209, 255, 1)',
+                                    'rgba(255, 204, 0, 1)',
+                                    'rgba(255, 59, 59, 1)',
+                                    'rgba(168, 85, 247, 1)'
+                                ]
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                                    titleColor: '#00ffc6',
+                                    bodyColor: '#e2e8f0',
+                                    borderColor: '#00ffc6',
+                                    borderWidth: 1,
+                                    cornerRadius: 10,
+                                    callbacks: {
+                                        label: function(context) {
+                                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                            const percentage = ((context.parsed.y / total) * 100).toFixed(1);
+                                            return `${context.parsed.y} emails (${percentage}%)`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: { 
+                                        color: '#94a3b8',
+                                        font: { size: 11, weight: 'bold' },
+                                        maxRotation: 45
+                                    },
+                                    grid: { display: false }
+                                },
+                                y: {
+                                    ticks: { 
+                                        color: '#94a3b8',
+                                        font: { size: 12, weight: 'bold' },
+                                        callback: function(value) {
+                                            return value.toLocaleString();
+                                        }
+                                    },
+                                    grid: { 
+                                        color: 'rgba(255, 255, 255, 0.1)',
+                                        drawBorder: false
+                                    }
+                                }
+                            },
+                            animation: {
+                                duration: 2000,
+                                easing: 'easeInOutQuart'
+                            }
+                        }
+                    });
+                    console.log('Department Chart created successfully!');
+                } else {
+                    console.error('mainDepartmentChart canvas not found!');
+                }
+
+                // Main Priority Classification Chart
+                const mainPriorityCanvas = document.getElementById('mainPriorityChart');
+                if (mainPriorityCanvas) {
+                    const mainPriorityCtx = mainPriorityCanvas.getContext('2d');
+                    new Chart(mainPriorityCtx, {
+                        type: 'polarArea',
+                        data: {
+                            labels: ['High Priority', 'Medium Priority', 'Low Priority', 'Routine'],
+                            datasets: [{
+                                data: [15, 35, 30, 20],
+                                backgroundColor: [
+                                    'rgba(255, 59, 59, 0.7)',
+                                    'rgba(255, 204, 0, 0.7)',
+                                    'rgba(0, 209, 255, 0.7)',
+                                    'rgba(0, 255, 148, 0.7)'
+                                ],
+                                borderColor: [
+                                    '#ff3b3b',
+                                    '#ffcc00',
+                                    '#00d1ff',
+                                    '#00ff94'
+                                ],
+                                borderWidth: 3,
+                                hoverBorderWidth: 5
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        color: '#e2e8f0',
+                                        font: {
+                                            size: 12,
+                                            weight: 'bold'
+                                        },
+                                        usePointStyle: true,
+                                        padding: 15,
+                                        generateLabels: function(chart) {
+                                            const data = chart.data;
+                                            if (data.labels.length && data.datasets.length) {
+                                                return data.labels.map((label, i) => {
+                                                    const value = data.datasets[0].data[i];
+                                                    return {
+                                                        text: `${label}: ${value}%`,
+                                                        fillStyle: data.datasets[0].backgroundColor[i],
+                                                        strokeStyle: data.datasets[0].borderColor[i],
+                                                        lineWidth: data.datasets[0].borderWidth,
+                                                        hidden: false,
+                                                        index: i
+                                                    };
+                                                });
+                                            }
+                                            return [];
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                                    titleColor: '#00ffc6',
+                                    bodyColor: '#e2e8f0',
+                                    borderColor: '#00ffc6',
+                                    borderWidth: 1,
+                                    cornerRadius: 10,
+                                    callbacks: {
+                                        label: function(context) {
+                                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                            const count = Math.round((context.parsed / 100) * 2847);
+                                            return `${context.label}: ${context.parsed}% (${count} emails)`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                r: {
+                                    ticks: { 
+                                        color: '#94a3b8',
+                                        backdropColor: 'transparent',
+                                        font: { size: 10, weight: 'bold' }
+                                    },
+                                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                                    angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                                    pointLabels: {
+                                        color: '#94a3b8',
+                                        font: { size: 11, weight: 'bold' }
+                                    }
+                                }
+                            },
+                            animation: {
+                                animateRotate: true,
+                                animateScale: true,
+                                duration: 2000,
+                                easing: 'easeInOutQuart'
+                            }
+                        }
+                    });
+                    console.log('Department Chart created successfully!');
+                } else {
+                    console.error('mainDepartmentChart canvas not found!');
+                }
+
+                // Mini charts for summary cards
+                createMiniChart('emailChart', [1200, 1350, 1100, 1400, 1600, 1800, 1750, 1900, 2100, 2300, 2500, 2847], '#00ffc6');
+                createMiniChart('departmentChart', [20, 21, 19, 22, 23, 24, 24, 24, 24, 24, 24, 24], '#00d1ff');
+                createMiniChart('unreadChart', [200, 180, 220, 190, 170, 160, 180, 165, 155, 150, 160, 156], '#00ff94');
+                createMiniChart('responseChart', [3.2, 3.0, 2.8, 2.6, 2.5, 2.4, 2.3, 2.2, 2.3, 2.4, 2.4, 2.4], '#a855f7');
+                
+            } catch (error) {
+                console.error('Error initializing charts:', error);
+            }
+        }
+
+        function createMiniChart(canvasId, data, color) {
+            try {
+                const canvas = document.getElementById(canvasId);
+                if (!canvas) {
+                    console.warn(`Canvas with id ${canvasId} not found`);
+                    return;
+                }
+                
+                const ctx = canvas.getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: Array.from({length: data.length}, (_, i) => i),
+                        datasets: [{
+                            data: data,
+                            borderColor: color,
+                            backgroundColor: color + '20',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: { enabled: false }
+                        },
+                        scales: {
+                            x: { display: false },
+                            y: { display: false }
+                        },
+                        elements: { 
+                            point: { radius: 0 } 
+                        },
+                        animation: {
+                            duration: 0
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error(`Error creating mini chart ${canvasId}:`, error);
+            }
+        }
+
+        // Enhanced table sorting with animations
+        function sortTable(columnIndex) {
+            const table = document.getElementById('emailTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            // Add loading state
+            table.classList.add('loading');
+            
+            setTimeout(() => {
+                rows.sort((a, b) => {
+                    const aText = a.cells[columnIndex].textContent.trim();
+                    const bText = b.cells[columnIndex].textContent.trim();
+                    return aText.localeCompare(bText);
+                });
+                
+                rows.forEach((row, index) => {
+                    row.style.animation = `fadeInUp 0.3s ease-out ${index * 0.05}s forwards`;
+                    tbody.appendChild(row);
+                });
+                
+                table.classList.remove('loading');
+            }, 500);
+        }
+
+        function sortContactTable(columnIndex) {
+            const table = document.getElementById('contactTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            table.classList.add('loading');
+            
+            setTimeout(() => {
+                rows.sort((a, b) => {
+                    const aText = a.cells[columnIndex].textContent.trim();
+                    const bText = b.cells[columnIndex].textContent.trim();
+                    return aText.localeCompare(bText);
+                });
+                
+                rows.forEach((row, index) => {
+                    row.style.animation = `fadeInUp 0.3s ease-out ${index * 0.05}s forwards`;
+                    tbody.appendChild(row);
+                });
+                
+                table.classList.remove('loading');
+            }, 500);
+        }
+
+        // Enhanced search with real-time filtering
+        function setupSearch() {
+            const emailSearch = document.getElementById('emailSearch');
+            const contactSearch = document.getElementById('contactSearch');
+
+            emailSearch.addEventListener('input', debounce(function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const table = document.getElementById('emailTable');
+                const rows = table.querySelectorAll('tbody tr');
+                
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    const isVisible = text.includes(searchTerm);
+                    row.style.display = isVisible ? '' : 'none';
+                    
+                    if (isVisible && searchTerm) {
+                        row.style.animation = 'fadeInUp 0.3s ease-out';
+                    }
+                });
+            }, 300));
+
+            contactSearch.addEventListener('input', debounce(function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const table = document.getElementById('contactTable');
+                const rows = table.querySelectorAll('tbody tr');
+                
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    const isVisible = text.includes(searchTerm);
+                    row.style.display = isVisible ? '' : 'none';
+                    
+                    if (isVisible && searchTerm) {
+                        row.style.animation = 'fadeInUp 0.3s ease-out';
+                    }
+                });
+            }, 300));
+        }
+
+        // Debounce function for performance
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Enhanced filter functionality
+        function setupFilters() {
+            document.getElementById('emailFilter').addEventListener('change', function(e) {
+                const filterValue = e.target.value;
+                const table = document.getElementById('emailTable');
+                const rows = table.querySelectorAll('tbody tr');
+                
+                rows.forEach((row, index) => {
+                    if (filterValue === 'all') {
+                        row.style.display = '';
+                        row.style.animation = `fadeInUp 0.3s ease-out ${index * 0.05}s`;
+                    } else {
+                        const statusCell = row.querySelector('.status-badge');
+                        const hasStatus = statusCell.classList.contains(filterValue);
+                        row.style.display = hasStatus ? '' : 'none';
+                        
+                        if (hasStatus) {
+                            row.style.animation = `fadeInUp 0.3s ease-out ${index * 0.05}s`;
+                        }
+                    }
+                });
+            });
+
+            document.getElementById('contactFilter').addEventListener('change', function(e) {
+                const filterValue = e.target.value;
+                const table = document.getElementById('contactTable');
+                const rows = table.querySelectorAll('tbody tr');
+                
+                rows.forEach((row, index) => {
+                    if (filterValue === 'all') {
+                        row.style.display = '';
+                        row.style.animation = `fadeInUp 0.3s ease-out ${index * 0.05}s`;
+                    } else {
+                        const statusCell = row.querySelector('.status-badge');
+                        const hasStatus = statusCell.classList.contains(filterValue);
+                        row.style.display = hasStatus ? '' : 'none';
+                        
+                        if (hasStatus) {
+                            row.style.animation = `fadeInUp 0.3s ease-out ${index * 0.05}s`;
+                        }
+                    }
+                });
+            });
+        }
+
+        // Advanced action functions with notifications
+        function viewEmail(emailId) {
+            showNotification('📧 Opening email viewer...', 'info');
+            console.log(`Viewing email: ${emailId}`);
+            
+            // Simulate API call
+            setTimeout(() => {
+                showNotification('✅ Email opened successfully!', 'success');
+            }, 1000);
+        }
+
+        function replyEmail(email) {
+            showNotification('✍️ Opening email composer...', 'info');
+            console.log(`Replying to: ${email}`);
+            
+            setTimeout(() => {
+                showNotification('📧 Email composer ready!', 'success');
+            }, 1000);
+        }
+
+        function sendEmail(email) {
+            showNotification('📧 Preparing to send email...', 'info');
+            console.log(`Sending email to: ${email}`);
+            
+            setTimeout(() => {
+                showNotification('✅ Email sent successfully!', 'success');
+            }, 1500);
+        }
+
+        function makeCall(phone) {
+            showNotification('📞 Initiating call...', 'info');
+            console.log(`Making call to: ${phone}`);
+            
+            setTimeout(() => {
+                showNotification('📞 Call connected!', 'success');
+            }, 2000);
+        }
+
+        function exportData() {
+            showNotification('📊 Preparing export...', 'info');
+            
+            setTimeout(() => {
+                showNotification('✅ Data exported successfully!', 'success');
+            }, 2000);
+        }
+
+        function exportContacts() {
+            showNotification('📋 Exporting contacts...', 'info');
+            
+            setTimeout(() => {
+                showNotification('✅ Contacts exported successfully!', 'success');
+            }, 1500);
+        }
+
+        // Advanced notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `alert-box ${type}`;
+            notification.innerHTML = `
+                <div class="alert-content">
+                    <div class="alert-icon">${getNotificationIcon(type)}</div>
+                    <div class="alert-text">
+                        <div class="alert-message">${message}</div>
+                    </div>
+                    <button class="alert-close" onclick="this.parentElement.parentElement.remove()">×</button>
+                </div>
+            `;
+            
+            // Create alert system if it doesn't exist
+            let alertSystem = document.querySelector('.alert-system');
+            if (!alertSystem) {
+                alertSystem = document.createElement('div');
+                alertSystem.className = 'alert-system';
+                document.body.appendChild(alertSystem);
+            }
+            
+            alertSystem.appendChild(notification);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.style.animation = 'slideOutRight 0.3s ease-out forwards';
+                    setTimeout(() => notification.remove(), 300);
+                }
+            }, 5000);
+        }
+
+        function getNotificationIcon(type) {
+            const icons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+            return icons[type] || 'ℹ️';
+        }
+
+        // Real-time activity feed updates
+        function updateActivityFeed() {
+            const activities = [
+                { icon: '📧', text: 'New email from Rajesh Kumar', time: '2 minutes ago', color: 'green' },
+                { icon: '📞', text: 'Call completed with Health Dept', time: '5 minutes ago', color: 'teal' },
+                { icon: '⚠️', text: 'Urgent email flagged', time: '8 minutes ago', color: 'yellow' },
+                { icon: '📊', text: 'Weekly report generated', time: '15 minutes ago', color: 'purple' },
+                { icon: '✅', text: 'Email resolved by Education Dept', time: '18 minutes ago', color: 'green' },
+                { icon: '📋', text: 'New contact added', time: '22 minutes ago', color: 'teal' }
+            ];
+
+            const feed = document.getElementById('activityFeed');
+            
+            setInterval(() => {
+                const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+                const newActivity = document.createElement('div');
+                newActivity.className = 'activity-item';
+                newActivity.style.animation = 'slideInRight 0.5s ease-out';
+                
+                const colorMap = {
+                    green: 'rgba(0, 255, 148, 0.2)',
+                    teal: 'rgba(0, 209, 255, 0.2)',
+                    yellow: 'rgba(255, 204, 0, 0.2)',
+                    purple: 'rgba(168, 85, 247, 0.2)'
+                };
+                
+                newActivity.innerHTML = `
+                    <div class="activity-icon" style="background: ${colorMap[randomActivity.color]}; color: var(--neon-${randomActivity.color});">${randomActivity.icon}</div>
+                    <div class="activity-content">
+                        <div class="activity-title">${randomActivity.text}</div>
+                        <div class="activity-time">Just now</div>
+                    </div>
+                `;
+                
+                feed.insertBefore(newActivity, feed.firstChild);
+                
+                // Remove oldest activity if more than 6
+                if (feed.children.length > 6) {
+                    feed.removeChild(feed.lastChild);
+                }
+            }, 15000); // Update every 15 seconds
+        }
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing charts...');
+            
+            // Initialize charts immediately
+            initializeCharts();
+            
+            createParticles();
+            
+            setTimeout(() => {
+                animateCounter('totalEmails', 2847);
+                animateCounter('totalDepartments', 24);
+                animateCounter('unreadMessages', 156);
+                animateCounter('responseTime', 2.4);
+            }, 500);
+            
+            setupSearch();
+            setupFilters();
+            updateActivityFeed();
+            
+            // Show welcome notification
+            setTimeout(() => {
+                showNotification('🚀 Email Management System loaded successfully!', 'success');
+            }, 1000);
+        });
+
+        // Backup initialization on window load
+        window.addEventListener('load', () => {
+            console.log('Window loaded, checking charts...');
+            // Re-initialize charts if they weren't created
+            setTimeout(() => {
+                initializeCharts();
+            }, 100);
+        });
+
+        // API Integration placeholders with enhanced error handling
+        async function loadEmailData() {
+            try {
+                showNotification('🔄 Loading email data...', 'info');
+                
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                showNotification('✅ Email data loaded successfully!', 'success');
+                console.log('Email data loaded from API');
+            } catch (error) {
+                showNotification('❌ Failed to load email data', 'error');
+                console.error('Error loading email data:', error);
+            }
+        }
+
+        async function loadContactData() {
+            try {
+                showNotification('🔄 Loading contact data...', 'info');
+                
+                await new Promise(resolve => setTimeout(resolve, 800));
+                
+                showNotification('✅ Contact data loaded successfully!', 'success');
+                console.log('Contact data loaded from API');
+            } catch (error) {
+                showNotification('❌ Failed to load contact data', 'error');
+                console.error('Error loading contact data:', error);
+            }
+        }
+
+        async function loadAnalytics() {
+            try {
+                showNotification('🔄 Loading analytics...', 'info');
+                
+                await new Promise(resolve => setTimeout(resolve, 1200));
+                
+                showNotification('✅ Analytics loaded successfully!', 'success');
+                console.log('Analytics data loaded from API');
+            } catch (error) {
+                showNotification('❌ Failed to load analytics', 'error');
+                console.error('Error loading analytics:', error);
+            }
+        }
+
+        // Real-time data updates
+        setInterval(() => {
+            loadEmailData();
+            loadContactData();
+            loadAnalytics();
+        }, 60000); // Update every minute
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'f':
+                        e.preventDefault();
+                        document.getElementById('emailSearch').focus();
+                        break;
+                    case 'e':
+                        e.preventDefault();
+                        exportData();
+                        break;
+                    case 'r':
+                        e.preventDefault();
+                        location.reload();
+                        break;
+                }
+            }
+        });
+
+        // Add CSS animation for slideOutRight
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideOutRight {
+                from {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: translateX(100%);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97054337766fa6c2',t:'MTc1NTM5MjcyMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

@@ -1,0 +1,2317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Channel Management - Nigam Setu Admin</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0, 255, 198, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 209, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(0, 255, 148, 0.05) 0%, transparent 50%);
+            animation: backgroundPulse 8s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes backgroundPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #00ffc6;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .whatsapp-section {
+            padding: 3rem 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header with Epic Animation */
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00ffc6 0%, #00d1ff 50%, #00ff94 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            position: relative;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(0, 255, 198, 0.5)); }
+            50% { filter: drop-shadow(0 0 40px rgba(0, 255, 198, 0.8)); }
+        }
+
+        .section-subtitle {
+            font-size: 1.3rem;
+            color: #94a3b8;
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Epic Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .metric-card {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            transform-style: preserve-3d;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 255, 198, 0.1), transparent);
+            animation: rotate 4s linear infinite;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .metric-card:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .metric-card::after {
+            content: '';
+            position: absolute;
+            inset: 1px;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 2rem;
+            z-index: -1;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.3),
+                0 0 100px rgba(0, 255, 198, 0.2);
+        }
+
+        .metric-card.cyan:hover {
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.3),
+                0 0 100px rgba(0, 255, 198, 0.4);
+        }
+
+        .metric-card.teal:hover {
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.3),
+                0 0 100px rgba(0, 209, 255, 0.4);
+        }
+
+        .metric-card.green:hover {
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.3),
+                0 0 100px rgba(0, 255, 148, 0.4);
+        }
+
+        .metric-card.yellow:hover {
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.3),
+                0 0 100px rgba(255, 204, 0, 0.4);
+        }
+
+        .metric-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .metric-icon {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-icon::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .metric-card:hover .metric-icon::before {
+            transform: translateX(100%);
+        }
+
+        .metric-icon.cyan {
+            background: linear-gradient(135deg, rgba(0, 255, 198, 0.3), rgba(0, 255, 198, 0.1));
+            color: #00ffc6;
+            box-shadow: 0 0 30px rgba(0, 255, 198, 0.4);
+        }
+
+        .metric-icon.teal {
+            background: linear-gradient(135deg, rgba(0, 209, 255, 0.3), rgba(0, 209, 255, 0.1));
+            color: #00d1ff;
+            box-shadow: 0 0 30px rgba(0, 209, 255, 0.4);
+        }
+
+        .metric-icon.green {
+            background: linear-gradient(135deg, rgba(0, 255, 148, 0.3), rgba(0, 255, 148, 0.1));
+            color: #00ff94;
+            box-shadow: 0 0 30px rgba(0, 255, 148, 0.4);
+        }
+
+        .metric-icon.yellow {
+            background: linear-gradient(135deg, rgba(255, 204, 0, 0.3), rgba(255, 204, 0, 0.1));
+            color: #ffcc00;
+            box-shadow: 0 0 30px rgba(255, 204, 0, 0.4);
+        }
+
+        .metric-trend {
+            font-size: 0.9rem;
+            color: #00ff94;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .metric-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #e2e8f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .metric-label {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #e2e8f0;
+            margin-bottom: 0.75rem;
+        }
+
+        .metric-subtext {
+            font-size: 1rem;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        /* Epic Alert Box */
+        .alert-box {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(30px);
+            border: 2px solid rgba(255, 59, 59, 0.5);
+            border-radius: 1.5rem;
+            padding: 1.5rem 2rem;
+            z-index: 1000;
+            animation: alertPulse 2s ease-in-out infinite;
+            box-shadow: 0 20px 40px rgba(255, 59, 59, 0.2);
+        }
+
+        @keyframes alertPulse {
+            0%, 100% { 
+                box-shadow: 0 20px 40px rgba(255, 59, 59, 0.2), 0 0 30px rgba(255, 59, 59, 0.3);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 25px 50px rgba(255, 59, 59, 0.4), 0 0 50px rgba(255, 59, 59, 0.5);
+                transform: scale(1.02);
+            }
+        }
+
+        .alert-text {
+            color: #ff3b3b;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Epic Data Sections */
+        .data-section {
+            margin-bottom: 4rem;
+        }
+
+        .section-title-small {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input, .filter-select {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1rem 1.5rem;
+            color: #e2e8f0;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            min-width: 250px;
+        }
+
+        .search-input:focus, .filter-select:focus {
+            outline: none;
+            border-color: #00ffc6;
+            box-shadow: 0 0 30px rgba(0, 255, 198, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Epic Table */
+        .table-container {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 2rem;
+            overflow: hidden;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1.5rem;
+            text-align: left;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #ffffff;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .table th:hover {
+            background: rgba(0, 255, 198, 0.1);
+            color: #00ffc6;
+        }
+
+        .table td {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+
+        .table tr {
+            transition: all 0.3s ease;
+        }
+
+        .table tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+            transform: scale(1.01);
+        }
+
+        .join-btn {
+            background: linear-gradient(135deg, #00ffc6, #00d1ff);
+            border: none;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: #0f172a;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .join-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .join-btn:hover::before {
+            left: 100%;
+        }
+
+        .join-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 255, 198, 0.4);
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .status-active {
+            background: rgba(0, 255, 148, 0.2);
+            color: #00ff94;
+            border: 2px solid rgba(0, 255, 148, 0.4);
+            box-shadow: 0 0 20px rgba(0, 255, 148, 0.2);
+        }
+
+        .status-low {
+            background: rgba(255, 204, 0, 0.2);
+            color: #ffcc00;
+            border: 2px solid rgba(255, 204, 0, 0.4);
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.2);
+        }
+
+        .status-inactive {
+            background: rgba(255, 59, 59, 0.2);
+            color: #ff3b3b;
+            border: 2px solid rgba(255, 59, 59, 0.4);
+            box-shadow: 0 0 20px rgba(255, 59, 59, 0.2);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            overflow: hidden;
+            margin-top: 0.75rem;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff94, #00ffc6, #00d1ff);
+            border-radius: 1rem;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shimmer 2s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Epic Analytics Grid */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .chart-container {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 1.1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 255, 198, 0.05), transparent);
+            animation: rotate 8s linear infinite;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .section-title {
+                font-size: 3rem;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .whatsapp-section {
+                padding: 2rem 1rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .metric-card {
+                padding: 2rem;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .search-input, .filter-select {
+                min-width: 100%;
+            }
+
+            .alert-box {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-bottom: 2rem;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            opacity: 0;
+            animation: loadIn 0.8s ease-out forwards;
+        }
+
+        @keyframes loadIn {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <div class="whatsapp-section">
+       
+        <!-- Epic Header -->
+        <div class="section-header">
+            <h1 class="section-title">WhatsApp Channel Management</h1>
+            <p class="section-subtitle">Monitor ward & zone WhatsApp groups, citizen engagement, and parshad activity with real-time analytics</p>
+        </div>
+
+        <!-- Epic Metrics Grid -->
+        <div class="metrics-grid">
+            <div class="metric-card cyan loading">
+                <div class="metric-header">
+                    <div class="metric-icon cyan">📱</div>
+                    <div class="metric-trend">↗️ +5.2%</div>
+                </div>
+                <div class="metric-value" id="totalWards">85</div>
+                <div class="metric-label">Total Ward Channels</div>
+                <div class="metric-subtext">All active ward WhatsApp groups across the city with real-time monitoring</div>
+            </div>
+
+            <div class="metric-card teal loading">
+                <div class="metric-header">
+                    <div class="metric-icon teal">🌐</div>
+                    <div class="metric-trend">↗️ +2.1%</div>
+                </div>
+                <div class="metric-value" id="totalZones">25</div>
+                <div class="metric-label">Total Zone Channels</div>
+                <div class="metric-subtext">Zonal level WhatsApp channels for coordinated communication</div>
+            </div>
+
+            <div class="metric-card green loading">
+                <div class="metric-header">
+                    <div class="metric-icon green">👥</div>
+                    <div class="metric-trend">↗️ +12.8%</div>
+                </div>
+                <div class="metric-value" id="totalMembers">12,847</div>
+                <div class="metric-label">Total Members Joined</div>
+                <div class="metric-subtext">Active citizens engaged across all wards & zones</div>
+            </div>
+
+            <div class="metric-card yellow loading">
+                <div class="metric-header">
+                    <div class="metric-icon yellow">⚡</div>
+                    <div class="metric-trend">↗️ +8.4%</div>
+                </div>
+                <div class="metric-value" id="activeParshads">73%</div>
+                <div class="metric-label">Active Parshads</div>
+                <div class="metric-subtext">Percentage of parshads regularly updating citizens</div>
+            </div>
+        </div>
+
+        <!-- Epic Ward Table Section -->
+        <div class="data-section loading">
+            <h2 class="section-title-small">📍 Ward Analytics Dashboard</h2>
+            
+            <div class="controls">
+                <input type="text" class="search-input" placeholder="🔍 Search by ward name or parshad..." id="wardSearch">
+                <select class="filter-select" id="engagementFilter">
+                    <option value="">📊 All Engagement Levels</option>
+                    <option value="active">✅ Active</option>
+                    <option value="low">⚠️ Low</option>
+                    <option value="inactive">❌ Inactive</option>
+                </select>
+            </div>
+
+            <div class="table-container">
+                <table class="table" id="wardTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Ward No. / Name ↕️</th>
+                            <th>WhatsApp Channel</th>
+                            <th onclick="sortTable(2)">Citizens Joined ↕️</th>
+                            <th>Parshad Name</th>
+                            <th onclick="sortTable(4)">Engagement Status ↕️</th>
+                            <th onclick="sortTable(5)">Last Update ↕️</th>
+                        </tr>
+                    </thead>
+                    <tbody id="wardTableBody">
+                        <!-- Ward data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Epic Zone Table Section -->
+        <div class="data-section loading">
+            <h2 class="section-title-small">🏢 Zone Analytics Dashboard</h2>
+            
+            <div class="table-container">
+                <table class="table" id="zoneTable">
+                    <thead>
+                        <tr>
+                            <th>Zone Name</th>
+                            <th>Total Wards</th>
+                            <th>Total Citizens</th>
+                            <th>Active Parshads</th>
+                            <th>Avg Engagement</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="zoneTableBody">
+                        <!-- Zone data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Epic Analytics Widgets -->
+        <div class="analytics-grid loading">
+            <div class="chart-container">
+                <div>
+                    <h3 style="color: #00ffc6; margin-bottom: 1rem; font-size: 1.5rem;">📊 Active vs Inactive Parshads</h3>
+                    <p>Interactive chart visualization showing parshad engagement trends</p>
+                    <small style="opacity: 0.7;">Real-time data integration ready</small>
+                </div>
+            </div>
+            <div class="chart-container">
+                <div>
+                    <h3 style="color: #00d1ff; margin-bottom: 1rem; font-size: 1.5rem;">📈 Citizen Growth Analytics</h3>
+                    <p>Dynamic line chart displaying weekly growth patterns</p>
+                    <small style="opacity: 0.7;">Advanced analytics dashboard</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const colors = ['#00ffc6', '#00d1ff', '#00ff94', '#ffcc00'];
+            
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Enhanced sample data
+        const wardData = [
+            { ward: "Ward 1 - Central Plaza", link: "https://chat.whatsapp.com/sample1", citizens: 245, parshad: "Rajesh Kumar", engagement: "active", lastUpdate: "2024-01-15 14:30", engagementPercent: 85 },
+            { ward: "Ward 2 - North District", link: "https://chat.whatsapp.com/sample2", citizens: 189, parshad: "Priya Sharma", engagement: "low", lastUpdate: "2024-01-14 09:15", engagementPercent: 45 },
+            { ward: "Ward 3 - South Garden", link: "https://chat.whatsapp.com/sample3", citizens: 312, parshad: "Amit Singh", engagement: "active", lastUpdate: "2024-01-15 16:45", engagementPercent: 92 },
+            { ward: "Ward 4 - East Market", link: "https://chat.whatsapp.com/sample4", citizens: 156, parshad: "Sunita Devi", engagement: "inactive", lastUpdate: "2024-01-12 11:20", engagementPercent: 12 },
+            { ward: "Ward 5 - West Colony", link: "https://chat.whatsapp.com/sample5", citizens: 278, parshad: "Vikram Patel", engagement: "active", lastUpdate: "2024-01-15 13:10", engagementPercent: 78 },
+            { ward: "Ward 6 - Industrial Area", link: "https://chat.whatsapp.com/sample6", citizens: 203, parshad: "Meera Gupta", engagement: "low", lastUpdate: "2024-01-13 15:45", engagementPercent: 38 },
+            { ward: "Ward 7 - Residential Hub", link: "https://chat.whatsapp.com/sample7", citizens: 334, parshad: "Ravi Verma", engagement: "active", lastUpdate: "2024-01-15 17:20", engagementPercent: 88 }
+        ];
+
+        const zoneData = [
+            { zone: "Zone A - Central Business District", wards: 15, citizens: 3245, activeParshads: 12, avgEngagement: 78 },
+            { zone: "Zone B - North Residential", wards: 18, citizens: 2890, activeParshads: 14, avgEngagement: 65 },
+            { zone: "Zone C - South Industrial", wards: 20, citizens: 4156, activeParshads: 16, avgEngagement: 82 },
+            { zone: "Zone D - East Commercial", wards: 16, citizens: 2556, activeParshads: 10, avgEngagement: 58 },
+            { zone: "Zone E - West Heritage", wards: 16, citizens: 3890, activeParshads: 13, avgEngagement: 71 }
+        ];
+
+        // Populate ward table with epic styling
+        function populateWardTable(data = wardData) {
+            const tbody = document.getElementById('wardTableBody');
+            tbody.innerHTML = '';
+            
+            data.forEach((ward, index) => {
+                const row = document.createElement('tr');
+                row.style.animationDelay = `${index * 0.1}s`;
+                row.innerHTML = `
+                    <td><strong style="color: #00ffc6;">${ward.ward}</strong></td>
+                    <td><a href="${ward.link}" class="join-btn" target="_blank">🚀 Join Channel</a></td>
+                    <td>
+                        <strong style="font-size: 1.1rem;">${ward.citizens.toLocaleString()}</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${ward.engagementPercent}%"></div>
+                        </div>
+                        <small style="color: #94a3b8;">${ward.engagementPercent}% engagement</small>
+                    </td>
+                    <td><strong>${ward.parshad}</strong></td>
+                    <td>
+                        <span class="status-badge status-${ward.engagement}">
+                            ${ward.engagement === 'active' ? '✅' : ward.engagement === 'low' ? '⚠️' : '❌'}
+                            ${ward.engagement.charAt(0).toUpperCase() + ward.engagement.slice(1)}
+                        </span>
+                    </td>
+                    <td><span style="color: #94a3b8;">${ward.lastUpdate}</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Populate zone table with epic styling
+        function populateZoneTable() {
+            const tbody = document.getElementById('zoneTableBody');
+            tbody.innerHTML = '';
+            
+            zoneData.forEach((zone, index) => {
+                const row = document.createElement('tr');
+                row.className = 'expandable-row';
+                row.style.animationDelay = `${index * 0.1}s`;
+                row.innerHTML = `
+                    <td><strong style="color: #00d1ff;">${zone.zone}</strong></td>
+                    <td><span style="font-size: 1.1rem; font-weight: 600;">${zone.wards}</span></td>
+                    <td><strong style="color: #00ff94;">${zone.citizens.toLocaleString()}</strong></td>
+                    <td><span style="color: #ffcc00;">${zone.activeParshads}/${zone.wards}</span></td>
+                    <td>
+                        <span class="status-badge ${zone.avgEngagement > 70 ? 'status-active' : zone.avgEngagement > 50 ? 'status-low' : 'status-inactive'}">
+                            ${zone.avgEngagement}%
+                        </span>
+                    </td>
+                    <td>
+                        <button class="join-btn" onclick="expandZone(this)">📊 View Details</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Enhanced search functionality
+        document.getElementById('wardSearch').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredData = wardData.filter(ward => 
+                ward.ward.toLowerCase().includes(searchTerm) ||
+                ward.parshad.toLowerCase().includes(searchTerm)
+            );
+            populateWardTable(filteredData);
+        });
+
+        // Enhanced filter functionality
+        document.getElementById('engagementFilter').addEventListener('change', function(e) {
+            const filterValue = e.target.value;
+            const filteredData = filterValue ? 
+                wardData.filter(ward => ward.engagement === filterValue) : 
+                wardData;
+            populateWardTable(filteredData);
+        });
+
+        // Epic counter animation
+        function animateCounter(elementId, targetValue, suffix = '', duration = 2500) {
+            const element = document.getElementById(elementId);
+            const startValue = 0;
+            const startTime = performance.now();
+            
+            function updateCounter(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Easing function for smooth animation
+                const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                const currentValue = Math.floor(startValue + (targetValue - startValue) * easeOutQuart);
+                
+                if (suffix === '%') {
+                    element.textContent = currentValue + suffix;
+                } else {
+                    element.textContent = currentValue.toLocaleString() + suffix;
+                }
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                }
+            }
+            
+            requestAnimationFrame(updateCounter);
+        }
+
+        // Sort table functionality
+        function sortTable(columnIndex) {
+            console.log(`Sorting by column ${columnIndex} with epic animation`);
+            // Add sorting logic here
+        }
+
+        // Expand zone details
+        function expandZone(button) {
+            button.textContent = button.textContent.includes('View') ? '📈 Hide Details' : '📊 View Details';
+            button.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                button.style.transform = 'scale(1)';
+            }, 150);
+        }
+
+        // Initialize loading animations
+        function initializeAnimations() {
+            const loadingElements = document.querySelectorAll('.loading');
+            loadingElements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        }
+
+        // Initialize the epic page
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            populateWardTable();
+            populateZoneTable();
+            initializeAnimations();
+            
+            // Epic counter animations with staggered timing
+            setTimeout(() => animateCounter('totalWards', 85), 500);
+            setTimeout(() => animateCounter('totalZones', 25), 700);
+            setTimeout(() => animateCounter('totalMembers', 12847), 900);
+            setTimeout(() => animateCounter('activeParshads', 73, '%'), 1100);
+        });
+
+        // API placeholder functions for future integration
+        async function fetchWardData() {
+            // Epic API integration ready
+            return wardData;
+        }
+
+        async function fetchZoneData() {
+            // Epic API integration ready
+            return zoneData;
+        }
+
+        async function updateEngagementStatus(wardId, status) {
+            console.log(`Epic update: Ward ${wardId} engagement to ${status}`);
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'970462f991059be4',t:'MTc1NTM4MzUzNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Channel Management - Nigam Setu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --neon-cyan: #00ffc6;
+            --neon-teal: #00d1ff;
+            --neon-green: #00ff94;
+            --neon-yellow: #ffcc00;
+            --neon-red: #ff3b3b;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --glass-bg: rgba(30, 41, 59, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --whatsapp-green: #25D366;
+            --whatsapp-dark: #128C7E;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .whatsapp-container {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header Section */
+        .whatsapp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+        }
+
+        .header-content h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--whatsapp-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(37, 211, 102, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(37, 211, 102, 0.3);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--whatsapp-green);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Action Bar */
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px 14px 50px;
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: 25px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 25px rgba(0, 255, 198, 0.4);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        .filter-dropdown {
+            padding: 14px 20px;
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: 15px;
+            color: var(--text-primary);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+
+        .filter-dropdown:focus {
+            outline: none;
+            border-color: var(--neon-teal);
+            box-shadow: 0 0 20px rgba(0, 209, 255, 0.3);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-primary {
+            padding: 14px 28px;
+            background: linear-gradient(135deg, var(--whatsapp-green), var(--whatsapp-dark));
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn-secondary {
+            padding: 14px 28px;
+            background: var(--glass-bg);
+            border: 2px solid var(--neon-cyan);
+            border-radius: 15px;
+            color: var(--neon-cyan);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 255, 198, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 198, 0.3);
+        }
+
+        /* Channel Grid */
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .channel-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .channel-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--whatsapp-green), var(--neon-cyan));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .channel-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 25px 50px rgba(0, 255, 198, 0.2);
+        }
+
+        .channel-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .channel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .channel-info h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .channel-type {
+            padding: 4px 12px;
+            background: rgba(0, 255, 198, 0.2);
+            color: var(--neon-cyan);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .channel-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--whatsapp-green);
+            display: block;
+        }
+
+        .stat-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .engagement-bar {
+            margin-bottom: 1.5rem;
+        }
+
+        .engagement-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--whatsapp-green), var(--neon-green));
+            border-radius: 4px;
+            transition: width 0.8s ease;
+            box-shadow: 0 0 10px rgba(37, 211, 102, 0.5);
+        }
+
+        .channel-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-whatsapp {
+            background: var(--whatsapp-green);
+            color: white;
+        }
+
+        .btn-whatsapp:hover {
+            background: var(--whatsapp-dark);
+            transform: scale(1.05);
+        }
+
+        .btn-manage {
+            background: rgba(0, 209, 255, 0.2);
+            color: var(--neon-teal);
+            border: 1px solid var(--neon-teal);
+        }
+
+        .btn-manage:hover {
+            background: rgba(0, 209, 255, 0.3);
+            box-shadow: 0 0 15px rgba(0, 209, 255, 0.4);
+        }
+
+        .status-indicator {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-active {
+            background: var(--neon-green);
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .status-warning {
+            background: var(--neon-yellow);
+            box-shadow: 0 0 10px var(--neon-yellow);
+        }
+
+        .status-inactive {
+            background: var(--neon-red);
+            box-shadow: 0 0 10px var(--neon-red);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Bulk Actions */
+        .bulk-actions {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1rem 2rem;
+            backdrop-filter: blur(20px);
+            display: none;
+            gap: 1rem;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .bulk-actions.show {
+            display: flex;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--neon-red);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 255, 198, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .whatsapp-container {
+                padding: 1rem;
+            }
+
+            .whatsapp-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-stats {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .action-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-filters {
+                flex-direction: column;
+            }
+
+            .channels-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .channel-card {
+                padding: 1.5rem;
+            }
+
+            .bulk-actions {
+                bottom: 1rem;
+                left: 1rem;
+                right: 1rem;
+                transform: none;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="whatsapp-container">
+        <!-- Header Section -->
+        <div class="whatsapp-header">
+            <div class="header-content">
+                <h1>📱 WhatsApp Channel Management</h1>
+                <p style="color: var(--text-secondary); font-size: 1.1rem;">Manage all ward and zone WhatsApp channels with real-time analytics</p>
+            </div>
+            <div class="header-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="total-channels">110</div>
+                    <div class="stat-label">Total Channels</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="active-channels">87</div>
+                    <div class="stat-label">Active Channels</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="total-members">24.5K</div>
+                    <div class="stat-label">Total Members</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <div class="search-filters">
+                <div class="search-box">
+                    <div class="search-icon">🔍</div>
+                    <input type="text" class="search-input" placeholder="Search channels, wards, or parshads..." id="searchInput">
+                </div>
+                <select class="filter-dropdown" id="typeFilter">
+                    <option value="">All Types</option>
+                    <option value="ward">Ward Channels</option>
+                    <option value="zone">Zone Channels</option>
+                </select>
+                <select class="filter-dropdown" id="statusFilter">
+                    <option value="">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="warning">Low Engagement</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+            <div class="action-buttons">
+                <button class="btn-secondary" onclick="exportData()">📊 Export Data</button>
+                <button class="btn-primary" onclick="openCreateModal()">➕ Create Channel</button>
+            </div>
+        </div>
+
+        <!-- Channels Grid -->
+        <div class="channels-grid" id="channelsGrid">
+            <!-- Dynamic content will be inserted here -->
+        </div>
+
+        <!-- Bulk Actions -->
+        <div class="bulk-actions" id="bulkActions">
+            <span id="selectedCount">0 selected</span>
+            <button class="btn-primary">📤 Bulk Message</button>
+            <button class="btn-secondary">📊 Bulk Analytics</button>
+            <button class="btn-secondary" style="color: var(--neon-red); border-color: var(--neon-red);">🗑️ Delete</button>
+        </div>
+
+        <!-- Create/Edit Modal -->
+        <div class="modal" id="channelModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modalTitle">Create New Channel</h3>
+                    <button class="close-btn" onclick="closeModal()">×</button>
+                </div>
+                <form id="channelForm">
+                    <div class="form-group">
+                        <label class="form-label">Channel Name</label>
+                        <input type="text" class="form-input" id="channelName" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Type</label>
+                        <select class="form-input" id="channelType" required>
+                            <option value="">Select Type</option>
+                            <option value="ward">Ward Channel</option>
+                            <option value="zone">Zone Channel</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ward/Zone Number</label>
+                        <input type="number" class="form-input" id="channelNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Parshad/Officer Name</label>
+                        <input type="text" class="form-input" id="officerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">WhatsApp Group Link</label>
+                        <input type="url" class="form-input" id="whatsappLink" placeholder="https://chat.whatsapp.com/...">
+                    </div>
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <button type="button" class="btn-secondary" onclick="closeModal()" style="flex: 1;">Cancel</button>
+                        <button type="submit" class="btn-primary" style="flex: 1;">💾 Save Channel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data - replace with API calls
+        let channelsData = [
+            {
+                id: 1,
+                name: "Ward 1 - Rajwada",
+                type: "ward",
+                number: 1,
+                members: 1247,
+                engagement: 85,
+                status: "active",
+                parshad: "Rajesh Kumar",
+                lastUpdate: "2 hours ago",
+                whatsappLink: "https://chat.whatsapp.com/ward1",
+                messages: 156,
+                activeMembers: 892
+            },
+            {
+                id: 2,
+                name: "Zone 1 - Central",
+                type: "zone",
+                number: 1,
+                members: 3456,
+                engagement: 72,
+                status: "active",
+                parshad: "Priya Sharma",
+                lastUpdate: "5 hours ago",
+                whatsappLink: "https://chat.whatsapp.com/zone1",
+                messages: 234,
+                activeMembers: 2489
+            },
+            {
+                id: 3,
+                name: "Ward 15 - Palasia",
+                type: "ward",
+                number: 15,
+                members: 892,
+                engagement: 45,
+                status: "warning",
+                parshad: "Amit Patel",
+                lastUpdate: "1 day ago",
+                whatsappLink: "https://chat.whatsapp.com/ward15",
+                messages: 67,
+                activeMembers: 401
+            },
+            {
+                id: 4,
+                name: "Ward 23 - Vijay Nagar",
+                type: "ward",
+                number: 23,
+                members: 567,
+                engagement: 25,
+                status: "inactive",
+                parshad: "Sunita Verma",
+                lastUpdate: "3 days ago",
+                whatsappLink: "https://chat.whatsapp.com/ward23",
+                messages: 23,
+                activeMembers: 142
+            }
+        ];
+
+        let filteredData = [...channelsData];
+        let selectedChannels = new Set();
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            renderChannels();
+            setupEventListeners();
+            updateStats();
+        });
+
+        // Render channels grid
+        function renderChannels() {
+            const grid = document.getElementById('channelsGrid');
+            
+            grid.innerHTML = filteredData.map(channel => `
+                <div class="channel-card" data-id="${channel.id}">
+                    <div class="status-indicator status-${channel.status}"></div>
+                    <div class="channel-header">
+                        <div class="channel-info">
+                            <h3>${channel.name}</h3>
+                            <div class="channel-type">${channel.type.toUpperCase()}</div>
+                        </div>
+                        <input type="checkbox" onchange="toggleSelection(${channel.id})" style="transform: scale(1.2);">
+                    </div>
+                    
+                    <div class="channel-stats">
+                        <div class="stat-box">
+                            <span class="stat-number">${channel.members.toLocaleString()}</span>
+                            <span class="stat-text">Total Members</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number">${channel.messages}</span>
+                            <span class="stat-text">Messages Today</span>
+                        </div>
+                    </div>
+                    
+                    <div class="engagement-bar">
+                        <div class="engagement-label">
+                            <span>Engagement Rate</span>
+                            <span style="color: ${getEngagementColor(channel.engagement)}">${channel.engagement}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${channel.engagement}%"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-secondary);">
+                        <div>👤 ${channel.parshad}</div>
+                        <div>🕒 Updated ${channel.lastUpdate}</div>
+                    </div>
+                    
+                    <div class="channel-actions">
+                        <button class="action-btn btn-whatsapp" onclick="openWhatsApp('${channel.whatsappLink}')">
+                            💬 Open Chat
+                        </button>
+                        <button class="action-btn btn-manage" onclick="manageChannel(${channel.id})">
+                            ⚙️ Manage
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Get engagement color based on percentage
+        function getEngagementColor(engagement) {
+            if (engagement >= 70) return 'var(--neon-green)';
+            if (engagement >= 40) return 'var(--neon-yellow)';
+            return 'var(--neon-red)';
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', handleSearch);
+            
+            // Filter functionality
+            document.getElementById('typeFilter').addEventListener('change', applyFilters);
+            document.getElementById('statusFilter').addEventListener('change', applyFilters);
+            
+            // Form submission
+            document.getElementById('channelForm').addEventListener('submit', handleFormSubmit);
+            
+            // Close modal on outside click
+            document.getElementById('channelModal').addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+        }
+
+        // Handle search
+        function handleSearch(e) {
+            const query = e.target.value.toLowerCase();
+            filteredData = channelsData.filter(channel => 
+                channel.name.toLowerCase().includes(query) ||
+                channel.parshad.toLowerCase().includes(query) ||
+                channel.number.toString().includes(query)
+            );
+            applyFilters();
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const typeFilter = document.getElementById('typeFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            
+            let filtered = [...filteredData];
+            
+            if (typeFilter) {
+                filtered = filtered.filter(channel => channel.type === typeFilter);
+            }
+            
+            if (statusFilter) {
+                filtered = filtered.filter(channel => channel.status === statusFilter);
+            }
+            
+            filteredData = filtered;
+            renderChannels();
+        }
+
+        // Toggle channel selection
+        function toggleSelection(channelId) {
+            if (selectedChannels.has(channelId)) {
+                selectedChannels.delete(channelId);
+            } else {
+                selectedChannels.add(channelId);
+            }
+            
+            updateBulkActions();
+        }
+
+        // Update bulk actions visibility
+        function updateBulkActions() {
+            const bulkActions = document.getElementById('bulkActions');
+            const selectedCount = document.getElementById('selectedCount');
+            
+            if (selectedChannels.size > 0) {
+                bulkActions.classList.add('show');
+                selectedCount.textContent = `${selectedChannels.size} selected`;
+            } else {
+                bulkActions.classList.remove('show');
+            }
+        }
+
+        // Open WhatsApp
+        function openWhatsApp(link) {
+            window.open(link, '_blank');
+        }
+
+        // Manage channel
+        function manageChannel(channelId) {
+            const channel = channelsData.find(c => c.id === channelId);
+            if (channel) {
+                // Populate form with existing data
+                document.getElementById('modalTitle').textContent = 'Manage Channel';
+                document.getElementById('channelName').value = channel.name;
+                document.getElementById('channelType').value = channel.type;
+                document.getElementById('channelNumber').value = channel.number;
+                document.getElementById('officerName').value = channel.parshad;
+                document.getElementById('whatsappLink').value = channel.whatsappLink;
+                
+                document.getElementById('channelModal').classList.add('show');
+            }
+        }
+
+        // Open create modal
+        function openCreateModal() {
+            document.getElementById('modalTitle').textContent = 'Create New Channel';
+            document.getElementById('channelForm').reset();
+            document.getElementById('channelModal').classList.add('show');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('channelModal').classList.remove('show');
+        }
+
+        // Handle form submission
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('channelName').value,
+                type: document.getElementById('channelType').value,
+                number: parseInt(document.getElementById('channelNumber').value),
+                parshad: document.getElementById('officerName').value,
+                whatsappLink: document.getElementById('whatsappLink').value
+            };
+            
+            // Simulate API call
+            console.log('Saving channel:', formData);
+            
+            // Add to data (in real app, this would be an API call)
+            const newChannel = {
+                id: Date.now(),
+                ...formData,
+                members: 0,
+                engagement: 0,
+                status: 'inactive',
+                lastUpdate: 'Just now',
+                messages: 0,
+                activeMembers: 0
+            };
+            
+            channelsData.push(newChannel);
+            filteredData = [...channelsData];
+            renderChannels();
+            updateStats();
+            closeModal();
+            
+            // Show success message
+            showNotification('Channel created successfully!', 'success');
+        }
+
+        // Export data
+        function exportData() {
+            const csvContent = "data:text/csv;charset=utf-8," 
+                + "Name,Type,Members,Engagement,Status,Parshad,Last Update\n"
+                + filteredData.map(channel => 
+                                        `"${channel.name}","${channel.type}",${channel.members},${channel.engagement}%,"${channel.status}","${channel.parshad}","${channel.lastUpdate}"`
+                ).join("\n");
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `whatsapp_channels_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification('Data exported successfully!', 'success');
+        }
+
+        // Update statistics
+        function updateStats() {
+            const totalChannels = channelsData.length;
+            const activeChannels = channelsData.filter(c => c.status === 'active').length;
+            const totalMembers = channelsData.reduce((sum, c) => sum + c.members, 0);
+            
+            // Animate counters
+            animateCounter('total-channels', totalChannels);
+            animateCounter('active-channels', activeChannels);
+            animateCounter('total-members', totalMembers, 'K');
+        }
+
+        // Animate counter
+        function animateCounter(elementId, targetValue, suffix = '') {
+            const element = document.getElementById(elementId);
+            const startValue = 0;
+            const duration = 1500;
+            const startTime = performance.now();
+
+            function updateCounter(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                let currentValue = Math.floor(startValue + (targetValue - startValue) * easeOutQuart);
+                
+                if (suffix === 'K' && currentValue >= 1000) {
+                    currentValue = (currentValue / 1000).toFixed(1) + 'K';
+                } else {
+                    currentValue = currentValue.toString();
+                }
+                
+                element.textContent = currentValue + (suffix !== 'K' ? suffix : '');
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                }
+            }
+            
+            requestAnimationFrame(updateCounter);
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: ${type === 'success' ? 'var(--neon-green)' : 'var(--neon-cyan)'};
+                color: var(--bg-primary);
+                padding: 1rem 2rem;
+                border-radius: 12px;
+                font-weight: 600;
+                z-index: 10000;
+                transform: translateX(400px);
+                transition: transform 0.3s ease;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            `;
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Animate out and remove
+            setTimeout(() => {
+                notification.style.transform = 'translateX(400px)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Real-time updates simulation
+        function simulateRealTimeUpdates() {
+            setInterval(() => {
+                // Randomly update some channels
+                const randomChannel = channelsData[Math.floor(Math.random() * channelsData.length)];
+                
+                // Simulate member growth
+                if (Math.random() > 0.7) {
+                    randomChannel.members += Math.floor(Math.random() * 5) + 1;
+                    randomChannel.messages += Math.floor(Math.random() * 10) + 1;
+                    randomChannel.lastUpdate = 'Just now';
+                    
+                    // Update engagement based on activity
+                    const activityRatio = randomChannel.messages / (randomChannel.members * 0.1);
+                    randomChannel.engagement = Math.min(Math.floor(activityRatio * 100), 100);
+                    
+                    // Update status based on engagement
+                    if (randomChannel.engagement >= 70) {
+                        randomChannel.status = 'active';
+                    } else if (randomChannel.engagement >= 40) {
+                        randomChannel.status = 'warning';
+                    } else {
+                        randomChannel.status = 'inactive';
+                    }
+                }
+                
+                // Re-render if no filters are active
+                const searchInput = document.getElementById('searchInput');
+                const typeFilter = document.getElementById('typeFilter');
+                const statusFilter = document.getElementById('statusFilter');
+                
+                if (!searchInput.value && !typeFilter.value && !statusFilter.value) {
+                    filteredData = [...channelsData];
+                    renderChannels();
+                    updateStats();
+                }
+            }, 10000); // Update every 10 seconds
+        }
+
+        // Advanced Analytics Functions
+        function generateAnalytics() {
+            const analytics = {
+                totalChannels: channelsData.length,
+                activeChannels: channelsData.filter(c => c.status === 'active').length,
+                totalMembers: channelsData.reduce((sum, c) => sum + c.members, 0),
+                totalMessages: channelsData.reduce((sum, c) => sum + c.messages, 0),
+                avgEngagement: Math.round(channelsData.reduce((sum, c) => sum + c.engagement, 0) / channelsData.length),
+                wardChannels: channelsData.filter(c => c.type === 'ward').length,
+                zoneChannels: channelsData.filter(c => c.type === 'zone').length,
+                topPerformers: channelsData
+                    .sort((a, b) => b.engagement - a.engagement)
+                    .slice(0, 5)
+                    .map(c => ({ name: c.name, engagement: c.engagement })),
+                lowPerformers: channelsData
+                    .filter(c => c.engagement < 40)
+                    .map(c => ({ name: c.name, engagement: c.engagement }))
+            };
+            
+            return analytics;
+        }
+
+        // Bulk operations
+        function bulkMessage() {
+            if (selectedChannels.size === 0) {
+                showNotification('Please select channels first', 'warning');
+                return;
+            }
+            
+            const message = prompt('Enter message to send to selected channels:');
+            if (message) {
+                // Simulate bulk message sending
+                console.log(`Sending message to ${selectedChannels.size} channels:`, message);
+                showNotification(`Message sent to ${selectedChannels.size} channels!`, 'success');
+                
+                // Clear selection
+                selectedChannels.clear();
+                updateBulkActions();
+                
+                // Uncheck all checkboxes
+                document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            }
+        }
+
+        function bulkAnalytics() {
+            if (selectedChannels.size === 0) {
+                showNotification('Please select channels first', 'warning');
+                return;
+            }
+            
+            const selectedData = channelsData.filter(c => selectedChannels.has(c.id));
+            const analytics = {
+                totalMembers: selectedData.reduce((sum, c) => sum + c.members, 0),
+                avgEngagement: Math.round(selectedData.reduce((sum, c) => sum + c.engagement, 0) / selectedData.length),
+                totalMessages: selectedData.reduce((sum, c) => sum + c.messages, 0)
+            };
+            
+            alert(`Selected Channels Analytics:\nTotal Members: ${analytics.totalMembers.toLocaleString()}\nAverage Engagement: ${analytics.avgEngagement}%\nTotal Messages: ${analytics.totalMessages}`);
+        }
+
+        function bulkDelete() {
+            if (selectedChannels.size === 0) {
+                showNotification('Please select channels first', 'warning');
+                return;
+            }
+            
+            if (confirm(`Are you sure you want to delete ${selectedChannels.size} selected channels?`)) {
+                // Remove selected channels
+                channelsData = channelsData.filter(c => !selectedChannels.has(c.id));
+                filteredData = [...channelsData];
+                
+                selectedChannels.clear();
+                updateBulkActions();
+                renderChannels();
+                updateStats();
+                
+                showNotification('Selected channels deleted successfully!', 'success');
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + K for search
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+            
+            // Ctrl/Cmd + N for new channel
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+                e.preventDefault();
+                openCreateModal();
+            }
+            
+            // Escape to close modal
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+            
+            // Ctrl/Cmd + A to select all visible channels
+            if ((e.ctrlKey || e.metaKey) && e.key === 'a' && e.target.tagName !== 'INPUT') {
+                e.preventDefault();
+                filteredData.forEach(channel => selectedChannels.add(channel.id));
+                updateBulkActions();
+                document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = true);
+            }
+        });
+
+        // Advanced search with debouncing
+        let searchTimeout;
+        function debouncedSearch(query) {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                filteredData = channelsData.filter(channel => 
+                    channel.name.toLowerCase().includes(query.toLowerCase()) ||
+                    channel.parshad.toLowerCase().includes(query.toLowerCase()) ||
+                    channel.number.toString().includes(query) ||
+                    channel.type.toLowerCase().includes(query.toLowerCase())
+                );
+                applyFilters();
+            }, 300);
+        }
+
+        // Update search handler to use debounced search
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            debouncedSearch(e.target.value);
+        });
+
+        // Add click handlers for bulk action buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update bulk action button handlers
+            setTimeout(() => {
+                const bulkActions = document.getElementById('bulkActions');
+                if (bulkActions) {
+                    const buttons = bulkActions.querySelectorAll('button');
+                    if (buttons[0]) buttons[0].onclick = bulkMessage;
+                    if (buttons[1]) buttons[1].onclick = bulkAnalytics;
+                    if (buttons[2]) buttons[2].onclick = bulkDelete;
+                }
+            }, 100);
+        });
+
+        // Performance optimization: Virtual scrolling for large datasets
+        function enableVirtualScrolling() {
+            if (channelsData.length > 50) {
+                // Implement virtual scrolling logic here
+                console.log('Virtual scrolling enabled for large dataset');
+            }
+        }
+
+        // Data validation
+        function validateChannelData(data) {
+            const errors = [];
+            
+            if (!data.name || data.name.trim().length < 3) {
+                errors.push('Channel name must be at least 3 characters long');
+            }
+            
+            if (!data.type || !['ward', 'zone'].includes(data.type)) {
+                errors.push('Please select a valid channel type');
+            }
+            
+            if (!data.number || data.number < 1) {
+                errors.push('Please enter a valid ward/zone number');
+            }
+            
+            if (!data.parshad || data.parshad.trim().length < 2) {
+                errors.push('Officer name must be at least 2 characters long');
+            }
+            
+            if (data.whatsappLink && !data.whatsappLink.includes('whatsapp.com')) {
+                errors.push('Please enter a valid WhatsApp link');
+            }
+            
+            return errors;
+        }
+
+        // Enhanced form submission with validation
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('channelName').value,
+                type: document.getElementById('channelType').value,
+                number: parseInt(document.getElementById('channelNumber').value),
+                parshad: document.getElementById('officerName').value,
+                whatsappLink: document.getElementById('whatsappLink').value
+            };
+            
+            // Validate data
+            const errors = validateChannelData(formData);
+            if (errors.length > 0) {
+                alert('Please fix the following errors:\n' + errors.join('\n'));
+                return;
+            }
+            
+            // Check for duplicates
+            const duplicate = channelsData.find(c => 
+                c.type === formData.type && c.number === formData.number
+            );
+            
+            if (duplicate) {
+                alert(`A ${formData.type} channel with number ${formData.number} already exists!`);
+                return;
+            }
+            
+            // Save channel
+            const newChannel = {
+                id: Date.now(),
+                ...formData,
+                members: 0,
+                engagement: 0,
+                status: 'inactive',
+                lastUpdate: 'Just now',
+                messages: 0,
+                activeMembers: 0
+            };
+            
+            channelsData.push(newChannel);
+            filteredData = [...channelsData];
+            renderChannels();
+            updateStats();
+            closeModal();
+            
+            showNotification('Channel created successfully!', 'success');
+        }
+
+        // Initialize real-time updates
+        simulateRealTimeUpdates();
+
+        // Initialize performance monitoring
+        enableVirtualScrolling();
+
+        // Add loading states for better UX
+        function showLoading() {
+            const grid = document.getElementById('channelsGrid');
+            grid.innerHTML = '<div style="text-align: center; padding: 4rem; color: var(--text-secondary);">Loading channels...</div>';
+        }
+
+        function hideLoading() {
+            renderChannels();
+        }
+
+        // API integration placeholders
+        async function fetchChannelsFromAPI() {
+            try {
+                showLoading();
+                // const response = await fetch('/api/whatsapp-channels');
+                // const data = await response.json();
+                // channelsData = data;
+                setTimeout(() => {
+                    hideLoading();
+                    updateStats();
+                }, 1000);
+            } catch (error) {
+                console.error('Error fetching channels:', error);
+                showNotification('Error loading channels', 'error');
+                hideLoading();
+            }
+        }
+
+        async function saveChannelToAPI(channelData) {
+            try {
+                // const response = await fetch('/api/whatsapp-channels', {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify(channelData)
+                // });
+                // return await response.json();
+                return Promise.resolve(channelData);
+            } catch (error) {
+                console.error('Error saving channel:', error);
+                throw error;
+            }
+        }
+
+        async function updateChannelInAPI(channelId, updates) {
+            try {
+                // const response = await fetch(`/api/whatsapp-channels/${channelId}`, {
+                //     method: 'PUT',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify(updates)
+                // });
+                // return await response.json();
+                return Promise.resolve(updates);
+            } catch (error) {
+                console.error('Error updating channel:', error);
+                throw error;
+            }
+        }
+
+        // Export the main functions for external use
+        window.WhatsAppChannelManager = {
+            renderChannels,
+            openCreateModal,
+            manageChannel,
+            exportData,
+            generateAnalytics,
+            bulkMessage,
+            bulkAnalytics,
+            bulkDelete
+        };
+    </script>
+</body>
+</html>
